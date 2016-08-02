@@ -9,7 +9,7 @@ import java.util.Queue;
  *
  * @param <Node>
  */
-public class BinaryTree<Node extends BinaryTree.BTNode<Node>> {
+public class xBinaryTree<Node extends BinaryTree.BTNode<Node>> {
 	
 	public static class BTNode<Node extends BTNode<Node>> {
 		public Node left;

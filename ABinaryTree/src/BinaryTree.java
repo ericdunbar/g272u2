@@ -1,27 +1,55 @@
-
-
 import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * An implementation of binary trees
+ * An implementation of binary trees. Source: Pat Morin ODS, sample code.
+ * 
  * @author morin
  *
  * @param <Node>
  */
 public class BinaryTree<Node extends BinaryTree.BTNode<Node>> {
-	
+
 	public static class BTNode<Node extends BTNode<Node>> {
 		public Node left;
 		public Node right;
-		public Node parent;	
+		public Node parent;
+		int preOrder, inOrder, postOrder; // TODO: track the traversal order
+											// rank of the node. Eric addition.
 	}
+
+	/*
+	 * A pre-order traversal of a binary tree is a traversal that visits each
+	 * node, u, before any of its children. An in-order traversal visits u after
+	 * visiting all the nodes in u’s left subtree but before visiting any of the
+	 * nodes in u’s right subtree. A post-order traversal visits u only after
+	 * visiting all other nodes in u’s subtree. The pre/in/post-order numbering
+	 * of a tree labels the nodes of a tree with the integers 0, . . . ,n - 1 in
+	 * the order that they are encountered by a pre/in/post-order traversal. See
+	 * Figure 6.10 for an example. (pg 148)
+	 */
+
+	/*
+	 * Design an algorithm for the following operations for a binary tree BT,
+	 * and show the worst-case running times for each implementation:
+	 * 
+	 * 1 Binary Tree
+	 * 
+	 * a. preorderNext(x): return the node visited after node x in a pre-order
+	 * traversal of BT.
+	 * 
+	 * b. postorderNext(x): return the node visited after node x in a post-order
+	 * traversal of BT.
+	 * 
+	 * c. inorderNext(x): return the node visited after node x in an in-order
+	 * traversal of BT.
+	 */
 
 	/**
 	 * Used to make a mini-factory
 	 */
 	protected Node sampleNode;
-	
+
 	/**
 	 * The root of this tree
 	 */
@@ -34,8 +62,9 @@ public class BinaryTree<Node extends BinaryTree.BTNode<Node>> {
 
 	/**
 	 * Create a new instance of this class
-	 * @param sampleNode - a sample of a node that can be used
-	 * to create a new node in newNode()
+	 * 
+	 * @param sampleNode - a sample of a node that can be used to create a new
+	 *            node in newNode()
 	 * @param nil - a node that will be used in place of null
 	 */
 	public BinaryTree(Node sampleNode, Node nil) {
@@ -46,30 +75,33 @@ public class BinaryTree<Node extends BinaryTree.BTNode<Node>> {
 
 	/**
 	 * Create a new instance of this class
-	 * @param sampleNode - a sample of a node that can be used
-	 * to create a new node in newNode()
+	 * 
+	 * @param sampleNode - a sample of a node that can be used to create a new
+	 *            node in newNode()
 	 */
 	public BinaryTree(Node sampleNode) {
 		this.sampleNode = sampleNode;
 	}
-	
+
 	/**
 	 * Allocate a new node for use in this tree
+	 * 
 	 * @return
 	 */
-	@SuppressWarnings({"unchecked"})
+	@SuppressWarnings({ "unchecked" })
 	protected Node newNode() {
 		try {
-			Node u = (Node)sampleNode.getClass().newInstance();
+			Node u = (Node) sampleNode.getClass().newInstance();
 			u.parent = u.left = u.right = nil;
 			return u;
 		} catch (Exception e) {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Compute the depth (distance to the root) of u
+	 * 
 	 * @param u
 	 * @return the distanct between u and the root, r
 	 */
@@ -81,26 +113,29 @@ public class BinaryTree<Node extends BinaryTree.BTNode<Node>> {
 		}
 		return d;
 	}
-	
+
 	/**
 	 * Compute the size (number of nodes) of this tree
+	 * 
 	 * @warning uses recursion so could cause a stack overflow
 	 * @return the number of nodes in this tree
 	 */
 	public int size() {
 		return size(r);
 	}
-	
+
 	/**
 	 * @return the size of the subtree rooted at u
 	 */
 	protected int size(Node u) {
-		if (u == nil) return 0;
+		if (u == nil)
+			return 0;
 		return 1 + size(u.left) + size(u.right);
 	}
-	
+
 	/**
 	 * Compute the number of nodes in this tree without recursion
+	 * 
 	 * @return
 	 */
 	public int size2() {
@@ -109,12 +144,17 @@ public class BinaryTree<Node extends BinaryTree.BTNode<Node>> {
 		while (u != nil) {
 			if (prev == u.parent) {
 				n++;
-				if (u.left != nil) next = u.left;
-				else if (u.right != nil) next = u.right;
-				else next = u.parent;
+				if (u.left != nil)
+					next = u.left;
+				else if (u.right != nil)
+					next = u.right;
+				else
+					next = u.parent;
 			} else if (prev == u.left) {
-				if (u.right != nil) next = u.right;
-				else next = u.parent;
+				if (u.right != nil)
+					next = u.right;
+				else
+					next = u.parent;
 			} else {
 				next = u.parent;
 			}
@@ -126,41 +166,44 @@ public class BinaryTree<Node extends BinaryTree.BTNode<Node>> {
 
 	/**
 	 * Compute the maximum depth of any node in this tree
+	 * 
 	 * @return the maximum depth of any node in this tree
 	 */
 	public int height() {
 		return height(r);
 	}
-	
+
 	/**
 	 * @return the size of the subtree rooted at u
 	 */
 	protected int height(Node u) {
-		if (u == nil) return -1;
+		if (u == nil)
+			return -1;
 		return 1 + Math.max(height(u.left), height(u.right));
 	}
 
-	
 	/**
 	 * @return
 	 */
 	public boolean isEmpty() {
 		return r == nil;
 	}
-	
+
 	/**
 	 * Make this tree into the empty tree
 	 */
 	public void clear() {
 		r = nil;
 	}
-	
+
 	/**
 	 * Demonstration of a recursive traversal
+	 * 
 	 * @param u
 	 */
 	public void traverse(Node u) {
-		if (u == nil) return;
+		if (u == nil)
+			return;
 		traverse(u.left);
 		traverse(u.right);
 	}
@@ -172,12 +215,17 @@ public class BinaryTree<Node extends BinaryTree.BTNode<Node>> {
 		Node u = r, prev = nil, next;
 		while (u != nil) {
 			if (prev == u.parent) {
-				if (u.left != nil) next = u.left;
-				else if (u.right != nil) next = u.right;
-				else next = u.parent;
+				if (u.left != nil)
+					next = u.left;
+				else if (u.right != nil)
+					next = u.right;
+				else
+					next = u.parent;
 			} else if (prev == u.left) {
-				if (u.right != nil) next = u.right;
-				else next = u.parent;
+				if (u.right != nil)
+					next = u.right;
+				else
+					next = u.parent;
 			} else {
 				next = u.parent;
 			}
@@ -191,28 +239,34 @@ public class BinaryTree<Node extends BinaryTree.BTNode<Node>> {
 	 */
 	public void bfTraverse() {
 		Queue<Node> q = new LinkedList<Node>();
-		if (r != nil) q.add(r);
+		if (r != nil)
+			q.add(r);
 		while (!q.isEmpty()) {
 			Node u = q.remove();
-			if (u.left != nil) q.add(u.left);
-			if (u.right != nil) q.add(u.right);
+			if (u.left != nil)
+				q.add(u.left);
+			if (u.right != nil)
+				q.add(u.right);
 		}
 	}
 
 	/**
 	 * Find the first node in an in-order traversal
+	 * 
 	 * @return the first node reported in an in-order traversal
 	 */
 	public Node firstNode() {
 		Node w = r;
-		if (w == nil) return nil;
+		if (w == nil)
+			return nil;
 		while (w.left != nil)
 			w = w.left;
 		return w;
 	}
-	
+
 	/**
 	 * Find the node that follows w in an in-order traversal
+	 * 
 	 * @param w
 	 * @return the node that follows w in an in-order traversal
 	 */
