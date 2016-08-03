@@ -269,8 +269,8 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTNode<Node>> {
 
 	private static BinaryTreeEric<Node> runSimulations(int repeats, int factor) {
 		BinaryTreeEric<Node> b = null;
-		double[] size = new double[repeats];
-		double[][] time = new double[3][repeats];
+		double[] size = new double[factor];
+		double[][] time = new double[3][factor];
 		final int pre = 0;
 		final int in = 1;
 		final int post = 2;
@@ -381,7 +381,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTNode<Node>> {
 
 	public static void main(String[] args) {
 
-		BinaryTreeEric<Node> b = runSimulations(3000, 6);
+		BinaryTreeEric<Node> b = runSimulations(4000, 20);
 
 		// print some trouble-shooting code
 		System.out.println("nil? " + b.nil + ", .left? " + b.nil.left + ", .right? " + b.nil.right);

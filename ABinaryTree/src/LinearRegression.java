@@ -20,7 +20,7 @@
 public class LinearRegression {
 
 	public static void doLinearRegression(double[] ind, double[] dep) {
-		int MAXN = 100000;
+		int MAXN = ind.length;
 		int n = 0;
 		double[] x = new double[MAXN];
 		double[] y = new double[MAXN];
@@ -74,8 +74,8 @@ public class LinearRegression {
 		System.out.println("  SSE  = " + rss);
 		System.out.println("  SSR  = " + ssr);
 
-		for (int i = 0; i < 20; i++) {
-			System.out.print("" + i + " (" + x[i] + ", " + y[i] + ") ");
+		for (int i = 0; i < ind.length; i++) {
+			System.out.println("" + i + " (" + x[i] + ", " + y[i] + ") ");
 
 		}
 		System.out.println();
