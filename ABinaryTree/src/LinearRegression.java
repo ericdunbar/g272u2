@@ -48,7 +48,7 @@ public class LinearRegression {
 		double beta0 = ybar - beta1 * xbar;
 
 		// print results
-		System.out.printf("y   = %6.4f * x + %6.4f%n",  beta1, beta0);
+		System.out.printf("    y = %6.4f * x + %6.4f%n",  beta1, beta0);
 
 		// analyze results
 		int df = n - 2;
@@ -64,21 +64,21 @@ public class LinearRegression {
 		double svar1 = svar / xxbar;
 		double svar0 = svar / n + xbar * xbar * svar1;
 		System.out.println();
-		System.out.printf("R^2                   = %6.4f%n", R2);
-		System.out.printf("  std error of beta_1 = %6.4f%n", Math.sqrt(svar1));
-		System.out.printf("  std error of beta_0 = %6.4f%n", Math.sqrt(svar0));
+		System.out.printf("R^2 = %6.4f%n", R2);
+		System.out.printf("  std error of x = %6.4f%n", Math.sqrt(svar1));
+		System.out.printf("  std error of b = %6.4f%n", Math.sqrt(svar0));
 		svar0 = svar * sumx2 / (n * xxbar);
-		System.out.printf("  std error of beta_0 = %6.4f%n", Math.sqrt(svar0));
 
 		System.out.println("  SSTO = " + yybar);
 		System.out.println("  SSE  = " + rss);
 		System.out.println("  SSR  = " + ssr);
 
+		System.out.println();
+		System.out.println("Data");
 		for (int i = 0; i < ind.length; i++) {
-			System.out.println("" + i + " (" + x[i] + ", " + y[i] + ") ");
+			System.out.println("    " + i + " (" + x[i] + ", " + y[i] + ") ");
 
 		}
-		System.out.println();
 		System.out.println();
 	}
 }
