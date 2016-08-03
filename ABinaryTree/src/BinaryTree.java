@@ -14,9 +14,8 @@ public class BinaryTree<Node extends BinaryTree.BTNode<Node>> {
 		public Node left;
 		public Node right;
 		public Node parent;
-		int preOrder, inOrder, postOrder; // TODO: track the traversal order
-											// rank of the node. Eric addition.
 	}
+
 
 	/*
 	 * A pre-order traversal of a binary tree is a traversal that visits each
@@ -282,5 +281,4 @@ public class BinaryTree<Node extends BinaryTree.BTNode<Node>> {
 		}
 		return w;
 	}
-
 }

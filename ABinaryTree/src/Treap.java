@@ -1,29 +1,37 @@
-
-
 import java.util.Comparator;
 import java.util.Random;
 
+import BinarySearchTree.BSTNode;
 
-public class Treap<T> extends
-		BinarySearchTree<Treap.Node<T>, T> implements SSet<T> {
+public class Treap<T> extends BinarySearchTree<Treap.Node<T>, T> implements SSet<T> {
 	/**
 	 * A random number source
 	 */
 	Random rand;
 
-	protected static class Node<T> extends BinarySearchTree.BSTNode<Node<T>,T> {
+	public static void main(String[] args) {
+		Treap<Integer> b;
+		b = new Treap<>();
+		b.r = new Node<Integer>();
+		Node<Integer> a = new Node<Integer>();
+		b.r.left = a;
+		b.r.left.left = new Node<Integer>();
+		System.out.println("height: " + b.height() + ", size: " + b.size());
+	}
+
+	protected static class Node<T> extends BinarySearchTree.BSTNode<Node<T>, T> {
 		int p;
 	}
-	
+
 	public Treap(Comparator<T> c) {
 		super(new Node<T>(), c);
 		rand = new Random();
 	}
 
 	public Treap() {
-		this(new DefaultComparator<T>());	
+		this(new DefaultComparator<T>());
 	}
-	
+
 	public boolean add(T x) {
 		Node<T> u = newNode();
 		u.x = x;

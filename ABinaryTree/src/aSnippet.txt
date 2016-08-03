@@ -1,0 +1,29 @@
+	/**
+	 * Created by Eric from Treap.java with assistance from comments in COMP272
+	 * forum
+	 * 
+	 * @author erdun
+	 *
+	 * @param <T>
+	 */
+	protected static class Node extends BTNode<Node> {
+		/**
+		 * A class variable called p.
+		 */
+		int p;
+
+		int preOrder, inOrder, postOrder; // TODO: track the traversal order
+		// rank of the node. Eric addition.
+	}
+
+	public static void main(String[] args) {
+		BinaryTree<Node> b;
+		b = new BinaryTree<Node>(new Node());
+		b.r = b.newNode();
+		b.r.p = 0;
+		b.r.left = b.newNode();
+		System.out.println(".size() = " + b.size() + ", .depth() = " + b.depth(b.r));
+	}
+
+	
+	
