@@ -1,7 +1,10 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
+
+import BinaryTree.Node;
 
 /**
  * An implementation of binary trees. Modified by Eric Dunbar for assignment 2.
@@ -189,91 +192,134 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	}
 
 	/**
-	 * Determine the next node for a pre-, in- or post-traversal of the tree.
-	 * Calling this repeatedly should build the same tree as what is stored by
-	 * post-traversal. Based off traverse2() by Pat Morin and
-	 * orderNumberIterative by Eric Dunbar.
+	 * Determine the next node for a pre-order traversal of the tree. Calling
+	 * this repeatedly should build the same tree as what is stored by pre-order
+	 * traversal. Based off traverse2() by Pat Morin and orderNumberIterative by
+	 * Eric Dunbar.
+	 * 
+	 * Worst case running time is O(2n) since it potentially has to visit each
+	 * node and check the left and right children before it finds the next node.
+	 * For example, an unbalanced tree with only left-node children on the left
+	 * and a single node on the right would result in the maximum running time.
+	 * Best case is O(1) if the given node has a left child.
 	 * 
 	 * @author Eric Dunbar
 	 */
-	public Node whatIsNextNodeOrderIterative(Node u, Order o) {
-		// System.out.println(" nil? " + nil + ", .left? " + nil.left + ",
-		// .right? " + nil.right);
-		// System.out.println(" r " + r + " u: " + u + " parent: " + r.parent);
-		// System.out.println(" rl " + r.left + " parent: " + r.left.parent);
-		// System.out.println(" rll " + r.left.left + " parent: " +
-		// r.left.left.parent);
-		// System.out.println(" rlll " + r.left.left.left + " parent: " +
-		// r.left.left.left.parent);
-
+	public Node preorderNext(Node u) {
 		Node prev = nil;
 		Node next;
 
+		if (u.left != nil)
+			return u.left; // RETURN left child
+		else if (u.right != nil)
+			return u.right; // RETURN right child because left is nil
+
+		// LEAF, thus go up the parent chain until a right-child is found
+		prev = u;
+		u = u.parent;
+
 		while (u != nil) {
-			if (prev == u.parent) {
-				// System.out.print(u +" ");
-				// FIRST VISIT. Arrived at a new node since prev == u.parent
-				// Assign PREORDER number here since this is the first visit
-
-				if (u.left != nil)
-				{// go left
-					if (o == Order.PREORDER) {
-						return u.left;
-					}
-					next = u.left;}
-				else if (u.right != nil)
-				// go right because left is nil
-				// IN-ORDER number ASSIGNED HERE because no left child
-				{
-					if (o == Order.PREORDER) {
-						return u.right;
-					}
-					else if (o == Order.INORDER) {
-						return u.right;
-					}
-					next = u.right;
-				} else
-				// LEAF: go back up the tree
-				// INORDER number assigned here because no left child
-				// POSTORDER number assigned here because this is leaf
-				{
-					if (o == Order.POSTORDER)
-						return u.parent; //TODO may cause problems WARNING
-					else if (o == Order.INORDER)
-						return u.parent;
-					next = u.parent;
-				}
-			} else if (prev == u.left) {
-
-				// came from the left child, now what?
-				// INORDER number assigned here because done with left child
-				if (o == Order.INORDER)
-					u.inOrder = inOrderRank++;
+			if (u.left == prev) {
 				if (u.right != nil)
-					// go right because it's not empty
-					next = u.right;
+					return u.right;
 				else
-				// go back up because right is empty
-				{
-					// THERE'S A LEFT CHILD BUT NO RIGHT CHILD.
-					// POSTORDER update
-					if (o == Order.POSTORDER)
-						u.postOrder = postOrderRank++;
 					next = u.parent;
-				}
-			} else {
-
-				// came from right child so up is the only way to go
-				// POSTORDER assigned here since done with all children
-				if (o == Order.POSTORDER) {
-					u.postOrder = postOrderRank++;
-				}
+			} else // if (u.right == prev)
 				next = u.parent;
-			}
 			prev = u; // the current node now assigned to previous node
 			u = next; // next node assigned to current node
 		}
 		return nil; // if it got this far there was no next node
+	}
+
+	/**
+	 * Determine the next node for an in-order traversal of the tree. Calling
+	 * this repeatedly should build the same tree as what is stored by in-order
+	 * traversal. Based off traverse2() & firstNode() by Pat Morin and,
+	 * orderNumberIterative() & preorderNext() by Eric Dunbar.
+	 * 
+	 * Worst case running time is O(n) if given the last node in an unbalanced
+	 * right-child-only tree. It has to visit all parent nodes.
+	 * 
+	 * @author Eric Dunbar
+	 */
+	public Node inorderNext(Node u) {
+		/*
+		 * First: test to see if it has a right-child, if so, go down one and
+		 * find the "first" (lowest) node
+		 * 
+		 * Second: go up to parent and if the prev is the parent's left node,
+		 * return the parent
+		 * 
+		 * Third: if it was the right node, keep repeating 2nd and third until
+		 * you hit nil
+		 */
+		Node prev;
+
+		if (u.right != nil) {
+			u = u.right;
+			while (u.left != nil)
+				u = u.left;
+			return u;
+		}
+
+		while (u != nil) {
+			prev = u;
+			u = u.parent;
+			if (u.left == prev)
+				return u; // RETURN parent}
+		}
+		return nil; // let's move on
+	}
+
+	/**
+	 * Determine the next node for a post-order traversal of the tree. Calling
+	 * this repeatedly should build the same tree as what is stored by
+	 * post-order traversal. Based off traverse2() & firstNode() by Pat Morin
+	 * and, orderNumberIterative() & preorderNext() & inorderNext() by Eric
+	 * Dunbar.
+	 * 
+	 * Worst case running time is ___ if given the last node in an unbalanced
+	 * right-child-only tree. It has to visit all parent nodes.
+	 * 
+	 * @author Eric Dunbar
+	 */
+	public Node postorderNext(Node u) {
+		/*
+		 * 1. Go up.
+		 * 
+		 * a. If you were the right-child return your parent
+		 * 
+		 * b. If you were the left-child... return the left or right child of
+		 * the firstNode
+		 * 
+		 * c. if your parent was nil return nil
+		 */
+
+		if (u == nil) {
+			return nil;
+		}
+		Node prev = u;
+		u = u.parent;
+		// GO UP.
+		// If u was right-child, return the parent
+		if (u.right == prev)
+			return u;
+		// If u was a left-child, return the firstNode, starting at the parent
+		else if (u.left == prev) {
+			if (u.right == nil)
+				return u;
+			u = u.right;
+
+			while (u.left != nil || u.right != nil) {
+				if (u.left != nil)
+					u = u.left;
+				else
+					u = u.right;
+			}
+			return u;
+		}
+		return nil;
 	}
 
 	/**
@@ -451,6 +497,12 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 		System.out.printf("%4d ", number);
 	}
 
+	/**
+	 * Print the traversal order numbers to System.out.
+	 * 
+	 * @param pg148 array of type Node
+	 * @param numNodes how many Nodes in the array
+	 */
 	public static void printNumbers(Node[] pg148, int numNodes) {
 		int lineWrap = 15;
 		int lineEnd = Math.min(lineWrap, numNodes);
@@ -458,7 +510,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 		// show the pre-order numbers
 
 		System.out.println();
-		System.out.println("NUMBERS ASSIGNED TO NODES IN A BINARY TREE");
+		System.out.println("TRAVERSAL ORDER NUMBERS ASSIGNED TO NODES IN A BINARY TREE");
 		System.out.println();
 		while (lineStart < numNodes) {
 			System.out.print(" Pre: ");
@@ -594,8 +646,12 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	}
 
 	private static Node[] buildBTPg148(BinaryTreeEric<Node> b, int copies) {
-		Node[] pg148 = new Node[1 + 11 * (copies + 1)]; // track nodes as
-														// they're
+		return buildBTPg148Proper(b, copies + 1);
+	}
+
+	private static Node[] buildBTPg148Proper(BinaryTreeEric<Node> b, int copies) {
+		Node[] pg148 = new Node[1 + 11 * (copies)]; // track nodes as
+													// they're
 		// added,
 		// pg. 148
 		int i = 0; // index for node tracking
@@ -604,7 +660,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 		Node second, tert;
 
 		// multiply the number of nodes
-		for (int j = 0; j < copies + 1; j++) {
+		for (int j = 0; j < copies; j++) {
 			// Add nodes in pre-order order (with one exception)
 			// Build left half
 			pg148[i++] = second = b.addLowest(b.newNode()); // first left
@@ -632,7 +688,9 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 
 	public static void main(String[] args) {
 		iterative = false;
-		BinaryTreeEric<Node> b = runFullOrderSimulations(1111, 11);
+		// BinaryTreeEric<Node> b = runFullOrderSimulations(1111, 11);
+
+		BinaryTreeEric<Node> b = runOrderNextSimulation();
 
 		// print some trouble-shooting code
 		System.out.println("nil? " + b.nil + ", .left? " + b.nil.left + ", .right? " + b.nil.right);
@@ -642,6 +700,88 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 		System.out.println("rlll " + b.r.left.left.left);
 		// System.out.println(".size() = " + b.size() + ", .height() = " +
 		// b.height());
+	}
+
+	private static void printOrderHeader(String[] traversal, String[] method, int idx) {
+		String outS = String.format(
+				"|| %2d. %s-ORDER traversal sequence returned by repeated calls to %s. ||", idx + 1,
+				traversal[idx], method[idx]);
+		System.out.println();
+		System.out.println(CommonSuite.stringRepeat("=", outS.length()));
+		System.out.println(outS);
+		System.out.println(CommonSuite.stringRepeat("=", outS.length()));
+		System.out.println();
+	}
+
+	private static BinaryTreeEric<BinaryTreeEric.Node> runOrderNextSimulation() {
+		// TODO Auto-generated method stub
+		BinaryTreeEric<Node> b = new BinaryTreeEric<>(new Node(), new Node());
+		Node[] pg148 = buildBTPg148Proper(b, 1);
+		String[] method = { "preorderNext()", "inorderNext()", "postorderNext" };
+		String[] traversal = { "PRE", "IN", "POST" };
+		int methodIdx = 0;
+
+		b.preOrderNumber(); // generate preOrderNumbers
+		b.inOrderNumber(); // generate inOrderNumbers
+		b.postOrderNumbers(); // generate postOrderNumbers
+
+		System.out.println();
+		System.out.println(
+				"Traverse order numbers generated by the 'pre'-, 'post'- and 'inOrderNumber()'");
+
+		printNumbers(pg148, pg148.length);
+
+		// **************************************************
+		// PREORDER NUMBERS
+		// **************************************************
+
+		printOrderHeader(traversal, method, methodIdx++);
+
+		int i = 0;
+		Node[] preOrderNextNums = new Node[pg148.length];
+		Node orderNumberCall = b.r;
+
+		while (orderNumberCall != b.nil) {
+			preOrderNextNums[i++] = orderNumberCall;
+			orderNumberCall = b.preorderNext(orderNumberCall);
+		}
+		printNumbers(preOrderNextNums, preOrderNextNums.length);
+		System.out.println();
+
+		// **************************************************
+		// INORDER NUMBERS
+		// **************************************************
+
+		printOrderHeader(traversal, method, methodIdx++);
+
+		i = 0;
+		Node[] inOrderNextNums = new Node[pg148.length];
+		orderNumberCall = preOrderNextNums[2]; // should be firstNode pg148
+
+		while (orderNumberCall != b.nil) {
+			inOrderNextNums[i++] = orderNumberCall;
+			orderNumberCall = b.inorderNext(orderNumberCall);
+		}
+		printNumbers(inOrderNextNums, inOrderNextNums.length);
+		System.out.println();
+
+		// **************************************************
+		// POSTORDER NUMBERS
+		// **************************************************
+
+		printOrderHeader(traversal, method, methodIdx++);
+
+		i = 0;
+		Node[] postOrderNextNums = new Node[pg148.length];
+		orderNumberCall = preOrderNextNums[2]; // should be firstNode pg148
+
+		while (orderNumberCall != b.nil) {
+			postOrderNextNums[i++] = orderNumberCall;
+			orderNumberCall = b.postorderNext(orderNumberCall);
+		}
+		printNumbers(postOrderNextNums, postOrderNextNums.length);
+		System.out.println();
+		return b;
 	}
 
 	/*
