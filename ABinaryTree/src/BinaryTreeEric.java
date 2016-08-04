@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -11,9 +12,9 @@ import java.util.Queue;
  *
  * @param <Node>
  */
-public class BinaryTreeEric<Node extends BinaryTreeEric.BTNode<Node>> {
+public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 
-	public static class BTNode<Node extends BTNode<Node>> {
+	public static class BTENode<Node extends BTENode<Node>> {
 		public Node left;
 		public Node right;
 		public Node parent;
@@ -54,43 +55,52 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTNode<Node>> {
 	 * traversal of BT.
 	 */
 
+	/*
+	 * 5. (20 marks) Exercise 6.7. Create a subclass of BinaryTree whose nodes
+	 * have fields for storing preorder, post-order, and in-order numbers. Write
+	 * methods preOrderNumber(), inOrderNumber(), and postOrderNumbers() that
+	 * assign these numbers correctly. These methods should each run in O(n)
+	 * time.
+	 */
+
 	/**
-	 * Created by Eric from Treap.java with assistance from comments in COMP272
-	 * forum. Provides the Node class required for BinaryTree to act as a source
-	 * of objects.
+	 * Node class that tracks pre-order, in-order and post-order numbering for
+	 * nodes (pg. 148 Pat Morin ODS) and parent, left-child and right-child node
+	 * relationships. Created by Eric with inspiration from Treap.java and
+	 * assistance from a comment in COMP272 forum that suggested that a Node
+	 * class needed to be created.
 	 * 
 	 * @author Eric Dunbar
 	 */
-	protected static class Node extends BinaryTreeEric.BTNode<Node> {
-		/**
-		 * A class variable called p. Does nothing. Eric.
-		 */
-		int p;
-
+	protected static class Node extends BinaryTreeEric.BTENode<Node> {
+		final int warningNumber = -99;
 		/**
 		 * Track the order number of the node if visited by a pre-order routine.
-		 * Eric.
+		 * 
+		 * @author Eric Dunbar
 		 */
-		int preOrder = -99;
+		int preOrder = warningNumber;
 
 		/**
-		 * Track the order number of the node if visited by a pre-order routine.
-		 * Eric.
+		 * Track the order number of the node if visited by an in-order routine.
+		 * 
+		 * @author Eric Dunbar
 		 */
-		int inOrder = -99;
+		int inOrder = warningNumber;
 
 		/**
-		 * Track the order number of the node if visited by a pre-order routine.
-		 * Eric.
+		 * Track the order number of the node if visited by a post-order
+		 * routine.
+		 * 
+		 * @author Eric Dunbar
 		 */
-		int postOrder = -99;
+		int postOrder = warningNumber;
 	}
 
 	/**
-	 * Add a node to the lowest in-order empty (nil) left node. ERIC
+	 * Add the node as the lowest in-order node.
 	 * 
 	 * @author Eric Dunbar
-	 * 
 	 * @return the added node
 	 */
 	public Node addLowest(Node u) {
@@ -108,11 +118,10 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTNode<Node>> {
 	}
 
 	/**
-	 * Add a node to the left child of the given node. Will overwrite existing
-	 * left child node. ERIC.
+	 * Add or replace the left child node of the given parent node.
 	 * 
+	 * @warning This will replace an existing left child node.
 	 * @author Eric Dunbar
-	 * 
 	 * @return the newly added node
 	 */
 	public Node addLeft(Node parent, Node child) {
@@ -125,11 +134,10 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTNode<Node>> {
 	}
 
 	/**
-	 * Add a node to the right child of the given node. Will overwrite existing
-	 * right child node. ERIC.
+	 * Add or replace the right child node of the given parent node.
 	 * 
+	 * @warning This will replace an existing right child node.
 	 * @author Eric Dunbar
-	 * 
 	 * @return the newly added node
 	 */
 	public Node addRight(Node parent, Node child) {
@@ -142,9 +150,10 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTNode<Node>> {
 	}
 
 	/**
-	 * Crude attempt at printing the tree. Causes stack over flow with large
-	 * trees.
+	 * Crude attempt at printing the tree, recursively. Causes stack over flow
+	 * with large trees.
 	 * 
+	 * @author Eric Dunbar
 	 * @param u root node for the tree to be printed
 	 * @param rank what is the starting rank of the root node (0 for root)
 	 * @return
@@ -161,8 +170,10 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTNode<Node>> {
 	}
 
 	/**
-	 * Performs a recursive pre-order traversal. Modification of traverse() by
-	 * Pat Morin. Causes a StackOverFlow error.
+	 * Performs a recursive pre-order traversal of all nodes and records the
+	 * pre-order traversal number in each node. Code modified from traverse() by
+	 * Pat Morin. Fast but causes a StackOverFlow error with a large enough
+	 * number of nodes. Runs in O(n) time.
 	 * 
 	 * @param u starting node for the tree rooted at u
 	 * @param rank current pre-order rank, should be 0 if starting with the root
@@ -177,6 +188,99 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTNode<Node>> {
 		return rank;
 	}
 
+	/**
+	 * Determine the next node for a pre-, in- or post-traversal of the tree.
+	 * Calling this repeatedly should build the same tree as what is stored by
+	 * post-traversal. Based off traverse2() by Pat Morin and
+	 * orderNumberIterative by Eric Dunbar.
+	 * 
+	 * @author Eric Dunbar
+	 */
+	public Node whatIsNextNodeOrderIterative(Node u, Order o) {
+		// System.out.println(" nil? " + nil + ", .left? " + nil.left + ",
+		// .right? " + nil.right);
+		// System.out.println(" r " + r + " u: " + u + " parent: " + r.parent);
+		// System.out.println(" rl " + r.left + " parent: " + r.left.parent);
+		// System.out.println(" rll " + r.left.left + " parent: " +
+		// r.left.left.parent);
+		// System.out.println(" rlll " + r.left.left.left + " parent: " +
+		// r.left.left.left.parent);
+
+		Node prev = nil;
+		Node next;
+
+		while (u != nil) {
+			if (prev == u.parent) {
+				// System.out.print(u +" ");
+				// FIRST VISIT. Arrived at a new node since prev == u.parent
+				// Assign PREORDER number here since this is the first visit
+
+				if (u.left != nil)
+				{// go left
+					if (o == Order.PREORDER) {
+						return u.left;
+					}
+					next = u.left;}
+				else if (u.right != nil)
+				// go right because left is nil
+				// IN-ORDER number ASSIGNED HERE because no left child
+				{
+					if (o == Order.PREORDER) {
+						return u.right;
+					}
+					else if (o == Order.INORDER) {
+						return u.right;
+					}
+					next = u.right;
+				} else
+				// LEAF: go back up the tree
+				// INORDER number assigned here because no left child
+				// POSTORDER number assigned here because this is leaf
+				{
+					if (o == Order.POSTORDER)
+						return u.parent; //TODO may cause problems WARNING
+					else if (o == Order.INORDER)
+						return u.parent;
+					next = u.parent;
+				}
+			} else if (prev == u.left) {
+
+				// came from the left child, now what?
+				// INORDER number assigned here because done with left child
+				if (o == Order.INORDER)
+					u.inOrder = inOrderRank++;
+				if (u.right != nil)
+					// go right because it's not empty
+					next = u.right;
+				else
+				// go back up because right is empty
+				{
+					// THERE'S A LEFT CHILD BUT NO RIGHT CHILD.
+					// POSTORDER update
+					if (o == Order.POSTORDER)
+						u.postOrder = postOrderRank++;
+					next = u.parent;
+				}
+			} else {
+
+				// came from right child so up is the only way to go
+				// POSTORDER assigned here since done with all children
+				if (o == Order.POSTORDER) {
+					u.postOrder = postOrderRank++;
+				}
+				next = u.parent;
+			}
+			prev = u; // the current node now assigned to previous node
+			u = next; // next node assigned to current node
+		}
+		return nil; // if it got this far there was no next node
+	}
+
+	/**
+	 * Identifies the type of number ordering scheme.
+	 * 
+	 * @author Eric Dunbar
+	 */
 	public enum Order {
 		PREORDER, INORDER, POSTORDER
 	};
@@ -187,7 +291,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTNode<Node>> {
 	 * 
 	 * @author Eric Dunbar
 	 */
-	public void orderNumberIteractive(Node u, Order o) {
+	public void orderNumberIterative(Node u, Order o) {
 		// System.out.println(" nil? " + nil + ", .left? " + nil.left + ",
 		// .right? " + nil.right);
 		// System.out.println(" r " + r + " u: " + u + " parent: " + r.parent);
@@ -276,7 +380,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTNode<Node>> {
 	 */
 	public void preOrderNumber() {
 		if (iterative)
-			orderNumberIteractive(r, Order.PREORDER);
+			orderNumberIterative(r, Order.PREORDER);
 		else
 			preOrderNumberRecursive(r, 0);
 	}
@@ -289,7 +393,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTNode<Node>> {
 	 */
 	public void postOrderNumbers() {
 		if (iterative)
-			orderNumberIteractive(r, Order.POSTORDER);
+			orderNumberIterative(r, Order.POSTORDER);
 		else
 			postOrderNumberRecursive(r, 0);
 	}
@@ -302,7 +406,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTNode<Node>> {
 	 */
 	public void inOrderNumber() {
 		if (iterative)
-			orderNumberIteractive(r, Order.INORDER);
+			orderNumberIterative(r, Order.INORDER);
 		else
 			inOrderNumberRecursive(r, 0);
 	}
@@ -378,7 +482,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTNode<Node>> {
 		}
 	}
 
-	private static BinaryTreeEric<Node> runSimulations(int repeats, int factor) {
+	private static BinaryTreeEric<Node> runFullOrderSimulations(int repeats, int factor) {
 		if (factor < 1 || repeats < 1) {
 			factor = repeats = 1; // default
 			System.out.println("An error occurred.");
@@ -402,37 +506,8 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTNode<Node>> {
 		// build a BinaryTree with increasing numbers of nodes using pg. 148
 		for (int idx = 0; idx < repeats; idx += repeats / factor) {
 			b = new BinaryTreeEric<Node>(new Node(), new Node());
-			pg148 = new Node[1 + 11 * repeats]; // track nodes as they're
-												// added,
-			// pg. 148
-			int i = 0; // index for node tracking
-			// specify root
-			pg148[i++] = b.addLowest(b.newNode());
-			Node second, tert;
 
-			// multiply the number of nodes
-			for (int j = 0; j < idx + 1; j++) {
-				// Add nodes in pre-order order (with one exception)
-				// Build left half
-				pg148[i++] = second = b.addLowest(b.newNode()); // first left
-																// child
-																// pre1
-				pg148[i++] = b.addLowest(b.newNode()); // second left child pre2
-														// (out of
-														// order)
-				pg148[i++] = tert = b.addRight(second, b.newNode()); // pre3
-				pg148[i++] = b.addLeft(tert, b.newNode()); // pre4
-				pg148[i++] = b.addRight(tert, b.newNode()); // pre5
-
-				// Build right half
-				// start at root node, or, i-7 for subsequent additions
-				pg148[i++] = second = b.addRight(pg148[i - 7], b.newNode());
-				pg148[i++] = tert = b.addLeft(second, b.newNode());
-				pg148[i++] = b.addLeft(tert, b.newNode());
-				pg148[i++] = tert = b.addRight(second, b.newNode());
-				pg148[i++] = b.addLeft(tert, b.newNode());
-				pg148[i++] = b.addRight(tert, b.newNode());
-			}
+			pg148 = buildBTPg148(b, idx);
 
 			regressionSizeInd[regressionIterationTracker] = b.size();
 
@@ -518,9 +593,46 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTNode<Node>> {
 		return b;
 	}
 
+	private static Node[] buildBTPg148(BinaryTreeEric<Node> b, int copies) {
+		Node[] pg148 = new Node[1 + 11 * (copies + 1)]; // track nodes as
+														// they're
+		// added,
+		// pg. 148
+		int i = 0; // index for node tracking
+		// specify root
+		pg148[i++] = b.addLowest(b.newNode());
+		Node second, tert;
+
+		// multiply the number of nodes
+		for (int j = 0; j < copies + 1; j++) {
+			// Add nodes in pre-order order (with one exception)
+			// Build left half
+			pg148[i++] = second = b.addLowest(b.newNode()); // first left
+			// child
+			// pre1
+			pg148[i++] = b.addLowest(b.newNode()); // second left child pre2
+			// (out of
+			// order)
+			pg148[i++] = tert = b.addRight(second, b.newNode()); // pre3
+			pg148[i++] = b.addLeft(tert, b.newNode()); // pre4
+			pg148[i++] = b.addRight(tert, b.newNode()); // pre5
+
+			// Build right half
+			// start at root node, or, i-7 for subsequent additions
+			pg148[i++] = second = b.addRight(pg148[i - 7], b.newNode());
+			pg148[i++] = tert = b.addLeft(second, b.newNode());
+			pg148[i++] = b.addLeft(tert, b.newNode());
+			pg148[i++] = tert = b.addRight(second, b.newNode());
+			pg148[i++] = b.addLeft(tert, b.newNode());
+			pg148[i++] = b.addRight(tert, b.newNode());
+		}
+
+		return pg148;
+	}
+
 	public static void main(String[] args) {
-		iterative = true;
-		BinaryTreeEric<Node> b = runSimulations(2000, 20);
+		iterative = false;
+		BinaryTreeEric<Node> b = runFullOrderSimulations(1111, 11);
 
 		// print some trouble-shooting code
 		System.out.println("nil? " + b.nil + ", .left? " + b.nil.left + ", .right? " + b.nil.right);
