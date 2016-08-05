@@ -1,10 +1,6 @@
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
-
-import BinaryTree.Node;
 
 /**
  * An implementation of binary trees. Modified by Eric Dunbar for assignment 2.
@@ -67,8 +63,8 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	 */
 
 	/**
-	 * Node class that tracks pre-order, in-order and post-order numbering for
-	 * nodes (pg. 148 Pat Morin ODS) and parent, left-child and right-child node
+	 * Binary Tree nodes track pre-order, in-order and post-order numbering for
+	 * nodes (pg. 148 Pat Morin ODS) and also track parent, left-child and right-child node
 	 * relationships. Created by Eric with inspiration from Treap.java and
 	 * assistance from a comment in COMP272 forum that suggested that a Node
 	 * class needed to be created.
@@ -76,20 +72,20 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	 * @author Eric Dunbar
 	 */
 	protected static class Node extends BinaryTreeEric.BTENode<Node> {
-		final int warningNumber = -99;
+		final int warning = -99;
 		/**
 		 * Track the order number of the node if visited by a pre-order routine.
 		 * 
 		 * @author Eric Dunbar
 		 */
-		int preOrder = warningNumber;
+		int preOrder = warning;
 
 		/**
 		 * Track the order number of the node if visited by an in-order routine.
 		 * 
 		 * @author Eric Dunbar
 		 */
-		int inOrder = warningNumber;
+		int inOrder = warning;
 
 		/**
 		 * Track the order number of the node if visited by a post-order
@@ -97,7 +93,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 		 * 
 		 * @author Eric Dunbar
 		 */
-		int postOrder = warningNumber;
+		int postOrder = warning;
 	}
 
 	/**
@@ -416,8 +412,6 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 		}
 	}
 
-	static boolean iterative = false;
-
 	/**
 	 * Assign pre-order numbers to nodes in the binary tree. Causes a
 	 * StackOverFlow error if used with a recursive implementation.
@@ -457,6 +451,8 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 			inOrderNumberRecursive(r, 0);
 	}
 
+	static boolean iterative = false;
+
 	/**
 	 * Performs a recursive post-order traversal. Modification of traverse() by
 	 * Pat Morin and preOrderNumberRecursive by Eric Dunbar. Causes a
@@ -466,7 +462,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	 * @param rank current post-order rank, should be 0 if starting with the
 	 *            root node
 	 */
-	public int postOrderNumberRecursive(Node u, int rank) {
+	private int postOrderNumberRecursive(Node u, int rank) {
 		if (u == nil)
 			return rank;
 		rank = postOrderNumberRecursive(u.left, rank);
@@ -484,7 +480,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	 * @param rank current in-order rank, should be 0 if starting with the root
 	 *            node
 	 */
-	public int inOrderNumberRecursive(Node u, int rank) {
+	private int inOrderNumberRecursive(Node u, int rank) {
 		if (u == nil)
 			return rank;
 		rank = inOrderNumberRecursive(u.left, rank);
@@ -493,52 +489,56 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 		return rank;
 	}
 
-	private static void printNumber(int number) {
+	/**
+	 * Trivial, private method used to format and print numbers for
+	 * printNumbers().
+	 * 
+	 * @param number
+	 */
+	private static void supportPrintNumber(int number) {
 		System.out.printf("%4d ", number);
 	}
 
 	/**
-	 * Print the traversal order numbers to System.out.
+	 * Print the pre-, in- and post-order traversal numbers to System.out.
 	 * 
 	 * @param pg148 array of type Node
 	 * @param numNodes how many Nodes in the array
 	 */
-	public static void printNumbers(Node[] pg148, int numNodes) {
+	private static void printNumbers(Node[] pg148, int numNodes) {
 		int lineWrap = 15;
-		int lineEnd = Math.min(lineWrap, numNodes);
-		int lineStart = 0;
-		// show the pre-order numbers
+		int lineEndIdx = Math.min(lineWrap, numNodes);
+		int lineStartIdx = 0;
 
 		System.out.println();
 		System.out.println("TRAVERSAL ORDER NUMBERS ASSIGNED TO NODES IN A BINARY TREE");
 		System.out.println();
-		while (lineStart < numNodes) {
-			System.out.print(" Pre: ");
-			for (int j = lineStart; j < lineEnd; j++) {
-				printNumber(pg148[j].preOrder);
+		while (lineStartIdx < numNodes) {
+			System.out.print("  Pre: ");
+			for (int j = lineStartIdx; j < lineEndIdx; j++) {
+				supportPrintNumber(pg148[j].preOrder);
 			}
 			System.out.println(); // show the post-order numbers
-			System.out.print("Post: ");
-			for (int j = lineStart; j < lineEnd; j++) {
-				printNumber(pg148[j].postOrder);
+			System.out.print(" Post: ");
+			for (int j = lineStartIdx; j < lineEndIdx; j++) {
+				supportPrintNumber(pg148[j].postOrder);
 			}
 			System.out.println(); // show the in-order numbers
-			System.out.print("  In: ");
-			for (int j = lineStart; j < lineEnd; j++) {
-				printNumber(pg148[j].inOrder);
+			System.out.print("   In: ");
+			for (int j = lineStartIdx; j < lineEndIdx; j++) {
+				supportPrintNumber(pg148[j].inOrder);
 			}
 			System.out.println();
 			System.out.println();
-			lineStart += lineWrap;
-			lineEnd = Math.min(lineEnd + lineWrap, numNodes);
+			lineStartIdx += lineWrap;
+			lineEndIdx = Math.min(lineEndIdx + lineWrap, numNodes);
 		}
 	}
 
 	private static BinaryTreeEric<Node> runFullOrderSimulations(int repeats, int factor) {
-		if (factor < 1 || repeats < 1) {
+		if (factor < 1 || repeats < 1)
 			factor = repeats = 1; // default
-			System.out.println("An error occurred.");
-		}
+
 		// eliminate null pointer exceptions & ensure arrays align
 		repeats = repeats / factor * factor;
 
@@ -546,9 +546,9 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 		Node[] pg148 = null; // the nodes added to the binary tree, in order
 
 		// regression analysis variables
-		double[] regressionSizeInd = new double[factor];
-		double[][] regressionTimeDep = new double[3][factor];
-		int regressionIterationTracker = 0;
+		double[] regrSizeInd = new double[factor];
+		double[][] regrTimeDep = new double[3][factor];
+		int regrIterationCounter = 0;
 
 		// constants for array indices
 		final int pre = 0;
@@ -561,10 +561,10 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 
 			pg148 = buildBTPg148(b, idx);
 
-			regressionSizeInd[regressionIterationTracker] = b.size();
+			regrSizeInd[regrIterationCounter] = b.size();
 
-			System.out.println(".size() = " + regressionSizeInd[regressionIterationTracker]
-					+ ", iteration = " + idx);
+			System.out.println(
+					".size() = " + regrSizeInd[regrIterationCounter] + ", iteration = " + idx);
 
 			int timeRepeats = 1000;
 			// determine how long it takes to (re)build the numbers
@@ -579,7 +579,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 				// b.preOrderNumberRecursive(b.r, 0); // assign pre-order
 				// numbers
 			}
-			regressionTimeDep[pre][regressionIterationTracker] = CommonSuite.StopWatch.stop();
+			regrTimeDep[pre][regrIterationCounter] = CommonSuite.StopWatch.stop();
 
 			CommonSuite.StopWatch.start();
 			for (int j = 0; j < timeRepeats; j++) {
@@ -592,7 +592,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 				// b.postOrderNumberRecursive(b.r, 0); // assign post-order
 				// numbers
 			}
-			regressionTimeDep[post][regressionIterationTracker] = CommonSuite.StopWatch.stop();
+			regrTimeDep[post][regrIterationCounter] = CommonSuite.StopWatch.stop();
 
 			CommonSuite.StopWatch.start();
 			for (int j = 0; j < timeRepeats; j++) {
@@ -605,7 +605,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 				// b.inOrderNumberRecursive(b.r, 0); // assign post-order
 				// numbers
 			}
-			regressionTimeDep[in][regressionIterationTracker++] = CommonSuite.StopWatch.stop();
+			regrTimeDep[in][regrIterationCounter++] = CommonSuite.StopWatch.stop();
 		}
 
 		System.out.println();
@@ -616,31 +616,28 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 		printNumbers(pg148, b.size());
 
 		System.out.println();
-		System.out.println("||========================================||");
-		System.out.println("||  Do ordering methods run in O(n) time? ||");
-		System.out.println("||========================================||");
+		System.out.println("||===========================================||");
+		System.out.println("||  Q? Do ordering methods run in O(n) time? ||");
+		System.out.println("||===========================================||");
 		System.out.println();
 
 		System.out.println("||======================================||");
 		System.out.println("||  PRE-ORDER NUMBERS LINEAR REGRESSION ||");
 		System.out.println("||======================================||");
-		LinearRegression.doLinearRegression(
-				Arrays.copyOfRange(regressionSizeInd, 1, regressionSizeInd.length),
-				Arrays.copyOfRange(regressionTimeDep[pre], 1, regressionTimeDep[pre].length));
+		LinearRegression.doLinearRegression(Arrays.copyOfRange(regrSizeInd, 1, regrSizeInd.length),
+				Arrays.copyOfRange(regrTimeDep[pre], 1, regrTimeDep[pre].length));
 
 		System.out.println("||======================================||");
 		System.out.println("|| POST-ORDER NUMBERS LINEAR REGRESSION ||");
 		System.out.println("||======================================||");
-		LinearRegression.doLinearRegression(
-				Arrays.copyOfRange(regressionSizeInd, 1, regressionSizeInd.length),
-				Arrays.copyOfRange(regressionTimeDep[post], 1, regressionTimeDep[post].length));
+		LinearRegression.doLinearRegression(Arrays.copyOfRange(regrSizeInd, 1, regrSizeInd.length),
+				Arrays.copyOfRange(regrTimeDep[post], 1, regrTimeDep[post].length));
 
 		System.out.println("||======================================||");
 		System.out.println("||   IN-ORDER NUMBERS LINEAR REGRESSION ||");
 		System.out.println("||======================================||");
-		LinearRegression.doLinearRegression(
-				Arrays.copyOfRange(regressionSizeInd, 1, regressionSizeInd.length),
-				Arrays.copyOfRange(regressionTimeDep[in], 1, regressionTimeDep[in].length));
+		LinearRegression.doLinearRegression(Arrays.copyOfRange(regrSizeInd, 1, regrSizeInd.length),
+				Arrays.copyOfRange(regrTimeDep[in], 1, regrTimeDep[in].length));
 
 		return b;
 	}
@@ -649,40 +646,42 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 		return buildBTPg148Proper(b, copies + 1);
 	}
 
+	/**
+	 * Create the binary tree as shown on page 148 of ODS by Pat Morin.
+	 * Recreates the pre-order, in-order and post-order traversal order.
+	 * 
+	 * @param b binary tree to be constructed
+	 * @param copies number of copies of the sub-tree to be used
+	 * @return array of Nodes in pre-order traversal order
+	 */
 	private static Node[] buildBTPg148Proper(BinaryTreeEric<Node> b, int copies) {
-		Node[] pg148 = new Node[1 + 11 * (copies)]; // track nodes as
-													// they're
-		// added,
-		// pg. 148
-		int i = 0; // index for node tracking
-		// specify root
-		pg148[i++] = b.addLowest(b.newNode());
+		// track nodes as they're added, pg. 148
+		Node[] pg148 = new Node[1 + 11 * (copies)];
+
+		int nodeIdx = 0;
+		pg148[nodeIdx++] = b.addLowest(b.newNode()); // create root
 		Node second, tert;
 
-		// multiply the number of nodes
+		// make multiple copies of the original binary tree
 		for (int j = 0; j < copies; j++) {
-			// Add nodes in pre-order order (with one exception)
+			// Add nodes in pre-order traversal
+
 			// Build left half
-			pg148[i++] = second = b.addLowest(b.newNode()); // first left
-			// child
-			// pre1
-			pg148[i++] = b.addLowest(b.newNode()); // second left child pre2
-			// (out of
-			// order)
-			pg148[i++] = tert = b.addRight(second, b.newNode()); // pre3
-			pg148[i++] = b.addLeft(tert, b.newNode()); // pre4
-			pg148[i++] = b.addRight(tert, b.newNode()); // pre5
+			pg148[nodeIdx++] = second = b.addLowest(b.newNode()); // 1st LC pre1
+			pg148[nodeIdx++] = b.addLowest(b.newNode()); // 2nd LC pre2
+			pg148[nodeIdx++] = tert = b.addRight(second, b.newNode()); // pre3
+			pg148[nodeIdx++] = b.addLeft(tert, b.newNode()); // pre4
+			pg148[nodeIdx++] = b.addRight(tert, b.newNode()); // pre5
 
 			// Build right half
-			// start at root node, or, i-7 for subsequent additions
-			pg148[i++] = second = b.addRight(pg148[i - 7], b.newNode());
-			pg148[i++] = tert = b.addLeft(second, b.newNode());
-			pg148[i++] = b.addLeft(tert, b.newNode());
-			pg148[i++] = tert = b.addRight(second, b.newNode());
-			pg148[i++] = b.addLeft(tert, b.newNode());
-			pg148[i++] = b.addRight(tert, b.newNode());
+			// start at root node, or, nodeIdx-7 for subsequent additions
+			pg148[nodeIdx++] = second = b.addRight(pg148[nodeIdx - 7], b.newNode());
+			pg148[nodeIdx++] = tert = b.addLeft(second, b.newNode());
+			pg148[nodeIdx++] = b.addLeft(tert, b.newNode());
+			pg148[nodeIdx++] = tert = b.addRight(second, b.newNode());
+			pg148[nodeIdx++] = b.addLeft(tert, b.newNode());
+			pg148[nodeIdx++] = b.addRight(tert, b.newNode());
 		}
-
 		return pg148;
 	}
 
@@ -692,14 +691,12 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 
 		BinaryTreeEric<Node> b = runOrderNextSimulation();
 
-		// print some trouble-shooting code
+		// some trouble-shooting code
 		System.out.println("nil? " + b.nil + ", .left? " + b.nil.left + ", .right? " + b.nil.right);
 		System.out.println("r " + b.r);
 		System.out.println("rl " + b.r.left);
 		System.out.println("rll " + b.r.left.left);
 		System.out.println("rlll " + b.r.left.left.left);
-		// System.out.println(".size() = " + b.size() + ", .height() = " +
-		// b.height());
 	}
 
 	private static void printOrderHeader(String[] traversal, String[] method, int idx) {
