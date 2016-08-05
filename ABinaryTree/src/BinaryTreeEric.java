@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -64,10 +65,10 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 
 	/**
 	 * Binary Tree nodes track pre-order, in-order and post-order numbering for
-	 * nodes (pg. 148 Pat Morin ODS) and also track parent, left-child and right-child node
-	 * relationships. Created by Eric with inspiration from Treap.java and
-	 * assistance from a comment in COMP272 forum that suggested that a Node
-	 * class needed to be created.
+	 * nodes (pg. 148 Pat Morin ODS) and also track parent, left-child and
+	 * right-child node relationships. Created by Eric with inspiration from
+	 * Treap.java and assistance from a comment in COMP272 forum that suggested
+	 * that a Node class needed to be created.
 	 * 
 	 * @author Eric Dunbar
 	 */
@@ -686,10 +687,24 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	}
 
 	public static void main(String[] args) {
+
+		String[] details = {
+				"A pre-order traversal of a binary tree is a traversal that visits each",
+				"node, u, before any of its children. An in-order traversal visits u after",
+				"visiting all the nodes in u’s left subtree but before visiting any of the",
+				"nodes in u’s right subtree. A post-order traversal visits u only after",
+				"visiting all other nodes in u’s subtree. The pre/in/post-order numbering",
+				"of a tree labels the nodes of a tree with the integers 0, . . . ,n - 1 in",
+				"the order that they are encountered by a pre/in/post-order traversal. See",
+				"Figure 6.10 for an example. (pg 148)" };
+
+		CommonSuite.printDescription("BinaryTree Traversal", details);
+		System.out.println();
+
 		iterative = false;
 		// BinaryTreeEric<Node> b = runFullOrderSimulations(1111, 11);
 
-		BinaryTreeEric<Node> b = runOrderNextSimulation();
+		BinaryTreeEric<Node> b = runQ1Simulation();
 
 		// some trouble-shooting code
 		System.out.println("nil? " + b.nil + ", .left? " + b.nil.left + ", .right? " + b.nil.right);
@@ -710,8 +725,22 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 		System.out.println();
 	}
 
-	private static BinaryTreeEric<BinaryTreeEric.Node> runOrderNextSimulation() {
-		// TODO Auto-generated method stub
+	private static BinaryTreeEric<BinaryTreeEric.Node> runQ1Simulation() {
+		String[] details = {
+				"Design an algorithm for the following operations for a binary tree BT,",
+				"and show the worst-case running times for each implementation:", "",
+				"1 Binary Tree", "",
+				"a. preorderNext(x): return the node visited after node x in a pre-order",
+				"traversal of BT.", "",
+				"b. postorderNext(x): return the node visited after node x in a post-order",
+				"traversal of BT.", "",
+				"c. inorderNext(x): return the node visited after node x in an in-order",
+				"traversal of BT." };
+
+		CommonSuite.printDescription("Question 1: Determine next node in a BinaryTree traversal",
+				details);
+		System.out.println();
+
 		BinaryTreeEric<Node> b = new BinaryTreeEric<>(new Node(), new Node());
 		Node[] pg148 = buildBTPg148Proper(b, 1);
 		String[] method = { "preorderNext()", "inorderNext()", "postorderNext" };
