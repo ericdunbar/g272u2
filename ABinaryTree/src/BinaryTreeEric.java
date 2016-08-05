@@ -4,8 +4,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * An implementation of binary trees. Modified by Eric Dunbar for assignment 2.
- * Source: BinaryTree.java by Pat Morin ODS from sample code.
+ * An implementation of binary trees. Modified by Eric Dunbar for assignment 2,
+ * question 1 and question 5. Source: BinaryTree.java by Pat Morin ODS from
+ * sample code.
  * 
  * @author Pat Morin
  * @author Eric Dunbar
@@ -20,7 +21,8 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 		public Node parent;
 	}
 	/*
-	 * START START START START
+	 * START START START START This is the start of additional code added by
+	 * Eric Dunbar
 	 * ========================================================================
 	 * ========================================================================
 	 * ========================================================================
@@ -72,7 +74,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	 * 
 	 * @author Eric Dunbar
 	 */
-	protected static class Node extends BinaryTreeEric.BTENode<Node> {
+	public static class Node extends BinaryTreeEric.BTENode<Node> {
 		final int warning = -99;
 		/**
 		 * Track the order number of the node if visited by a pre-order routine.
@@ -158,7 +160,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	 * @param rank what is the starting rank of the root node (0 for root)
 	 * @return
 	 */
-	protected String printTree(Node u, int rank) {
+	public String printTree(Node u, int rank) {
 		if (u == nil)
 			return "END";
 		else {
@@ -171,9 +173,9 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 
 	/**
 	 * Performs a recursive pre-order traversal of all nodes and records the
-	 * pre-order traversal number in each node. Code modified from traverse() by
-	 * Pat Morin. Fast but causes a StackOverFlow error with a large enough
-	 * number of nodes. Runs in O(n) time.
+	 * pre-order traversal number in each node. Code based on traverse() by Pat
+	 * Morin. Fast but causes a StackOverFlow error with a large enough number
+	 * of nodes. Runs in O(n) time.
 	 * 
 	 * @param u starting node for the tree rooted at u
 	 * @param rank current pre-order rank, should be 0 if starting with the root
@@ -191,8 +193,8 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	/**
 	 * Determine the next node for a pre-order traversal of the tree. Calling
 	 * this repeatedly should build the same tree as what is stored by pre-order
-	 * traversal. Based off traverse2() by Pat Morin and orderNumberIterative by
-	 * Eric Dunbar.
+	 * traversal. Based off traverse2() by Pat Morin and orderNumberIterative()
+	 * by Eric Dunbar.
 	 * 
 	 * Worst case running time is O(2n) since it potentially has to visit each
 	 * node and check the left and right children before it finds the next node.
@@ -201,6 +203,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	 * Best case is O(1) if the given node has a left child.
 	 * 
 	 * @author Eric Dunbar
+	 * @param the current node in the traversal order
 	 */
 	public Node preorderNext(Node u) {
 		Node prev = nil;
@@ -209,9 +212,9 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 		if (u.left != nil)
 			return u.left; // RETURN left child
 		else if (u.right != nil)
-			return u.right; // RETURN right child because left is nil
+			return u.right; // RETURN right child
 
-		// LEAF, thus go up the parent chain until a right-child is found
+		// THIS IS LEAF, go up parent chain until a right-child is found
 		prev = u;
 		u = u.parent;
 
@@ -221,12 +224,12 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 					return u.right;
 				else
 					next = u.parent;
-			} else // if (u.right == prev)
+			} else
 				next = u.parent;
-			prev = u; // the current node now assigned to previous node
-			u = next; // next node assigned to current node
+			prev = u;
+			u = next;
 		}
-		return nil; // if it got this far there was no next node
+		return nil; // if it got this far there was no right child
 	}
 
 	/**
@@ -239,6 +242,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	 * right-child-only tree. It has to visit all parent nodes.
 	 * 
 	 * @author Eric Dunbar
+	 * @param the current node in the traversal order
 	 */
 	public Node inorderNext(Node u) {
 		/*
@@ -276,20 +280,17 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	 * and, orderNumberIterative() & preorderNext() & inorderNext() by Eric
 	 * Dunbar.
 	 * 
-	 * Worst case running time is ___ if given the last node in an unbalanced
-	 * right-child-only tree. It has to visit all parent nodes.
+	 * Worst case running time is O(n) if given the first node in an unbalanced
+	 * one left-child, vs. many left-children on the other side tree. It has to
+	 * visit all nodes before finding the next lowest node.
 	 * 
 	 * @author Eric Dunbar
+	 * @param u current Node in the traversal order
 	 */
 	public Node postorderNext(Node u) {
 		/*
-		 * 1. Go up.
-		 * 
-		 * a. If you were the right-child return your parent
-		 * 
-		 * b. If you were the left-child... return the left or right child of
-		 * the firstNode
-		 * 
+		 * 1. Go up. a. If you were the right-child return your parent b. If you
+		 * were the left-child... return the firstNode, starting at the parent
 		 * c. if your parent was nil return nil
 		 */
 
@@ -298,8 +299,8 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 		}
 		Node prev = u;
 		u = u.parent;
-		// GO UP.
-		// If u was right-child, return the parent
+
+		// GO UP. If u was right-child, return the parent
 		if (u.right == prev)
 			return u;
 		// If u was a left-child, return the firstNode, starting at the parent
@@ -307,7 +308,6 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 			if (u.right == nil)
 				return u;
 			u = u.right;
-
 			while (u.left != nil || u.right != nil) {
 				if (u.left != nil)
 					u = u.left;
@@ -320,7 +320,8 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	}
 
 	/**
-	 * Identifies the type of number ordering scheme.
+	 * Identifies the type of number ordering scheme: PREORDER, INORDER or
+	 * POSTORDER.
 	 * 
 	 * @author Eric Dunbar
 	 */
@@ -329,21 +330,18 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	};
 
 	/**
-	 * Order visit numbers using iterative traversal. Based off traverse2() by
-	 * Pat Morin.
+	 * Assign pre-, in- and post-order visit numbers using iterative traversal.
+	 * Modified from traverse2() by Pat Morin.
+	 * 
+	 * Efficiency improvement: there's no reason this method couldn't build all
+	 * traversal order variables in one execution of this method.
 	 * 
 	 * @author Eric Dunbar
+	 * @param u starting Node for traversal ordering
+	 * @param the type of traversal ordering requested, can be Order.PRE,
+	 *            Order.IN, and Order.POST
 	 */
 	public void orderNumberIterative(Node u, Order o) {
-		// System.out.println(" nil? " + nil + ", .left? " + nil.left + ",
-		// .right? " + nil.right);
-		// System.out.println(" r " + r + " u: " + u + " parent: " + r.parent);
-		// System.out.println(" rl " + r.left + " parent: " + r.left.parent);
-		// System.out.println(" rll " + r.left.left + " parent: " +
-		// r.left.left.parent);
-		// System.out.println(" rlll " + r.left.left.left + " parent: " +
-		// r.left.left.left.parent);
-
 		Node prev = nil;
 		Node next;
 		int preOrderRank = 0;
@@ -351,13 +349,10 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 		int postOrderRank = 0;
 		while (u != nil) {
 			if (prev == u.parent) {
-				// System.out.print(u +" ");
 				// FIRST VISIT. Arrived at a new node since prev == u.parent
 				// Assign PREORDER number here since this is the first visit
 				if (o == Order.PREORDER) {
 					u.preOrder = preOrderRank++;
-					// System.out.println("u: " + u + " u.left: " + u.left + "
-					// u.right: " + u.right + " u.parent: " + u.parent);
 				}
 				if (u.left != nil)
 					// go left
@@ -382,8 +377,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 					next = u.parent;
 				}
 			} else if (prev == u.left) {
-
-				// came from the left child, now what?
+				// Came from the left child, now what?
 				// INORDER number assigned here because done with left child
 				if (o == Order.INORDER)
 					u.inOrder = inOrderRank++;
@@ -400,7 +394,6 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 					next = u.parent;
 				}
 			} else {
-
 				// came from right child so up is the only way to go
 				// POSTORDER assigned here since done with all children
 				if (o == Order.POSTORDER) {
@@ -414,8 +407,16 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	}
 
 	/**
+	 * Determines whether recursive or iterative code will be used, if
+	 * available. Default is set to recursive code. Larger BinaryTrees should be
+	 * set to use iterative code, if available.
+	 */
+	static boolean iterative = false;
+
+	/**
 	 * Assign pre-order numbers to nodes in the binary tree. Causes a
-	 * StackOverFlow error if used with a recursive implementation.
+	 * StackOverFlow error if used with a recursive implementation and a larger
+	 * BinaryTree.
 	 * 
 	 * Answer to assignment (2), question (5) from textbook question 6.7.
 	 */
@@ -452,8 +453,6 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 			inOrderNumberRecursive(r, 0);
 	}
 
-	static boolean iterative = false;
-
 	/**
 	 * Performs a recursive post-order traversal. Modification of traverse() by
 	 * Pat Morin and preOrderNumberRecursive by Eric Dunbar. Causes a
@@ -488,326 +487,6 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 		u.inOrder = rank++;
 		rank = inOrderNumberRecursive(u.right, rank);
 		return rank;
-	}
-
-	/**
-	 * Trivial, private method used to format and print numbers for
-	 * printNumbers().
-	 * 
-	 * @param number
-	 */
-	private static void supportPrintNumber(int number) {
-		System.out.printf("%4d ", number);
-	}
-
-	/**
-	 * Print the pre-, in- and post-order traversal numbers to System.out.
-	 * 
-	 * @param pg148 array of type Node
-	 * @param numNodes how many Nodes in the array
-	 */
-	private static void printNumbers(Node[] pg148, int numNodes) {
-		int lineWrap = 15;
-		int lineEndIdx = Math.min(lineWrap, numNodes);
-		int lineStartIdx = 0;
-
-		System.out.println();
-		System.out.println("TRAVERSAL ORDER NUMBERS ASSIGNED TO NODES IN A BINARY TREE");
-		System.out.println();
-		while (lineStartIdx < numNodes) {
-			System.out.print("  Pre: ");
-			for (int j = lineStartIdx; j < lineEndIdx; j++) {
-				supportPrintNumber(pg148[j].preOrder);
-			}
-			System.out.println(); // show the post-order numbers
-			System.out.print(" Post: ");
-			for (int j = lineStartIdx; j < lineEndIdx; j++) {
-				supportPrintNumber(pg148[j].postOrder);
-			}
-			System.out.println(); // show the in-order numbers
-			System.out.print("   In: ");
-			for (int j = lineStartIdx; j < lineEndIdx; j++) {
-				supportPrintNumber(pg148[j].inOrder);
-			}
-			System.out.println();
-			System.out.println();
-			lineStartIdx += lineWrap;
-			lineEndIdx = Math.min(lineEndIdx + lineWrap, numNodes);
-		}
-	}
-
-	private static BinaryTreeEric<Node> runFullOrderSimulations(int repeats, int factor) {
-		if (factor < 1 || repeats < 1)
-			factor = repeats = 1; // default
-
-		// eliminate null pointer exceptions & ensure arrays align
-		repeats = repeats / factor * factor;
-
-		BinaryTreeEric<Node> b = null; // the binary tree
-		Node[] pg148 = null; // the nodes added to the binary tree, in order
-
-		// regression analysis variables
-		double[] regrSizeInd = new double[factor];
-		double[][] regrTimeDep = new double[3][factor];
-		int regrIterationCounter = 0;
-
-		// constants for array indices
-		final int pre = 0;
-		final int in = 1;
-		final int post = 2;
-
-		// build a BinaryTree with increasing numbers of nodes using pg. 148
-		for (int idx = 0; idx < repeats; idx += repeats / factor) {
-			b = new BinaryTreeEric<Node>(new Node(), new Node());
-
-			pg148 = buildBTPg148(b, idx);
-
-			regrSizeInd[regrIterationCounter] = b.size();
-
-			System.out.println(
-					".size() = " + regrSizeInd[regrIterationCounter] + ", iteration = " + idx);
-
-			int timeRepeats = 1000;
-			// determine how long it takes to (re)build the numbers
-			CommonSuite.StopWatch.start();
-			for (int j = 0; j < timeRepeats; j++) {
-				// repeat 1000 times to make time measurable on a fast computer
-				// stack over flow is a problem
-				b.preOrderNumber();
-				// b.orderNumberIteractive(b.r, Order.PREORDER); // assign
-				// pre-order
-				// numbers
-				// b.preOrderNumberRecursive(b.r, 0); // assign pre-order
-				// numbers
-			}
-			regrTimeDep[pre][regrIterationCounter] = CommonSuite.StopWatch.stop();
-
-			CommonSuite.StopWatch.start();
-			for (int j = 0; j < timeRepeats; j++) {
-				// repeat 1000 times to make time measurable on a fast computer
-				// stack over flow is a problem
-				b.postOrderNumbers();
-				// b.orderNumberIteractive(b.r, Order.POSTORDER); // assign
-				// post-order
-				// numbers
-				// b.postOrderNumberRecursive(b.r, 0); // assign post-order
-				// numbers
-			}
-			regrTimeDep[post][regrIterationCounter] = CommonSuite.StopWatch.stop();
-
-			CommonSuite.StopWatch.start();
-			for (int j = 0; j < timeRepeats; j++) {
-				// repeat 1000 times to make time measurable on a fast computer
-				// stack over flow is a problem
-				b.inOrderNumber();
-				// b.orderNumberIteractive(b.r, Order.INORDER); // assign
-				// in-order
-				// numbers
-				// b.inOrderNumberRecursive(b.r, 0); // assign post-order
-				// numbers
-			}
-			regrTimeDep[in][regrIterationCounter++] = CommonSuite.StopWatch.stop();
-		}
-
-		System.out.println();
-
-		// show the tree with all its warts
-		// b.printTree(b.r, 1);
-
-		printNumbers(pg148, b.size());
-
-		System.out.println();
-		System.out.println("||===========================================||");
-		System.out.println("||  Q? Do ordering methods run in O(n) time? ||");
-		System.out.println("||===========================================||");
-		System.out.println();
-
-		System.out.println("||======================================||");
-		System.out.println("||  PRE-ORDER NUMBERS LINEAR REGRESSION ||");
-		System.out.println("||======================================||");
-		LinearRegression.doLinearRegression(Arrays.copyOfRange(regrSizeInd, 1, regrSizeInd.length),
-				Arrays.copyOfRange(regrTimeDep[pre], 1, regrTimeDep[pre].length));
-
-		System.out.println("||======================================||");
-		System.out.println("|| POST-ORDER NUMBERS LINEAR REGRESSION ||");
-		System.out.println("||======================================||");
-		LinearRegression.doLinearRegression(Arrays.copyOfRange(regrSizeInd, 1, regrSizeInd.length),
-				Arrays.copyOfRange(regrTimeDep[post], 1, regrTimeDep[post].length));
-
-		System.out.println("||======================================||");
-		System.out.println("||   IN-ORDER NUMBERS LINEAR REGRESSION ||");
-		System.out.println("||======================================||");
-		LinearRegression.doLinearRegression(Arrays.copyOfRange(regrSizeInd, 1, regrSizeInd.length),
-				Arrays.copyOfRange(regrTimeDep[in], 1, regrTimeDep[in].length));
-
-		return b;
-	}
-
-	private static Node[] buildBTPg148(BinaryTreeEric<Node> b, int copies) {
-		return buildBTPg148Proper(b, copies + 1);
-	}
-
-	/**
-	 * Create the binary tree as shown on page 148 of ODS by Pat Morin.
-	 * Recreates the pre-order, in-order and post-order traversal order.
-	 * 
-	 * @param b binary tree to be constructed
-	 * @param copies number of copies of the sub-tree to be used
-	 * @return array of Nodes in pre-order traversal order
-	 */
-	private static Node[] buildBTPg148Proper(BinaryTreeEric<Node> b, int copies) {
-		// track nodes as they're added, pg. 148
-		Node[] pg148 = new Node[1 + 11 * (copies)];
-
-		int nodeIdx = 0;
-		pg148[nodeIdx++] = b.addLowest(b.newNode()); // create root
-		Node second, tert;
-
-		// make multiple copies of the original binary tree
-		for (int j = 0; j < copies; j++) {
-			// Add nodes in pre-order traversal
-
-			// Build left half
-			pg148[nodeIdx++] = second = b.addLowest(b.newNode()); // 1st LC pre1
-			pg148[nodeIdx++] = b.addLowest(b.newNode()); // 2nd LC pre2
-			pg148[nodeIdx++] = tert = b.addRight(second, b.newNode()); // pre3
-			pg148[nodeIdx++] = b.addLeft(tert, b.newNode()); // pre4
-			pg148[nodeIdx++] = b.addRight(tert, b.newNode()); // pre5
-
-			// Build right half
-			// start at root node, or, nodeIdx-7 for subsequent additions
-			pg148[nodeIdx++] = second = b.addRight(pg148[nodeIdx - 7], b.newNode());
-			pg148[nodeIdx++] = tert = b.addLeft(second, b.newNode());
-			pg148[nodeIdx++] = b.addLeft(tert, b.newNode());
-			pg148[nodeIdx++] = tert = b.addRight(second, b.newNode());
-			pg148[nodeIdx++] = b.addLeft(tert, b.newNode());
-			pg148[nodeIdx++] = b.addRight(tert, b.newNode());
-		}
-		return pg148;
-	}
-
-	public static void main(String[] args) {
-
-		String[] details = {
-				"A pre-order traversal of a binary tree is a traversal that visits each",
-				"node, u, before any of its children. An in-order traversal visits u after",
-				"visiting all the nodes in u’s left subtree but before visiting any of the",
-				"nodes in u’s right subtree. A post-order traversal visits u only after",
-				"visiting all other nodes in u’s subtree. The pre/in/post-order numbering",
-				"of a tree labels the nodes of a tree with the integers 0, . . . ,n - 1 in",
-				"the order that they are encountered by a pre/in/post-order traversal. See",
-				"Figure 6.10 for an example. (pg 148)" };
-
-		CommonSuite.printDescription("BinaryTree Traversal", details);
-		System.out.println();
-
-		iterative = false;
-		// BinaryTreeEric<Node> b = runFullOrderSimulations(1111, 11);
-
-		BinaryTreeEric<Node> b = runQ1Simulation();
-
-		// some trouble-shooting code
-		System.out.println("nil? " + b.nil + ", .left? " + b.nil.left + ", .right? " + b.nil.right);
-		System.out.println("r " + b.r);
-		System.out.println("rl " + b.r.left);
-		System.out.println("rll " + b.r.left.left);
-		System.out.println("rlll " + b.r.left.left.left);
-	}
-
-	private static void printOrderHeader(String[] traversal, String[] method, int idx) {
-		String outS = String.format(
-				"|| %2d. %s-ORDER traversal sequence returned by repeated calls to %s. ||", idx + 1,
-				traversal[idx], method[idx]);
-		System.out.println();
-		System.out.println(CommonSuite.stringRepeat("=", outS.length()));
-		System.out.println(outS);
-		System.out.println(CommonSuite.stringRepeat("=", outS.length()));
-		System.out.println();
-	}
-
-	private static BinaryTreeEric<BinaryTreeEric.Node> runQ1Simulation() {
-		String[] details = {
-				"Design an algorithm for the following operations for a binary tree BT,",
-				"and show the worst-case running times for each implementation:", "",
-				"1 Binary Tree", "",
-				"a. preorderNext(x): return the node visited after node x in a pre-order",
-				"traversal of BT.", "",
-				"b. postorderNext(x): return the node visited after node x in a post-order",
-				"traversal of BT.", "",
-				"c. inorderNext(x): return the node visited after node x in an in-order",
-				"traversal of BT." };
-
-		CommonSuite.printDescription("Question 1: Determine next node in a BinaryTree traversal",
-				details);
-		System.out.println();
-
-		BinaryTreeEric<Node> b = new BinaryTreeEric<>(new Node(), new Node());
-		Node[] pg148 = buildBTPg148Proper(b, 1);
-		String[] method = { "preorderNext()", "inorderNext()", "postorderNext" };
-		String[] traversal = { "PRE", "IN", "POST" };
-		int methodIdx = 0;
-
-		b.preOrderNumber(); // generate preOrderNumbers
-		b.inOrderNumber(); // generate inOrderNumbers
-		b.postOrderNumbers(); // generate postOrderNumbers
-
-		System.out.println();
-		System.out.println(
-				"Traverse order numbers generated by the 'pre'-, 'post'- and 'inOrderNumber()'");
-
-		printNumbers(pg148, pg148.length);
-
-		// **************************************************
-		// PREORDER NUMBERS
-		// **************************************************
-
-		printOrderHeader(traversal, method, methodIdx++);
-
-		int i = 0;
-		Node[] preOrderNextNums = new Node[pg148.length];
-		Node orderNumberCall = b.r;
-
-		while (orderNumberCall != b.nil) {
-			preOrderNextNums[i++] = orderNumberCall;
-			orderNumberCall = b.preorderNext(orderNumberCall);
-		}
-		printNumbers(preOrderNextNums, preOrderNextNums.length);
-		System.out.println();
-
-		// **************************************************
-		// INORDER NUMBERS
-		// **************************************************
-
-		printOrderHeader(traversal, method, methodIdx++);
-
-		i = 0;
-		Node[] inOrderNextNums = new Node[pg148.length];
-		orderNumberCall = preOrderNextNums[2]; // should be firstNode pg148
-
-		while (orderNumberCall != b.nil) {
-			inOrderNextNums[i++] = orderNumberCall;
-			orderNumberCall = b.inorderNext(orderNumberCall);
-		}
-		printNumbers(inOrderNextNums, inOrderNextNums.length);
-		System.out.println();
-
-		// **************************************************
-		// POSTORDER NUMBERS
-		// **************************************************
-
-		printOrderHeader(traversal, method, methodIdx++);
-
-		i = 0;
-		Node[] postOrderNextNums = new Node[pg148.length];
-		orderNumberCall = preOrderNextNums[2]; // should be firstNode pg148
-
-		while (orderNumberCall != b.nil) {
-			postOrderNextNums[i++] = orderNumberCall;
-			orderNumberCall = b.postorderNext(orderNumberCall);
-		}
-		printNumbers(postOrderNextNums, postOrderNextNums.length);
-		System.out.println();
-		return b;
 	}
 
 	/*
@@ -1030,7 +709,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	}
 
 	/**
-	 * Find the first node in an in-order traversal. Original.
+	 * Find the first node in an in-order traversal. Original by Pat Morin.
 	 * 
 	 * @return the first node reported in an in-order traversal
 	 */
@@ -1044,7 +723,8 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	}
 
 	/**
-	 * Find the node that follows w in an in-order traversal. Original.
+	 * Find the node that follows w in an in-order traversal. Original by Pat
+	 * Morin.
 	 * 
 	 * @param w
 	 * @return the node that follows w in an in-order traversal
