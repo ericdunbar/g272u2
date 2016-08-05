@@ -324,13 +324,6 @@ public class BinaryTreeEricDemo {
 
 		b = runQ1NextOrderSimulation();
 		b = runQ5CreateOrderNumbersSimulations(1111, 11);
-
-		// some trouble-shooting code
-		System.out.println("nil? " + b.nil + ", .left? " + b.nil.left + ", .right? " + b.nil.right);
-		System.out.println("r " + b.r);
-		System.out.println("rl " + b.r.left);
-		System.out.println("rll " + b.r.left.left);
-		System.out.println("rlll " + b.r.left.left.left);
 	}
 
 }

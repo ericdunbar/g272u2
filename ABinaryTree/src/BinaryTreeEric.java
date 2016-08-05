@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -42,7 +40,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	 */
 
 	/*
-	 * Design an algorithm for the following operations for a binary tree BT,
+	 * 1. Design an algorithm for the following operations for a binary tree BT,
 	 * and show the worst-case running times for each implementation:
 	 * 
 	 * 1 Binary Tree
@@ -100,10 +98,11 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	}
 
 	/**
-	 * Add the node as the lowest in-order node.
+	 * Add the given node as the lowest in-order node.
 	 * 
 	 * @author Eric Dunbar
-	 * @return the added node
+	 * @param u node to be added
+	 * @return a pointer to the added node
 	 */
 	public Node addLowest(Node u) {
 		if (r == nil) {
@@ -124,6 +123,8 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	 * 
 	 * @warning This will replace an existing left child node.
 	 * @author Eric Dunbar
+	 * @param parent Node to which the Node is to be added
+	 * @param child the Node that is to be added
 	 * @return the newly added node
 	 */
 	public Node addLeft(Node parent, Node child) {
@@ -140,6 +141,8 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	 * 
 	 * @warning This will replace an existing right child node.
 	 * @author Eric Dunbar
+	 * @param parent Node to which the Node is to be added
+	 * @param child the Node that is to be added
 	 * @return the newly added node
 	 */
 	public Node addRight(Node parent, Node child) {
@@ -271,6 +274,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 				return u; // RETURN parent}
 		}
 		return nil; // let's move on
+		// Note: code could be more efficient. See nextNode().
 	}
 
 	/**
@@ -338,8 +342,8 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	 * 
 	 * @author Eric Dunbar
 	 * @param u starting Node for traversal ordering
-	 * @param the type of traversal ordering requested, can be Order.PRE,
-	 *            Order.IN, and Order.POST
+	 * @param the type of traversal ordering requested, can be Order.PREORDER,
+	 *            Order.INORDER, and Order.POSTORDER
 	 */
 	public void orderNumberIterative(Node u, Order o) {
 		Node prev = nil;
@@ -491,8 +495,6 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 
 	/*
 	 * END END END END
-	 * ========================================================================
-	 * ========================================================================
 	 * ========================================================================
 	 * ========================================================================
 	 * ========================================================================
