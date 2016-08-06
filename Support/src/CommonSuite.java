@@ -247,7 +247,6 @@ public class CommonSuite {
 		System.out.println("============================================================");
 	}
 
-
 	/**
 	 * Prints programmer details
 	 * 
@@ -314,10 +313,10 @@ public class CommonSuite {
 	 */
 	public static TestSuite commonProgramStart(String author, String studentNumber, int assignment,
 			int question, String questionTitle, boolean isTesting) {
-		return commonProgramStart(Integer.toString(assignment),
-				Integer.toString(question), questionTitle, isTesting);
+		return commonProgramStart(Integer.toString(assignment), Integer.toString(question),
+				questionTitle, isTesting);
 	}
-	
+
 	/**
 	 * Prints program details using the parameters passed as author, student
 	 * number, assignment number and question number. The boolean isTesting sets
@@ -328,8 +327,8 @@ public class CommonSuite {
 	 * @param questionTitle Title of the question, as String
 	 * @param isTesting Whether the TestSuite should be testing, as boolean
 	 */
-	public static TestSuite commonProgramStart(String assignment,
-			String question, String questionTitle, boolean isTesting) {
+	public static TestSuite commonProgramStart(String assignment, String question,
+			String questionTitle, boolean isTesting) {
 		String author = "Eric Dunbar";
 		String studentNumber = "3243614";
 
@@ -375,7 +374,7 @@ public class CommonSuite {
 
 	}
 
-	// NEW IN MAY, 2016
+	// NEW MAY, 2016
 
 	public static void printDescription(String title, String[] details) {
 		System.out.println("TITLE");
@@ -387,29 +386,14 @@ public class CommonSuite {
 		}
 	}
 
-	// TODO This is unnecessary code. Covered by TestSuite. Delete when
-	// confident nothing relies on it.
-	// public static boolean isTesting() {
-	// return isTesting;
-	// }
-
-	// TODO This is unnecessary code. Covered by TestSuite. Delete when
-	// confident nothing relies on it.
-	// public static void setTesting(boolean isTesting) {
-	// CommonSuite.isTesting = isTesting;
-	// }
-
 	public static void methodInfo(String methodDetail) {
 		// http://stackoverflow.com/questions/421280/how-do-i-find-the-caller-of-a-method-using-stacktrace-or-reflection
-
-		// TODO This is unnecessary code. Covered by TestSuite. Delete when
-		// confident nothing relies on it.
-		// if (isTesting)
 		{
 			StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
 			System.out.println("  " + stackTraceElements[2].getMethodName() + " " + methodDetail);
 		}
 	}
+
 	/**
 	 * Provides methods to track and report elapsed time.
 	 */
@@ -433,4 +417,20 @@ public class CommonSuite {
 		}
 	}
 
+	// NEW AUGUST, 2016
+	/**
+	 * Displays a single string with line of === before and after. <p>
+	 * =============<br>
+	 * || Message || <br>
+	 * ============= <br>
+	 * 
+	 * @param outS String to be displayed sandwiched between two lines of ===
+	 */
+	public static void printFancyHeader(String outS) {
+		System.out.println();
+		System.out.println("//" + CommonSuite.stringRepeat("=", outS.length() + 2) + "\\\\");
+		System.out.println("|| " + outS + " ||");
+		System.out.println("\\\\" + CommonSuite.stringRepeat("=", outS.length() + 2) + "//");
+		System.out.println();
+	}
 }

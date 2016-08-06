@@ -493,6 +493,19 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 		return rank;
 	}
 
+	/**
+	 * Compute the size (number of nodes) of this tree. Modified by Eric Dunbar
+	 * to use either iterative or recursive algorithms.
+	 * 
+	 * @return the number of nodes in this tree
+	 */
+	public int size() {
+		if (iterative)
+			return size2();
+		else
+			return size(r);
+	}
+
 	/*
 	 * END END END END
 	 * ========================================================================
@@ -569,18 +582,10 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	}
 
 	/**
-	 * Compute the size (number of nodes) of this tree. Original.
+	 * Determine the size of the subtree rooted at u
 	 * 
 	 * @warning uses recursion so could cause a stack overflow
-	 * @return the number of nodes in this tree
-	 */
-	public int size() {
-		return size(r);
-	}
-
-	/**
-	 * Original.
-	 * 
+	 * @param u root Node for the sub-tree
 	 * @return the size of the subtree rooted at u
 	 */
 	protected int size(Node u) {

@@ -1,8 +1,6 @@
 import java.util.Comparator;
 import java.util.Random;
 
-import BinarySearchTree.BSTNode;
-
 public class Treap<T> extends BinarySearchTree<Treap.Node<T>, T> implements SSet<T> {
 	/**
 	 * A random number source
