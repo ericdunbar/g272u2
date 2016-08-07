@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Comparator;
 
 /*
@@ -64,14 +65,147 @@ public class BinarySearchTreeProperty<T>
 	protected static class Node<T> extends BinarySearchTree.BSTNode<Node<T>, T> {
 	}
 
-	private static <T> boolean testSearchTreeProperty(Node<T> n) {
-		
-		return false;
-
+	/**
+	 * Tests whether a binary tree satisfies the "search tree order property"
+	 * (binary search tree property, pg. 140???) at every node. For each node u,
+	 * every data value stored in the subtree rooted at u.left is less than u.x
+	 * and every data value stored in the subtree rooted at u.right is greater
+	 * than u.x.
+	 * 
+	 * Answer to question 2, assignment 2.
+	 * 
+	 * @author Eric Dunbar
+	 * @param n root Node for sub-tree to be tested.
+	 * @return whether the binary search tree property is implemented properly
+	 */
+	public boolean testBSTP(Node<T> n) {
+		boolean testB = true;
+		if (n.left != nil) {
+			testB = testB && (c.compare(n.x, n.left.x) > 0);
+			testB = testB && testBSTP(n.left);
+		}
+		if (n.right != nil) {
+			testB = testB && (c.compare(n.x, n.right.x) < 0);
+			testB = testB && testBSTP(n.right);
+		}
+		return testB;
 	}
 
-	private static void demoSearchTree() {
+	/**
+	 * Tracks rank and data for each node in the tree for printing purposes.
+	 */
+	ArrayList<ArrayList<T>> pT;
 
+	/**
+	 * Add data to a data structure that tracks elements and ranks (height) of
+	 * the Nodes in the BinarySearchTree. This can be used to show the tree.
+	 * 
+	 * @param n height with 0 being root
+	 * @param x data element
+	 */
+	private void addToPT(int n, T x) {
+		while (pT.size() < n + 1) {
+			pT.add(new ArrayList<T>());
+		}
+		pT.get(n).add(x);
+	}
+
+	/**
+	 * Print the binary search sub-tree starting at the given Node.
+	 * 
+	 * @author Eric Dunbar
+	 * @param u the root Node for the sub-tree
+	 */
+	public void printBSTPTree(Node<T> u) {
+		pT = new ArrayList<ArrayList<T>>();
+
+		int n = 0;
+		constructBSTPTree(u, n);
+
+		System.out.println(
+				"Caution: this only produces accurate relative horizontal positions for a balanced tree");
+		for (int i = 0; i < pT.size(); i++) {
+			int theSize = pT.get(i).size();
+			String thePadding = CommonSuite.stringRepeat(" ", (60 - 4 * theSize) / (theSize + 1));
+			for (int j = 0; j < theSize; j++) {
+				System.out.printf("%s%4s", thePadding, pT.get(i).get(j));
+			}
+			System.out.println();
+		}
+	}
+
+	/**
+	 * Helper method to collect information to print the binary search tree.
+	 * 
+	 * @author Eric Dunbar
+	 * @param u the root Node for the sub-tree
+	 * @param n starting height (0 = root)
+	 */
+	private void constructBSTPTree(Node<T> u, int n) {
+		n++;
+		addToPT(n, u.x);
+		System.out.printf("%d, %s   ", n, u.x);
+		if (u.left != nil) {
+			constructBSTPTree(u.left, n);
+		}
+		if (u.right != nil) {
+			constructBSTPTree(u.right, n);
+		}
+	}
+
+	/**
+	 * Demonstrate the binary search tree property test.
+	 */
+	private static void runBinarySearchTreePropertyTest() {
+		BinarySearchTreeProperty<Integer> ib;
+		ib = new BinarySearchTreeProperty<Integer>(new Node<Integer>(), new Node<Integer>(),
+				new DefaultComparator<Integer>());
+		ib.add(10);
+		Integer[] iArray = { 10, 5, 3, 7, 4, 6, 2, 11, 12, 8, 1, 9, 15, 16, 17, 18, 13, 14, 19,
+				20 };
+		for (Integer integer : iArray) {
+			ib.add(integer);
+		}
+		Node<Integer> my = ib.r;
+
+		// THE ACTUAL QUESTION 2 TEST
+		System.out.printf("This tree %s obey the binary search tree property.%n",
+				ib.testBSTP(ib.r) ? "does" : "does not");
+		System.out.println();
+		ib.printBSTPTree(my);
+		System.out.println();
+		System.out.println();
+
+		// SWAP DATA AND DON'T BOTHER CHECK FOR VALID NODES :)
+		System.out.println("Modify the BinarySearchTree by manually switching elements");
+
+		Integer fastAndLooseTest;
+		fastAndLooseTest = ib.r.left.x;
+		ib.r.left.x = ib.r.right.x;
+		ib.r.right.x = fastAndLooseTest;
+
+		// THE ACTUAL QUESTION 2 TEST
+		System.out.printf("This tree %s obey the binary search tree property.%n",
+				ib.testBSTP(ib.r) ? "does" : "does not");
+		System.out.println();
+		ib.printBSTPTree(my);
+		System.out.println();
+		System.out.println();
+
+		// SWAP DATA AND DON'T BOTHER CHECK FOR VALID NODES :)
+		System.out
+				.println("Reverse the changes to BinarySearchTree by manually switching elements");
+		fastAndLooseTest = ib.r.left.x;
+		ib.r.left.x = ib.r.right.x;
+		ib.r.right.x = fastAndLooseTest;
+
+		// THE ACTUAL QUESTION 2 TEST
+		System.out.printf("This tree %s obey the binary search tree property.%n",
+				ib.testBSTP(ib.r) ? "does" : "does not");
+		System.out.println();
+		ib.printBSTPTree(my);
+		System.out.println();
+		System.out.println();
 	}
 
 	public static void main(String[] args) {
@@ -80,6 +214,7 @@ public class BinarySearchTreeProperty<T>
 		printTheory2();
 		System.out.println();
 		printQuestion();
+		runBinarySearchTreePropertyTest();
 	}
 
 }
