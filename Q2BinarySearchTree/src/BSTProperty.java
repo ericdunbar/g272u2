@@ -132,12 +132,14 @@ public class BSTProperty<T> extends BinarySearchTree<BSTProperty.Node<T>, T> {
 		int n = 0;
 		constructBSTPTree(u, n);
 		System.out.println();
-
 		System.out.println(
-				"CAUTION: this only produces accurate relative horizontal positions for a balanced tree");
+				"CAUTION: slightly valid relative horizontal positions displayed only for a balanced tree");
 		for (int i = 0; i < pT.size(); i++) {
 			int theSize = pT.get(i).size();
-			String thePadding = CommonSuite.stringRepeat(" ", (80 - 3 * theSize) / (theSize + 1));
+			int baseWidth = 100;
+			String thePadding = CommonSuite.stringRepeat(" ",
+					(int) ((baseWidth - 3 * theSize) / (theSize + 1)));
+			System.out.printf("%2d", theSize);
 			for (int j = 0; j < theSize; j++)
 				System.out.printf("%s%3s", thePadding, pT.get(i).get(j));
 			System.out.println();
@@ -165,8 +167,8 @@ public class BSTProperty<T> extends BinarySearchTree<BSTProperty.Node<T>, T> {
 		int mid = (min + max) / 2;
 		ib.add(mid);
 		if (min < max) {
-			buildBalanced(ib, min, mid-1);
-			buildBalanced(ib, mid+1, max);
+			buildBalanced(ib, min, mid - 1);
+			buildBalanced(ib, mid + 1, max);
 		}
 	}
 
@@ -174,7 +176,7 @@ public class BSTProperty<T> extends BinarySearchTree<BSTProperty.Node<T>, T> {
 	 * Demonstrate the binary search tree property test.
 	 */
 	private static void runBinarySearchTreePropertyTest() {
-		BSTProperty<Integer> ib;
+		BSTProperty<Integer> ib, jb, kb;
 
 		// CONSTRUCT THE BST
 
@@ -183,17 +185,23 @@ public class BSTProperty<T> extends BinarySearchTree<BSTProperty.Node<T>, T> {
 		ib = new BSTProperty<Integer>(new Node<Integer>(), new Node<Integer>(),
 				new DefaultComparator<Integer>());
 
-		int exponent = 8;
+		jb = new BSTProperty<Integer>(new Node<Integer>(), new Node<Integer>(),
+				new DefaultComparator<Integer>());
+
+		kb = new BSTProperty<Integer>(new Node<Integer>(), new Node<Integer>(),
+				new DefaultComparator<Integer>());
+
+		// A balanced tree
 		buildBalanced(ib, 1, 31);
 
-		// ib.add((int) (Math.pow(2, 4)/2));
-		// for(int j = 1; j<Math.pow(2, 4);j++)
-		// ib.add(j);
+		// An extremely unbalanced tree
+		jb.add((int) (Math.pow(2, 4) / 2));
+		for (int j = 1; j < Math.pow(2, 4); j++)
+			jb.add(j);
 
-		// Integer[] iArray;
-		// iArray = new Integer[] { 4, 2, 3, 1, 6, 5, 7};
-		// for (Integer integer : iArray)
-		// ib.add(integer);
+		// A manually built tree
+		for (Integer integer : new Integer[] { 4, 2, 3, 1, 6, 5, 7 })
+			kb.add(integer);
 
 		Node<Integer> my = ib.r;
 
