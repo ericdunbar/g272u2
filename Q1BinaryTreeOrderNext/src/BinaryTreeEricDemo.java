@@ -100,7 +100,7 @@ public class BinaryTreeEricDemo {
 		return pg148;
 	}
 
-	private static BinaryTreeEric<BinaryTreeEric.Node> runQ1NextOrderSimulation() {
+	private static BinaryTreeEric<BinaryTreeEric.Node> question1NextOrderSimulation() {
 		String[] details = {
 				"Design an algorithm for the following operations for a binary tree BT,",
 				"and show the worst-case running times for each implementation:", "",
@@ -186,7 +186,7 @@ public class BinaryTreeEricDemo {
 		return b;
 	}
 
-	private static BinaryTreeEric<BinaryTreeEric.Node> runQ5CreateOrderNumbersSimulations(
+	private static BinaryTreeEric<BinaryTreeEric.Node> question5CreateOrderNumbersSimulations(
 			int repeats, int factor) {
 		String[] details = {
 				"5. (20 marks) Exercise 6.7. Create a subclass of BinaryTree whose nodes",
@@ -278,6 +278,9 @@ public class BinaryTreeEricDemo {
 		return b;
 	}
 
+	private static boolean testing = false;
+	static TestSuite theTester;
+
 	public static void main(String[] args) {
 
 		String[] details = {
@@ -294,9 +297,22 @@ public class BinaryTreeEricDemo {
 		System.out.println();
 
 		BinaryTreeEric.iterative = false;
-		
-		runQ1NextOrderSimulation();
-		runQ5CreateOrderNumbersSimulations(2000, 11);
+
+		// Display programmer info and create testing object
+		theTester = CommonSuite.commonProgramStart(2, 1,
+				"Determine next node in a BinaryTree traversal", testing);
+
+		question1NextOrderSimulation();
+
+		CommonSuite.commonProgramEnd(theTester);
+
+		// Display programmer info and create testing object
+		theTester = CommonSuite.commonProgramStart(2, 5,
+				"Create order numbers for a BinaryTree traversal", testing);
+
+		question5CreateOrderNumbersSimulations(2000, 11);
+
+		CommonSuite.commonProgramEnd(theTester);
 	}
 
 }

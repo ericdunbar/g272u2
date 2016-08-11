@@ -453,4 +453,22 @@ public class CommonSuite {
 		System.out.println("\\\\" + CommonSuite.stringRepeat("=", outS.length() + 2) + "//");
 		System.out.println();
 	}
+	/**
+	 * Displays a single string with line of === before and after.
+	 * <p>
+	 * =============<br>
+	 * || Message || <br>
+	 * ============= <br>
+	 * 
+	 * @param outS String to be displayed sandwiched between two lines of ===
+	 */
+	public static void printSuperFancyHeader(String outS) {
+		System.out.println();
+		System.out.println("//" + CommonSuite.stringRepeat("=", outS.length() + 2) + "\\\\");
+		System.out.println("||" + CommonSuite.stringRepeat("=", outS.length() + 2) + "||");
+		System.out.println("|| " + outS + " ||");
+		System.out.println("||" + CommonSuite.stringRepeat("=", outS.length() + 2) + "||");
+		System.out.println("\\\\" + CommonSuite.stringRepeat("=", outS.length() + 2) + "//");
+		System.out.println();
+	}
 }

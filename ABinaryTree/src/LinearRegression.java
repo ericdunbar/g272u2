@@ -65,7 +65,7 @@ public class LinearRegression {
 		double svar0 = svar / n + xbar * xbar * svar1;
 		System.out.println();
 		System.out.printf("R^2 = %6.4f%n", R2);
-		System.out.printf("  std error of x = %6.4f%n", Math.sqrt(svar1));
+		System.out.printf("  std error of m = %6.4f%n", Math.sqrt(svar1));
 		System.out.printf("  std error of b = %6.4f%n", Math.sqrt(svar0));
 		svar0 = svar * sumx2 / (n * xxbar);
 
