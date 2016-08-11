@@ -259,7 +259,7 @@ public class BinaryTreeEricDemo {
 
 		System.out.println();
 
-		printNumbers(pg148, Math.min(b.size(), 200));
+		printNumberss(pg148, Math.min(b.size(), 200));
 
 		CommonSuite.printFancyHeader("Do ordering methods run in O(n) time?");
 
