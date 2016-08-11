@@ -376,6 +376,14 @@ public class CommonSuite {
 
 	// NEW MAY, 2016
 
+	/**
+	 * Print a separate TITLE and DESCRIPTION. The title is passed as a String
+	 * while the details is an array of type String. Each entry is printed on a
+	 * separate line.
+	 * 
+	 * @param title title
+	 * @param details description of type String
+	 */
 	public static void printDescription(String title, String[] details) {
 		System.out.println("TITLE");
 		System.out.println(indentString(title));
@@ -384,6 +392,17 @@ public class CommonSuite {
 		for (int i = 0; i < details.length; i++) {
 			System.out.println(indentString(details[i]));
 		}
+	}
+
+	/**
+	 * Print a separate TITLE and DESCRIPTION. The first line of the array is
+	 * treated as the TITLE.Each entry is printed on a separate line.
+	 * 
+	 * @param details the first element is the title, the remainder are
+	 *            description
+	 */
+	public static void printFullDescription(String[] details) {
+		printDescription(details[0], Arrays.copyOfRange(details, 1, details.length));
 	}
 
 	public static void methodInfo(String methodDetail) {
@@ -419,7 +438,8 @@ public class CommonSuite {
 
 	// NEW AUGUST, 2016
 	/**
-	 * Displays a single string with line of === before and after. <p>
+	 * Displays a single string with line of === before and after.
+	 * <p>
 	 * =============<br>
 	 * || Message || <br>
 	 * ============= <br>
