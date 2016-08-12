@@ -1,10 +1,22 @@
 import java.util.Arrays;
 
+/**
+ * Demonstrates the use of traversal order methods for questions 1 and 5 of
+ * assignment 2 in COMP 272.
+ * 
+ * @author Eric Dunbar
+ * @date Aug 11, 2016
+ * @title Demo of traversal order for questions 1 and 5
+ * @assignment 2
+ *
+ */
 public class BinaryTreeEricDemo {
 
 	/**
 	 * Trivial, private method used to format and print numbers for
 	 * printNumbers().
+	 * 
+	 * @author Eric Dunbar
 	 * 
 	 * @param number
 	 */
@@ -259,7 +271,7 @@ public class BinaryTreeEricDemo {
 
 		System.out.println();
 
-		printNumberss(pg148, Math.min(b.size(), 200));
+		printNumbers(pg148, Math.min(b.size(), 200));
 
 		CommonSuite.printFancyHeader("Do ordering methods run in O(n) time?");
 

@@ -8,6 +8,8 @@ import java.util.Queue;
  * 
  * @author Pat Morin
  * @author Eric Dunbar
+ * @date 11/8/16
+ * @course COMP272
  *
  * @param <Node>
  */
@@ -507,7 +509,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	}
 
 	/*
-	 * END END END END
+	 * END END END END OF MATERIAL ADDED BY ERIC DUNBAR
 	 * ========================================================================
 	 * ========================================================================
 	 * ========================================================================
@@ -542,7 +544,8 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	}
 
 	/**
-	 * Create a new instance of this class. Original.
+	 * Create a new instance of this class. Original. Renamed from the original
+	 * but code is unmodified.
 	 * 
 	 * @param sampleNode - a sample of a node that can be used to create a new
 	 *            node in newNode()

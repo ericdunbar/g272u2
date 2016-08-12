@@ -17,6 +17,18 @@
  *
  ******************************************************************************/
 
+/**
+ * Modified by Eric Dunbar. Original found at
+ * http://introcs.cs.princeton.edu/java/97data/LinearRegression.java.html.
+ * 
+ * @author Robert Sedgewick
+ * @author Kevin Wayne
+ * @author Eric Dunbar
+ * @date Aug 11, 2016
+ * @title Linear Regression
+ * @assignment 2
+ *
+ */
 public class LinearRegression {
 
 	public static void doLinearRegression(double[] ind, double[] dep) {
@@ -48,7 +60,7 @@ public class LinearRegression {
 		double beta0 = ybar - beta1 * xbar;
 
 		// print results
-		System.out.printf("    y = %6.4f * x + %6.4f%n",  beta1, beta0);
+		System.out.printf("    y = %6.4f * x + %6.4f%n", beta1, beta0);
 
 		// analyze results
 		int df = n - 2;
