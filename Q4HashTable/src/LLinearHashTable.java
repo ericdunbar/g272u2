@@ -1,4 +1,3 @@
-package ods;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -13,10 +12,10 @@ import java.util.Set;
  *
  * @param <T>
  */
-public class LinearHashTable<T> implements USet<T> {
+public class LLinearHashTable<T> implements USet<T> {
 
 	protected static final int w = 32;
-	protected static final int r = 8;
+	protected static final int r = 8; // what do I do?
 	Factory<T> f;
 
 	/**
@@ -38,7 +37,7 @@ public class LinearHashTable<T> implements USet<T> {
 	 * @param nil an object of class T that will never be stored in the table
 	 */
 	@SuppressWarnings("unchecked")
-	public LinearHashTable(T nil) {
+	public LLinearHashTable(T nil) {
 		this.del = nil;
 		f = new Factory<T>((Class<T>) nil.getClass());
 		d = 1;
@@ -70,9 +69,18 @@ public class LinearHashTable<T> implements USet<T> {
 	}
 
 	protected int hash(T x) {
+		System.out.println("hashing it out");
 		int h = x.hashCode();
-		return (tab[0][h & 0xff] ^ tab[1][(h >>> 8) & 0xff] ^ tab[2][(h >>> 16) & 0xff]
-				^ tab[3][(h >>> 24) & 0xff]) >>> (w - d);
+
+		//@formatter:off
+		int r = (tab[0][h & 0xff]
+				^ tab[1][(h >>> 8) & 0xff] 
+				^ tab[2][(h >>> 16) & 0xff]
+				^ tab[3][(h >>> 24) & 0xff]) 
+				>>> (w - d);
+		//@formatter:on
+		System.out.println("Original code: hash(" + x + ") = " + r);
+		return r;
 	}
 
 	/*
@@ -128,6 +136,7 @@ public class LinearHashTable<T> implements USet<T> {
 
 	public T find(T x) {
 		int i = hash(x);
+		System.out.println("FIND: " + t.length + " = t.length");
 		while (t[i] != null) {
 			if (t[i] != del && x.equals(t[i]))
 				return t[i];
@@ -198,9 +207,9 @@ public class LinearHashTable<T> implements USet<T> {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static void xmain(String[] args) {
 		Random rand = new Random(1);
-		USet<Integer> lht = new LinearHashTable<Integer>(-1);
+		USet<Integer> lht = new LLinearHashTable<Integer>(-1);
 		Set<Integer> s = new HashSet<Integer>();
 		int n = 1000000;
 		System.out.println("Adding");
@@ -244,7 +253,7 @@ public class LinearHashTable<T> implements USet<T> {
 	/**
 	 * Table used by tabular hashing
 	 */
-	protected static int[][] tab = { { 0x0069aeff, 0x6ac0719e, 0x384cd7ee, 0xcba78313, 0x133ef89a,
+	public static int[][] tab = { { 0x0069aeff, 0x6ac0719e, 0x384cd7ee, 0xcba78313, 0x133ef89a,
 			0xb37979e6, 0xa4c4e09c, 0x911c738b, 0xc7fe9194, 0xba8e5dc7, 0xe610718c, 0x48460ac5,
 			0x6b4d9d43, 0x73afeeab, 0x051264cb, 0x4b3dba93, 0x28837665, 0xfb80a52b, 0xad1c14af,
 			0xb2baf17f, 0x35e311a5, 0xf7fa2905, 0xa973c315, 0x00885f47, 0x8842622b, 0x0445a92c,
