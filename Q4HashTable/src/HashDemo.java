@@ -27,32 +27,29 @@ public class HashDemo<T> extends LLinearHashTable<T> implements USet<T> {
 		System.out.println();
 	}
 
-	/*@formatter:off
-	 * Since the HASH is K mod 13 redesign the resize() method.
+	/*
+	 * @formatter:off Since the HASH is K mod 13 redesign the resize() method.
 	 * 
 	 * Tasks:
 	 * 
-	 * 1. hash(T x) needs to:
-	 * (a) take the value, perform % 13 on it (perhaps using Math.mod?)
-	 * (b) multiply the result by an instance variable factor, factor
-	 * (c) return the modified value
+	 * 1. hash(T x) needs to: (a) take the value, perform % 13 on it (perhaps
+	 * using Math.mod?) (b) multiply the result by an instance variable factor,
+	 * factor (c) return the modified value
 	 * 
-	 * 2. resize() needs to:
-	 * (a) ensure that the array is larger than a multiple of 13
-	 * (b) update the multiple
+	 * 2. resize() needs to: (a) ensure that the array is larger than a multiple
+	 * of 13 (b) update the multiple
 	 * 
 	 * 3. WHAT METHOD INITIALIZES MULTIPLE? Constructor! And resize() updates.
 	 * 
-	 * 4. INSTANCE variables:
-	 * (a) final int divisor = 13; // initialized by constructor
-	 * (b) private int multiple; // initialized by?, updated by resize()
+	 * 4. INSTANCE variables: (a) final int divisor = 13; // initialized by
+	 * constructor (b) private int multiple; // initialized by? updated by
+	 * resize()
 	 * 
-	 * 5. resize() calls by add(T x) and remove(T x) need to:
-	 * (a) be rewritten to change the size check to handle the current factor 
-	 * of 13 rather than what's current in use
-	 * add(T x) is OK. resizes() when > 50% occupancy
-	 * remove(T x) is OK with caveats. Unnecessary resize() calls when
-	 *   n < 2 and remove is called.
+	 * 5. resize() calls by add(T x) and remove(T x) need to: (a) be rewritten
+	 * to change the size check to handle the current factor of 13 rather than
+	 * what's current in use add(T x) is OK. resizes() when > 50% occupancy
+	 * remove(T x) is OK with caveats. Unnecessary resize() calls when n < 2 and
+	 * remove is called.
 	 * 
 	 * 6. rewrite clear() to correctly size the backing array
 	 * 
@@ -68,20 +65,18 @@ public class HashDemo<T> extends LLinearHashTable<T> implements USet<T> {
 
 	public HashDemo(T nil) {
 		super(nil);
-		System.out.println("   I'm the new constructor");
 		factor = 1;
 		divisor = 13;
 
-		// set the initial array size
+		// override the initial array size
 		clear();
 	}
 
 	// INSTANCE METHODS
 
 	/**
-	 * Resize the backing array to have size 2^d. Warning: 2^d should be much
-	 * bigger than n. Modified by Eric Dunbar from resize() from ODS by Pat
-	 * Morin.
+	 * Resize the backing array to have size that is a multiple of 13 that is >=
+	 * 3 * n. Modified by Eric Dunbar from resize() from ODS by Pat Morin.
 	 */
 	@Override
 	protected void resize() {
@@ -107,20 +102,17 @@ public class HashDemo<T> extends LLinearHashTable<T> implements USet<T> {
 	}
 
 	/**
-	 * @return return ((x.hashCode() mod 13) mod 2^w) div 2^(w-d)
+	 * @return ((x.hashCode() mod 13) mod 2^w) div 2^(w-d)
 	 */
 	protected int xhash(T x) {
 		System.out.println("hashing it out");
 		int h = x.hashCode() % divisor;
 
-		//@formatter:off
-		int r1 = (tab[0][h & 0xff]
-				^ tab[1][(h >>> 8) & 0xff] 
-				^ tab[2][(h >>> 16) & 0xff]
-				^ tab[3][(h >>> 24) & 0xff]);
-		int r = r1
-				>>> (w - d); // unsigned right shift limits index values to 2^d
-		//@formatter:on
+		// @formatter:off
+		int r1 = (tab[0][h & 0xff] ^ tab[1][(h >>> 8) & 0xff] ^ tab[2][(h >>> 16) & 0xff] ^ tab[3][(h >>> 24) & 0xff]);
+		int r = r1 >>> (w - d); // unsigned right shift limits index values to
+								// 2^d
+		// @formatter:on
 
 		System.out.println("     hash(" + x + ") = " + r + "; x % 13 = " + h
 				+ "; computation: r1 = " + r1 + "; (w-d) = (" + w + " - " + d + ") = " + (w - d));
@@ -129,7 +121,8 @@ public class HashDemo<T> extends LLinearHashTable<T> implements USet<T> {
 
 	@Override
 	/**
-	 * Generates a hash value using a multiple of mod 13.
+	 * Generates a hash value using x mod 13. If more elements are to be stored,
+	 * then a scaling factor is applied to the result of the mod 13 calculation.
 	 * 
 	 * @author Eric Dunbar
 	 * @param x data value for which hash is to be generated
@@ -138,12 +131,6 @@ public class HashDemo<T> extends LLinearHashTable<T> implements USet<T> {
 	public int hash(T x) {
 		int v = x.hashCode();
 		int r = ((v % divisor + divisor) % divisor) * factor;
-		System.out.println(".............. hash(" + x + ") = " + r);
-		for (int i = 0; i < t.length; i++) {
-			System.out.print(t[i] + ", ");
-			;
-		}
-		System.out.println();
 		return r;
 	}
 
@@ -169,14 +156,37 @@ public class HashDemo<T> extends LLinearHashTable<T> implements USet<T> {
 		for (int i = 0; i < q4.length; i++) {
 			h.add(q4[i]);
 		}
+		printHashTable((HashDemo<Integer>) h);
 
-		for (int i = 0; i < ((HashDemo<Integer>) h).t.length; i++) {
-			if (i % 10 == 0) {
-				System.out.println();
-				System.out.printf("%3d: ", i);
-			}
-			System.out.printf("%4d, ", i, ((HashDemo<Integer>) h).t[i]);
+		for (int i = 88; i < 200_000; i += 283) {
+			h.add(234252);
 		}
+		printHashTable((HashDemo<Integer>) h);
+		
+		for (int i = 88; i < 200_000; i += 283) {
+			h.add(i);
+		}
+		printHashTable((HashDemo<Integer>) h);
+	}
+
+	public static void printHashTable(HashDemo<Integer> h) {
+		System.out.println();
+		System.out.print("_______||");
+		for (int i = 0; i < 13; i++) {
+			System.out.printf("___%2d___|", i);
+		}
+
+		for (int i = 0; i < h.t.length; i++) {
+			if (i % 13 == 0) {
+				System.out.println();
+				System.out.printf("%6d ||", i);
+			}
+			Integer valueE = h.t[i];
+			String value = (valueE == h.del || valueE == null ? "" : valueE.toString());
+			System.out.printf(" %6s |", value);
+		}
+		System.out.println();
+
 	}
 
 	public static void odsDemo() {

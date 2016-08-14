@@ -47,8 +47,6 @@ public class LLinearHashTable<T> implements USet<T> {
 	/**
 	 * Resize the backing array to have size 2^d Warning: 2^d should be much
 	 * bigger than n
-	 * 
-	 * @param d
 	 */
 	protected void resize() {
 		d = 1;
@@ -136,7 +134,6 @@ public class LLinearHashTable<T> implements USet<T> {
 
 	public T find(T x) {
 		int i = hash(x);
-		System.out.println("FIND: " + t.length + " = t.length");
 		while (t[i] != null) {
 			if (t[i] != del && x.equals(t[i]))
 				return t[i];
