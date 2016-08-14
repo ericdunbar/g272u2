@@ -1,30 +1,33 @@
 
-
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-
-public class ScapegoatTree<T> 
-		extends BinarySearchTree<ScapegoatTree.Node<T>,T> {
+public class ScapegoatTree<T> extends BinarySearchTree<ScapegoatTree.Node<T>, T> {
 	/**
 	 * An overestimate of n
 	 */
 	int q;
-	
-	protected static class Node<T> extends BinarySearchTree.BSTNode<Node<T>,T> {	}
-	
+	int credits = 0;
+
+	protected static class Node<T> extends BinarySearchTree.BSTNode<Node<T>, T> {
+		int credit = 0;
+	}
+
 	public ScapegoatTree(Comparator<T> c) {
 		super(new Node<T>(), c);
+		credits = 0;
 	}
-	
+
 	public ScapegoatTree() {
 		this(new DefaultComparator<T>());
 	}
-	
+
 	public boolean remove(T x) {
+		System.out.println("note: does not implement credit scheme");
+		System.out.println("Remove(" + x + ")");
 		if (super.remove(x)) {
-			if (2*n < q) {
+			if (2 * n < q) {
 				rebuild(r);
 				q = n;
 			}
@@ -32,29 +35,37 @@ public class ScapegoatTree<T>
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Compute the ceiling of log_{3/2}(q)
+	 * 
 	 * @param q
 	 * @return the ceiling of log_{3/2}(q)
 	 */
 	protected static final int log32(int q) {
 		final double log23 = 2.4663034623764317;
-		return (int)Math.ceil(log23*Math.log(q));
+		int v = (int) Math.ceil(log23 * Math.log(q));
+//		System.out.println("log32(" + q + ") = " + v);
+		return v;
 	}
 
+	
 	/***
-	 * Do a normal BinarySearchTree insertion, but return the depth
-	 * of the newly inserted node. 
+	 * Do a normal BinarySearchTree insertion, but return the depth of the newly
+	 * inserted node.
+	 * 
 	 * @param u - the new node to insert
-	 * @return the depth of the newly inserted node, or -1 if the node
-	 * was not inserted
+	 * @return the depth of the newly inserted node, or -1 if the node was not
+	 *         inserted
 	 */
 	int addWithDepth(Node<T> u) {
+		System.out.println("addWithDepth(" + u + ")");
 		Node<T> w = r;
 		if (w == nil) {
 			r = u;
-			n++; q++;
+			n++;
+			q++;
+			System.out.printf("      (nil) Increment q to %d; increment n to %d%n", q, n);
 			return 0;
 		}
 		boolean done = false;
@@ -63,10 +74,16 @@ public class ScapegoatTree<T>
 			int res = c.compare(u.x, w.x);
 			if (res < 0) {
 				if (w.left == nil) {
+					w.credit++;
+					credits++;
+
 					w.left = u;
 					u.parent = w;
 					done = true;
 				} else {
+					w.credit++;
+					credits++;
+
 					w = w.left;
 				}
 			} else if (res > 0) {
@@ -75,13 +92,17 @@ public class ScapegoatTree<T>
 					u.parent = w;
 					done = true;
 				}
+				w.credit++;
+				credits++;
 				w = w.right;
 			} else {
 				return -1;
 			}
 			d++;
 		} while (!done);
-		n++; q++;
+		n++;
+		q++;
+		System.out.printf("      Increment q to %d; increment n to %d%n", q, n);
 		return d;
 	}
 
@@ -89,10 +110,12 @@ public class ScapegoatTree<T>
 		// first do basic insertion keeping track of depth
 		Node<T> u = newNode(x);
 		int d = addWithDepth(u);
+		System.out.printf("add(%d) = %s; d = %d; %s = %d; %s(%s) = %d%n", x, d >= 0, d, "q", q,
+				"log32", "q", log32(q));
 		if (d > log32(q)) {
 			// depth exceeded, find scapegoat
 			Node<T> w = u.parent;
-			while (3*size(w) <= 2*size(w.parent))
+			while (3 * size(w) <= 2 * size(w.parent))
 				w = w.parent;
 			rebuild(w.parent);
 		}
@@ -101,6 +124,7 @@ public class ScapegoatTree<T>
 
 	@SuppressWarnings("unchecked")
 	protected void rebuild(Node<T> u) {
+		System.out.println("rebuild(" + u + ")");
 		int ns = size(u);
 		Node<T> p = u.parent;
 		Node<T>[] a = (Node<T>[]) Array.newInstance(Node.class, ns);
@@ -127,6 +151,7 @@ public class ScapegoatTree<T>
 	 * @return size(u)
 	 */
 	protected int packIntoArray(Node<T> u, Node<T>[] a, int i) {
+		System.out.println("packIntoArray(" + u + "," + a + "," + i + ")");
 		if (u == nil) {
 			return i;
 		}
@@ -145,6 +170,7 @@ public class ScapegoatTree<T>
 	 * @return the rooted of the newly created subtree
 	 */
 	protected Node<T> buildBalanced(Node<T>[] a, int i, int ns) {
+		System.out.println("buildBalanced(" + a + "," + i + "," + ns + ")");
 		if (ns == 0)
 			return nil;
 		int m = ns / 2;
@@ -156,13 +182,15 @@ public class ScapegoatTree<T>
 			a[i + m].right.parent = a[i + m];
 		return a[i + m];
 	}
-	
+
 	// PRINTING CODE FROM BSTProperty. Eric's addition
-	
+
 	/**
 	 * Tracks height and data for each node in the tree for printing purposes.
 	 */
 	private ArrayList<ArrayList<T>> pT;
+	private ArrayList<ArrayList<String>> pS;
+	private ArrayList<ArrayList<Integer>> pCredits;
 
 	/**
 	 * Add data to a data structure that tracks elements and ranks (height) of
@@ -171,15 +199,21 @@ public class ScapegoatTree<T>
 	 * @param n height with 0 being root
 	 * @param x data element
 	 */
-	private void addToPT(int n, T x) {
-		while (pT.size() < n + 1)
+	private void addToPT(int n, T x, String s, int creditt) {
+		while (pT.size() < n + 1){
 			pT.add(new ArrayList<T>());
+			pS.add(new ArrayList<String>());
+			pCredits.add(new ArrayList<Integer>());
+			}
 		pT.get(n).add(x);
+		pS.get(n).add(s);
+		pCredits.get(n).add(creditt);
 	}
 
 	public void printBSTPTree() {
 		printBSTPTree(r);
 	}
+
 	/**
 	 * Print the binary search sub-tree starting at the given Node.
 	 * 
@@ -188,9 +222,11 @@ public class ScapegoatTree<T>
 	 */
 	public void printBSTPTree(Node<T> u) {
 		pT = new ArrayList<ArrayList<T>>();
+		pS = new ArrayList<ArrayList<String>>();
+		pCredits = new ArrayList<ArrayList<Integer>>();
 
 		int n = 0;
-		constructBSTPTree(u, n);
+		constructBSTPTree(u, n, "ROOT");
 
 		System.out.println();
 		System.out.println("CAUTION: horizontal positions are correct only relative to each other");
@@ -201,7 +237,7 @@ public class ScapegoatTree<T>
 			String thePadding = CommonSuite.stringRepeat(" ",
 					(int) ((baseWidth - 3 * theSize) / (theSize + 1)));
 			for (int j = 0; j < theSize; j++)
-				System.out.printf("%s%3s", thePadding, pT.get(i).get(j));
+				System.out.printf("%s%s: %3s (credit %d)", thePadding, pS.get(i).get(j),pT.get(i).get(j), pCredits.get(i).get(j));
 			System.out.println();
 		}
 	}
@@ -211,17 +247,16 @@ public class ScapegoatTree<T>
 	 * 
 	 * @author Eric Dunbar
 	 * @param u the root Node for the sub-tree
-	 * @param n starting height (0 = root)
+	 * @param num starting height (0 = root)
 	 */
-	private void constructBSTPTree(Node<T> u, int n) {
-		n++;
-		addToPT(n, u.x);
-		System.out.printf("%d: %s ", n, u.x);
+	private void constructBSTPTree(Node<T> u, int num, String s) {
+		num++;
+		addToPT(num, u.x, s, u.credit);
+		System.out.printf("%d: %s ", num, u.x);
 		if (u.left != nil)
-			constructBSTPTree(u.left, n);
+			constructBSTPTree(u.left, num, "LEFT");
 		if (u.right != nil)
-			constructBSTPTree(u.right, n);
+			constructBSTPTree(u.right, num, "RIGHT");
 	}
-
 
 }
