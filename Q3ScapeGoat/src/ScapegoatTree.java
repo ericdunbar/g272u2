@@ -42,11 +42,14 @@ public class ScapegoatTree<T> extends BinarySearchTree<ScapegoatTree.Node<T>, T>
 	 * @param q
 	 * @return the ceiling of log_{3/2}(q)
 	 */
-	protected static final int log32(int q) {
+//	protected static final int log32(int q) {
+	protected static final double log32(int q) {
 		final double log23 = 2.4663034623764317;
-		int v = (int) Math.ceil(log23 * Math.log(q));
-//		System.out.println("log32(" + q + ") = " + v);
-		return v;
+		double vD = log23 * Math.log(q);
+		int v = (int) Math.ceil(vD);
+		System.out.println(".............. log32(" + q + ") = " + vD);
+//		return v;
+		return vD;
 	}
 
 	
@@ -110,7 +113,7 @@ public class ScapegoatTree<T> extends BinarySearchTree<ScapegoatTree.Node<T>, T>
 		// first do basic insertion keeping track of depth
 		Node<T> u = newNode(x);
 		int d = addWithDepth(u);
-		System.out.printf("add(%d) = %s; d = %d; %s = %d; %s(%s) = %d%n", x, d >= 0, d, "q", q,
+		System.out.printf("add(%d) = %s; d = %d; %s = %d; %s(%s) = %f%n", x, d >= 0, d, "q", q,
 				"log32", "q", log32(q));
 		if (d > log32(q)) {
 			// depth exceeded, find scapegoat
