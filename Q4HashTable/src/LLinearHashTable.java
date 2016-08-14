@@ -21,7 +21,7 @@ public class LLinearHashTable<T> implements USet<T> {
 	/**
 	 * The table
 	 */
-	T[] t; // the table
+	public T[] t; // the table
 
 	/**
 	 * Special marker - used to show deleted nodes

@@ -161,17 +161,21 @@ public class HashDemo<T> extends LLinearHashTable<T> implements USet<T> {
 	 * 
 	 */
 	public static void question4() {
-		Integer q4[] = { 39, 20, 1, 5, 21, 26, 39, 14, 15, 16, 17, 18, 19, 20, 111, 145, 146 };
+		Integer q4[] = { 1, 5, 21, 26, 39, 14, 15, 16, 17, 18, 19, 20, 111, 145, 146 };
+
+		// why USet instead of HashDemo? Or LinearHashTable?
 		USet<Integer> h = new HashDemo<Integer>(-99);
 
 		for (int i = 0; i < q4.length; i++) {
-			System.out.print("add   ");
 			h.add(q4[i]);
-			int x = LLinearHashTable.tab[1][1];
 		}
 
-		for (int i = 0; i < q4.length; i++) {
-			System.out.println();
+		for (int i = 0; i < ((HashDemo<Integer>) h).t.length; i++) {
+			if (i % 10 == 0) {
+				System.out.println();
+				System.out.printf("%3d: ", i);
+			}
+			System.out.printf("%4d, ", i, ((HashDemo<Integer>) h).t[i]);
 		}
 	}
 
