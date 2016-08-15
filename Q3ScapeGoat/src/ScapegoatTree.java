@@ -42,17 +42,16 @@ public class ScapegoatTree<T> extends BinarySearchTree<ScapegoatTree.Node<T>, T>
 	 * @param q
 	 * @return the ceiling of log_{3/2}(q)
 	 */
-//	protected static final int log32(int q) {
+	// protected static final int log32(int q) {
 	protected static final double log32(int q) {
 		final double log23 = 2.4663034623764317;
 		double vD = log23 * Math.log(q);
 		int v = (int) Math.ceil(vD);
 		System.out.println(".............. log32(" + q + ") = " + vD);
-//		return v;
+		// return v;
 		return vD;
 	}
 
-	
 	/***
 	 * Do a normal BinarySearchTree insertion, but return the depth of the newly
 	 * inserted node.
@@ -109,6 +108,12 @@ public class ScapegoatTree<T> extends BinarySearchTree<ScapegoatTree.Node<T>, T>
 		return d;
 	}
 
+	private void printRebuildData(Node<T> w, int sizeW, int sizeWParent) {
+		System.out.printf("w.x = %d, w.parent.x = %d; size(w)/size(w.parent) = %d/%d; %d/%d > 2/3 = %s%n",
+				w.x, w.parent.x, sizeW, sizeWParent, sizeW, sizeWParent, (((double) sizeW / sizeWParent) > (2.0 / 3)));
+
+	}
+
 	public boolean add(T x) {
 		// first do basic insertion keeping track of depth
 		Node<T> u = newNode(x);
@@ -116,10 +121,25 @@ public class ScapegoatTree<T> extends BinarySearchTree<ScapegoatTree.Node<T>, T>
 		System.out.printf("add(%d) = %s; d = %d; %s = %d; %s(%s) = %f%n", x, d >= 0, d, "q", q,
 				"log32", "q", log32(q));
 		if (d > log32(q)) {
+			System.out.println();
+			System.out.println("Rebuild operation required");
+
 			// depth exceeded, find scapegoat
 			Node<T> w = u.parent;
-			while (3 * size(w) <= 2 * size(w.parent))
+			int sizeW = size(w);
+			int sizeWParent = size(w.parent);
+
+			printRebuildData(w, sizeW, sizeWParent);
+			while (3 * sizeW <= 2 * sizeWParent) {
 				w = w.parent;
+				sizeW = size(w);
+				sizeWParent = size(w.parent);
+				printRebuildData(w, sizeW, sizeWParent);
+			}
+			printRebuildData(w, sizeW, sizeWParent);
+			System.out.println();
+			System.out.println();
+
 			rebuild(w.parent);
 		}
 		return d >= 0;
@@ -203,11 +223,11 @@ public class ScapegoatTree<T> extends BinarySearchTree<ScapegoatTree.Node<T>, T>
 	 * @param x data element
 	 */
 	private void addToPT(int n, T x, String s, int creditt) {
-		while (pT.size() < n + 1){
+		while (pT.size() < n + 1) {
 			pT.add(new ArrayList<T>());
 			pS.add(new ArrayList<String>());
 			pCredits.add(new ArrayList<Integer>());
-			}
+		}
 		pT.get(n).add(x);
 		pS.get(n).add(s);
 		pCredits.get(n).add(creditt);
@@ -240,7 +260,8 @@ public class ScapegoatTree<T> extends BinarySearchTree<ScapegoatTree.Node<T>, T>
 			String thePadding = CommonSuite.stringRepeat(" ",
 					(int) ((baseWidth - 3 * theSize) / (theSize + 1)));
 			for (int j = 0; j < theSize; j++)
-				System.out.printf("%s%s: %3s (credit %d)", thePadding, pS.get(i).get(j),pT.get(i).get(j), pCredits.get(i).get(j));
+				System.out.printf("%s%s: %3s (credit %d)", thePadding, pS.get(i).get(j),
+						pT.get(i).get(j), pCredits.get(i).get(j));
 			System.out.println();
 		}
 	}
