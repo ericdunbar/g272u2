@@ -12,7 +12,7 @@ import java.util.Set;
  *
  * @param <T>
  */
-public class LLinearHashTable<T> implements USet<T> {
+public class LinearHashTable<T> implements USet<T> {
 
 	protected static final int w = 32;
 	protected static final int r = 8; // what do I do?
@@ -37,7 +37,7 @@ public class LLinearHashTable<T> implements USet<T> {
 	 * @param nil an object of class T that will never be stored in the table
 	 */
 	@SuppressWarnings("unchecked")
-	public LLinearHashTable(T nil) {
+	public LinearHashTable(T nil) {
 		this.del = nil;
 		f = new Factory<T>((Class<T>) nil.getClass());
 		d = 1;
@@ -206,7 +206,7 @@ public class LLinearHashTable<T> implements USet<T> {
 	 */
 	public static void xmain(String[] args) {
 		Random rand = new Random(1);
-		USet<Integer> lht = new LLinearHashTable<Integer>(-1);
+		USet<Integer> lht = new LinearHashTable<Integer>(-1);
 		Set<Integer> s = new HashSet<Integer>();
 		int n = 1000000;
 		System.out.println("Adding");

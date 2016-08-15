@@ -1,17 +1,32 @@
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
-
-//public class LinearHashTable<T> implements USet<T> {
-
-public class HashDemo<T> extends LLinearHashTable<T> implements USet<T> {
+/**
+ * A hash table that handles collision using linear probing, using (K mod 13) as
+ * the hash function. Modified from LinearHashTable by Pat Morin.
+ * 
+ * @author Eric Dunbar
+ * @date Aug 15, 2016
+ * @assignment 2
+ *
+ * @param <T> data type
+ */
+public class HashDemo<T> extends LinearHashTable<T> implements USet<T> {
 
 	private static boolean testing = false;
 	static TestSuite theTester;
 
 	public static void printTheory() {
-		String title = "HASH HASH HASH";
-		String[] details = { "Hash Hash Hash", "Hash Hash Hash" };
+		String title = "LinearHashTable: Linear Probing (5.2)";
+		String[] details = { "Open addressing stores elements directly in an array, t, with each",
+				"array location in t storing at most one value.", "",
+				"Ideally store the element x with hash value i = hash(x) in table",
+				"location t[i]. If that location is occupied then try to store it",
+				"at location t[(i + 1) mod t.length]; if that’s not possible, then",
+				"try t[(i+2) mod t.length], until an unused location is found.", "",
+				"Three types of entries are stored in t:",
+				"1. data values: actual values in the USet that we are representing;",
+				"2. null values: at array locations where no data has ever been stored; and",
+				"3. del values: at array locations where data has been deleted", "",
+				"The counter, n, keeps track of the number of elements in the linear",
+				"hash table. q keeps track of the number of elements of Types 1 and 3." };
 		CommonSuite.printDescription(title, details);
 
 		System.out.println();
@@ -28,8 +43,6 @@ public class HashDemo<T> extends LLinearHashTable<T> implements USet<T> {
 	}
 
 	/*
-	 * @formatter:off Since the HASH is K mod 13 redesign the resize() method.
-	 * 
 	 * Tasks:
 	 * 
 	 * 1. hash(T x) needs to: (a) take the value, perform % 13 on it (perhaps
@@ -52,17 +65,31 @@ public class HashDemo<T> extends LLinearHashTable<T> implements USet<T> {
 	 * remove is called.
 	 * 
 	 * 6. rewrite clear() to correctly size the backing array
-	 * 
-	 * @formatter:on
 	 */
 
 	// INSTANCE FIELDS
 
-	private int factor;// by how much does hash need to be multiplied
-	private final int divisor; // the divisor for the HASH table
+	/**
+	 * By how much does the hash need to be multiplied if many elements are to
+	 * be stored in the hash table.
+	 */
+	private int factor;
+
+	/**
+	 * The divisor for the hash table. Default is initialized to 13 by
+	 * constructor but this can be changed.
+	 */
+	private final int divisor;
 
 	// CONSTRUCTORS
 
+	/**
+	 * Create an instance of a hash table that use K Mod 13 as the hash
+	 * function.
+	 * 
+	 * @param nil an element that is used as the nil value. Programmer
+	 *            responsible for making sure it is not be used.
+	 */
 	public HashDemo(T nil) {
 		super(nil);
 		factor = 1;
@@ -99,20 +126,22 @@ public class HashDemo<T> extends LLinearHashTable<T> implements USet<T> {
 				t[i] = told[k];
 			}
 		}
+
 	}
 
 	/**
+	 * Experimental. Not for use.
+	 * 
 	 * @return ((x.hashCode() mod 13) mod 2^w) div 2^(w-d)
 	 */
 	protected int xhash(T x) {
 		System.out.println("hashing it out");
 		int h = x.hashCode() % divisor;
 
-		// @formatter:off
-		int r1 = (tab[0][h & 0xff] ^ tab[1][(h >>> 8) & 0xff] ^ tab[2][(h >>> 16) & 0xff] ^ tab[3][(h >>> 24) & 0xff]);
+		int r1 = (tab[0][h & 0xff] ^ tab[1][(h >>> 8) & 0xff] ^ tab[2][(h >>> 16) & 0xff]
+				^ tab[3][(h >>> 24) & 0xff]);
 		int r = r1 >>> (w - d); // unsigned right shift limits index values to
 								// 2^d
-		// @formatter:on
 
 		System.out.println("     hash(" + x + ") = " + r + "; x % 13 = " + h
 				+ "; computation: r1 = " + r1 + "; (w-d) = (" + w + " - " + d + ") = " + (w - d));
@@ -121,8 +150,9 @@ public class HashDemo<T> extends LLinearHashTable<T> implements USet<T> {
 
 	@Override
 	/**
-	 * Generates a hash value using x mod 13. If more elements are to be stored,
-	 * then a scaling factor is applied to the result of the mod 13 calculation.
+	 * Generates a hash value using x mod 13. If more elements are to be stored
+	 * than half the array size, then a scaling factor is applied to the result
+	 * of the mod 13 calculation.
 	 * 
 	 * @author Eric Dunbar
 	 * @param x data value for which hash is to be generated
@@ -134,6 +164,10 @@ public class HashDemo<T> extends LLinearHashTable<T> implements USet<T> {
 		return r;
 	}
 
+	/**
+	 * Clears a hash table and resets its size and other parameters to the
+	 * starting condition.
+	 */
 	@Override
 	public void clear() {
 		n = 0;
@@ -145,7 +179,12 @@ public class HashDemo<T> extends LLinearHashTable<T> implements USet<T> {
 	// PROGRAM CODE
 
 	/**
+	 * Demonstration of question 4, hash table with a hash(x) = K Mod 13
 	 * 
+	 * @author Eric Dunbar
+	 * @date Aug 15, 2016
+	 * @assignment 2
+	 *
 	 */
 	public static void question4() {
 		Integer q4[] = { 1, 5, 21, 26, 39, 14, 15, 16, 17, 18, 19, 20, 111, 145, 146 };
@@ -158,20 +197,57 @@ public class HashDemo<T> extends LLinearHashTable<T> implements USet<T> {
 		}
 		printHashTable((HashDemo<Integer>) h);
 
-		for (int i = 88; i < 200_000; i += 283) {
-			h.add(234252);
+		int largeV = 234252;
+
+		System.out.println();
+
+		String title = "Add a single value to the hash table.";
+		String details[] = new String[] {
+				"Add " + largeV + " to the hash table. Notice that (" + largeV + " mod 13) * 3 = ",
+				(largeV % 13 + 13) % 13 * 3
+						+ " and should appear immediately after two elements with the same ",
+				"modulo 13 result (5*3) in index 17." };
+		CommonSuite.printDescription(title, details);
+
+		System.out.println();
+
+		for (int i = 88; i < 200_000; i += 2083) {
+			h.add(largeV);
 		}
 		printHashTable((HashDemo<Integer>) h);
-		
-		for (int i = 88; i < 200_000; i += 283) {
+
+		System.out.println();
+
+		title = "Add a series to hash table increasing by 13^3.";
+		details = new String[] {
+				"Add a series to the hash table, starting at 88 and increasing by 13^3.",
+				"All elements in the series have 10 as the modulo (~remainder) which is why",
+				"the elements have all been added to the table starting at index 180 and",
+				"wrapping around to 0." };
+		CommonSuite.printDescription(title, details);
+
+		System.out.println();
+
+		for (int i = 88; i < 200_000; i += Math.pow(13, 3)) {
 			h.add(i);
 		}
 		printHashTable((HashDemo<Integer>) h);
 	}
 
+	/**
+	 * Prints Integers stored in a K Mod 13 hash table. Requires a terminal with
+	 * a width of at least 120. Can comfortably handle values up to 999_999.
+	 * 
+	 * @author Eric Dunbar
+	 * @date Aug 15, 2016
+	 *
+	 * @param h hash table to display
+	 */
 	public static void printHashTable(HashDemo<Integer> h) {
 		System.out.println();
-		System.out.print("_______||");
+		System.out.println(CommonSuite.stringRepeat("_", 12) + "Thirteen position"
+				+ CommonSuite.stringRepeat("_", 97));
+		System.out.print("_Index_||");
 		for (int i = 0; i < 13; i++) {
 			System.out.printf("___%2d___|", i);
 		}
@@ -186,50 +262,6 @@ public class HashDemo<T> extends LLinearHashTable<T> implements USet<T> {
 			System.out.printf(" %6s |", value);
 		}
 		System.out.println();
-
-	}
-
-	public static void odsDemo() {
-		Random rand = new Random(1);
-		USet<Integer> lht = new HashDemo<Integer>(-1);
-		Set<Integer> s = new HashSet<Integer>();
-		int n = 1000000;
-		System.out.println("Adding");
-		for (int i = 0; i < n; i++) {
-			Integer x = rand.nextInt(n);
-			boolean rs = s.add(x);
-			boolean rlht = lht.add(x);
-			if (rs != rlht)
-				throw new RuntimeException("Aaaaaaaaaaaaaaaah!");
-			if (s.size() != lht.size()) {
-				System.out.println(s.size());
-				System.out.println(lht.size());
-				throw new RuntimeException("Bwaaaaaaaaaaaaaaah!");
-			}
-		}
-		System.out.println("Searching");
-		for (int i = 0; i < n; i++) {
-			Integer x = rand.nextInt(n);
-			boolean rs = s.contains(x);
-			boolean rlht = lht.find(x) != null;
-			if (rs != rlht)
-				throw new RuntimeException("Aaaaaaaaaaaaaaaah!");
-			if (s.size() != lht.size())
-				throw new RuntimeException("Bwaaaaaaaaaaaaaaah!");
-		}
-
-		System.out.println("Removing");
-		for (int i = 0; i < n; i++) {
-			Integer x = rand.nextInt(n);
-			boolean rs = s.remove(x);
-			boolean rlht = lht.remove(x) != null;
-			if (rs != rlht)
-				throw new RuntimeException("Aaaaaaaaaaaaaaaah!");
-			if (s.size() != lht.size())
-				throw new RuntimeException("Bwaaaaaaaaaaaaaaah!");
-		}
-		s.clear();
-		lht.clear();
 	}
 
 	public static void main(String[] args) {
