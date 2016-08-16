@@ -74,7 +74,7 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	 * 
 	 * @author Eric Dunbar
 	 */
-	public static class TheNode extends EricBinaryTree.BTENode<TheNode> {
+	public static class TsheNode extends EricBinaryTree.BTENode<TheNode> {
 		final int warning = -99;
 		/**
 		 * Track the order number of the node if visited by a pre-order routine.
