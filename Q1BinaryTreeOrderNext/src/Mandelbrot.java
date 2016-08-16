@@ -1,7 +1,15 @@
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
- 
+ /**
+  * Nothing to do with COMP272.
+  * @author Eric Dunbar
+  * @date Aug 16, 2016
+  * @title
+  * @assignment 2
+  *
+  */
+@SuppressWarnings("serial")
 public class Mandelbrot extends JFrame {
  
     private final int MAX_ITER = 570;
