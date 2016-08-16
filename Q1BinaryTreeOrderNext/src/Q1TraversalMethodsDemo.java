@@ -1,12 +1,10 @@
-import java.util.Arrays;
-
 /**
- * Demonstrates the use of traversal order methods for questions 1 and 5 of
- * assignment 2 in COMP 272.
+ * Demonstrates the use of traversal order methods for question 1 of assignment
+ * 2 in COMP 272.
  * 
  * @author Eric Dunbar
  * @date Aug 11, 2016
- * @title Demo of traversal order for questions 1 and 5
+ * @title Demo of traversal order for questions 1
  * @assignment 2
  *
  */
@@ -198,98 +196,6 @@ public class Q1TraversalMethodsDemo {
 		return b;
 	}
 
-	private static EricBinaryTree<EricBinaryTree.Node> question5CreateOrderNumbersSimulations(
-			int repeats, int factor) {
-		String[] details = {
-				"5. (20 marks) Exercise 6.7. Create a subclass of BinaryTree whose nodes",
-				"have fields for storing preorder, post-order, and in-order numbers. Write",
-				"methods preOrderNumber(), inOrderNumber(), and postOrderNumbers() that",
-				"assign these numbers correctly. These methods should each run in O(n)", "time." };
-
-		CommonSuite.printDescription("Question 5: Create order numbers for a BinaryTree traversal",
-				details);
-		System.out.println();
-
-		if (factor < 1 || repeats < 1)
-			factor = repeats = 1; // default
-
-		// eliminate null pointer exceptions & ensure arrays align
-		repeats = repeats / factor * factor;
-
-		EricBinaryTree<EricBinaryTree.Node> b = null; // the binary tree
-		EricBinaryTree.Node[] pg148 = null; // the nodes added to the binary
-											// tree, in order
-
-		// regression analysis variables
-		double[] regrSizeInd = new double[factor];
-		double[][] regrTimeDep = new double[3][factor];
-		int regrIterationCounter = 0;
-
-		// constants for array indices
-		final int pre = 0;
-		final int in = 1;
-		final int post = 2;
-
-		// build a BinaryTree with increasing numbers of nodes using pg. 148
-		for (int idx = 0; idx < repeats; idx += repeats / factor) {
-			b = new EricBinaryTree<EricBinaryTree.Node>(new EricBinaryTree.Node(),
-					new EricBinaryTree.Node());
-
-			pg148 = buildBTPg148(b, idx);
-
-			regrSizeInd[regrIterationCounter] = b.size();
-
-			System.out.println(
-					".size() = " + regrSizeInd[regrIterationCounter] + ", iteration = " + idx);
-
-			int timeRepeats = 1000;
-			// determine how long it takes to (re)build the numbers
-			CommonSuite.StopWatch.start();
-			for (int j = 0; j < timeRepeats; j++) {
-				// repeat 1000 times to make time measurable on a fast computer
-				// stack over flow is a problem
-				b.preOrderNumber();
-			}
-			regrTimeDep[pre][regrIterationCounter] = CommonSuite.StopWatch.stop();
-
-			CommonSuite.StopWatch.start();
-			for (int j = 0; j < timeRepeats; j++) {
-				// repeat 1000 times to make time measurable on a fast computer
-				// stack over flow is a problem
-				b.postOrderNumbers();
-			}
-			regrTimeDep[post][regrIterationCounter] = CommonSuite.StopWatch.stop();
-
-			CommonSuite.StopWatch.start();
-			for (int j = 0; j < timeRepeats; j++) {
-				// repeat 1000 times to make time measurable on a fast computer
-				// stack over flow is a problem
-				b.inOrderNumber();
-			}
-			regrTimeDep[in][regrIterationCounter++] = CommonSuite.StopWatch.stop();
-		}
-
-		System.out.println();
-
-		printNumbers(pg148, Math.min(b.size(), 200));
-
-		CommonSuite.printFancyHeader("Do ordering methods run in O(n) time?");
-
-		CommonSuite.printFancyHeader("PRE-ORDER NUMBERS LINEAR REGRESSION");
-		LinearRegression.doLinearRegression(Arrays.copyOfRange(regrSizeInd, 1, regrSizeInd.length),
-				Arrays.copyOfRange(regrTimeDep[pre], 1, regrTimeDep[pre].length));
-
-		CommonSuite.printFancyHeader("POST-ORDER NUMBERS LINEAR REGRESSION");
-		LinearRegression.doLinearRegression(Arrays.copyOfRange(regrSizeInd, 1, regrSizeInd.length),
-				Arrays.copyOfRange(regrTimeDep[post], 1, regrTimeDep[post].length));
-
-		CommonSuite.printFancyHeader("IN-ORDER NUMBERS LINEAR REGRESSION");
-		LinearRegression.doLinearRegression(Arrays.copyOfRange(regrSizeInd, 1, regrSizeInd.length),
-				Arrays.copyOfRange(regrTimeDep[in], 1, regrTimeDep[in].length));
-
-		return b;
-	}
-
 	private static boolean testing = false;
 	static TestSuite theTester;
 
@@ -315,14 +221,6 @@ public class Q1TraversalMethodsDemo {
 				"Determine next node in a BinaryTree traversal", testing);
 
 		question1NextOrderSimulation();
-
-		CommonSuite.commonProgramEnd(theTester);
-
-		// Display programmer info and create testing object
-		theTester = CommonSuite.commonProgramStart(2, 5,
-				"Create order numbers for a BinaryTree traversal", testing);
-
-		question5CreateOrderNumbersSimulations(2000, 11);
 
 		CommonSuite.commonProgramEnd(theTester);
 	}
