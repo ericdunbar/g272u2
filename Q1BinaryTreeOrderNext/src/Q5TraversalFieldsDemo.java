@@ -10,7 +10,7 @@ import java.util.Arrays;
  * @assignment 2
  *
  */
-public class EricBinaryTreeDemo {
+public class Q5TraversalFieldsDemo {
 
 	/**
 	 * Trivial, private method used to format and print numbers for
