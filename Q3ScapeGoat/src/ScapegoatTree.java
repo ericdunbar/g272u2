@@ -3,6 +3,16 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+/**
+ * ScapegoatTree modified by Eric Dunbar from Open Data Structures by Pat Morin.
+ * 
+ * @author Eric Dunbar
+ * @date Aug 16, 2016
+ * @title ScapegoatTree
+ * @assignment 2
+ *
+ * @param <T>
+ */
 public class ScapegoatTree<T> extends BinarySearchTree<ScapegoatTree.Node<T>, T> {
 	/**
 	 * An overestimate of n
@@ -47,7 +57,6 @@ public class ScapegoatTree<T> extends BinarySearchTree<ScapegoatTree.Node<T>, T>
 		final double log23 = 2.4663034623764317;
 		double vD = log23 * Math.log(q);
 		int v = (int) Math.ceil(vD);
-		System.out.println(".............. log32(" + q + ") = " + vD);
 		// return v;
 		return vD;
 	}
@@ -61,13 +70,15 @@ public class ScapegoatTree<T> extends BinarySearchTree<ScapegoatTree.Node<T>, T>
 	 *         inserted
 	 */
 	int addWithDepth(Node<T> u) {
-		System.out.println("addWithDepth(" + u + ")");
+		System.out.println("AWD:   node pointer(" + u + ")");
 		Node<T> w = r;
 		if (w == nil) {
 			r = u;
 			n++;
 			q++;
-			System.out.printf("      (nil) Increment q to %d; increment n to %d%n", q, n);
+			System.out.printf(
+					"AWD:   (root created) Increment q to %d; increment n to %d; add %s%n", q, n,
+					u.x.toString());
 			return 0;
 		}
 		boolean done = false;
@@ -104,13 +115,16 @@ public class ScapegoatTree<T> extends BinarySearchTree<ScapegoatTree.Node<T>, T>
 		} while (!done);
 		n++;
 		q++;
-		System.out.printf("      Increment q to %d; increment n to %d%n", q, n);
+		System.out.printf("AWD:   Increment q to %d; increment n to %d; add %s%n", q, n,
+				u.x.toString());
 		return d;
 	}
 
 	private void printRebuildData(Node<T> w, int sizeW, int sizeWParent) {
-		System.out.printf("w.x = %d, w.parent.x = %d; size(w)/size(w.parent) = %d/%d; %d/%d > 2/3 = %s%n",
-				w.x, w.parent.x, sizeW, sizeWParent, sizeW, sizeWParent, (((double) sizeW / sizeWParent) > (2.0 / 3)));
+		System.out.printf(
+				"w.x = %d, w.parent.x = %d; size(w)/size(w.parent) = %d/%d; %d/%d > 2/3 = %s%n",
+				w.x, w.parent.x, sizeW, sizeWParent, sizeW, sizeWParent,
+				(((double) sizeW / sizeWParent) > (2.0 / 3)));
 
 	}
 
@@ -118,11 +132,13 @@ public class ScapegoatTree<T> extends BinarySearchTree<ScapegoatTree.Node<T>, T>
 		// first do basic insertion keeping track of depth
 		Node<T> u = newNode(x);
 		int d = addWithDepth(u);
-		System.out.printf("add(%d) = %s; d = %d; %s = %d; %s(%s) = %f%n", x, d >= 0, d, "q", q,
-				"log32", "q", log32(q));
+		System.out.printf("add:   add(%d) = %s; d = %d; %s = %d; %s(%s) = %f%n", x, d >= 0, d, "q",
+				q, "log32", "q", log32(q));
 		if (d > log32(q)) {
 			System.out.println();
-			System.out.println("Rebuild operation required");
+			System.out.println("Rebuild operation required:");
+			System.out.println("    searching for scapegoat where size(w)/size(w.parent) > 2/3");
+			System.out.println();
 
 			// depth exceeded, find scapegoat
 			Node<T> w = u.parent;
@@ -142,12 +158,14 @@ public class ScapegoatTree<T> extends BinarySearchTree<ScapegoatTree.Node<T>, T>
 
 			rebuild(w.parent);
 		}
+		System.out.println();
 		return d >= 0;
 	}
 
 	@SuppressWarnings("unchecked")
 	protected void rebuild(Node<T> u) {
-		System.out.println("rebuild(" + u + ")");
+		System.out.println("Starting rebuild at node (" + u + ")");
+		System.out.println();
 		int ns = size(u);
 		Node<T> p = u.parent;
 		Node<T>[] a = (Node<T>[]) Array.newInstance(Node.class, ns);
@@ -174,7 +192,7 @@ public class ScapegoatTree<T> extends BinarySearchTree<ScapegoatTree.Node<T>, T>
 	 * @return size(u)
 	 */
 	protected int packIntoArray(Node<T> u, Node<T>[] a, int i) {
-		System.out.println("packIntoArray(" + u + "," + a + "," + i + ")");
+		System.out.println("packIntoArray(" + u + "," + i + ")");
 		if (u == nil) {
 			return i;
 		}
@@ -193,10 +211,13 @@ public class ScapegoatTree<T> extends BinarySearchTree<ScapegoatTree.Node<T>, T>
 	 * @return the rooted of the newly created subtree
 	 */
 	protected Node<T> buildBalanced(Node<T>[] a, int i, int ns) {
-		System.out.println("buildBalanced(" + a + "," + i + "," + ns + ")");
-		if (ns == 0)
+		System.out.print("buildBalanced(" + i + ", " + ns + ")");
+		if (ns == 0) {
+			System.out.println("    nil");
 			return nil;
+		}
 		int m = ns / 2;
+		System.out.printf("    element = %s%n", a[i + m].x.toString());
 		a[i + m].left = buildBalanced(a, i, m);
 		if (a[i + m].left != nil)
 			a[i + m].left.parent = a[i + m];

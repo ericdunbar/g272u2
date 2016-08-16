@@ -60,48 +60,50 @@ Rebuild sub-tree starting with u.x=5 as the root node of the sub-tree. 9 of the 
  */
 
 /**
+ * Program used to confirm what happens when a sequence of numbers is added to
+ * an empty ScapegoatTree. Added for completeness. The actual answer did not
+ * specify that code was required so little effort has been made to make this
+ * meaningful for anyone else.
  * 
- */
-
-/*
- * public class ScapegoatTree<T> 
-		extends BinarySearchTree<ScapegoatTree.Node<T>,T> {
-	/**
-	 * An overestimate of n
-	 */
-//	int q;
-	
-//	protected static class Node<T> extends BinarySearchTree.BSTNode<Node<T>,T> {	}
-
-/**
  * @author Eric Dunbar
  * @date Aug 14, 2016
- * @title
+ * @title ScapegoatTree
  * @assignment 2
  *
  */
-public class Q3 {
+public class Q3ScapegoatTree {
 
-	/**
-	 * @author Eric Dunbar
-	 * @date Aug 14, 2016
-	 * @title
-	 * @assignment 2
-	 *
-	 * @param args
-	 */
+	public static void printQuestion() {
+		String title = "Scapegoat Tree (Q3)";
+		String[] details = {
+				"Illustrate what happens when the sequence 1, 5, 2, 4, 3 is added to an",
+				"empty ScapegoatTree, and show where the credits described in the proof of",
+				"Lemma 8.3 go, and how they are used during this sequence of additions", "",
+				"Program used to confirm what happens when a sequence of numbers is added to",
+				"an empty ScapegoatTree. Added for completeness. The actual answer did not",
+				"specify that code was required so little effort has been made to make this",
+				"meaningful for anyone else." };
+		CommonSuite.printDescription(title, details);
+
+		System.out.println();
+	}
+
 	public static void main(String[] args) {
+		// no testing here folks
+		CommonSuite.commonProgramStart(2, 3, "ScapegoatTree", false);
+
+		printQuestion();
 
 		ScapegoatTree<Integer> sg;
-		
+
 		sg = new ScapegoatTree<>();
-		
-		Integer a[] = {1,5,2,4,3};
-		
+
+		Integer a[] = { 1, 5, 2, 4, 3 };
+
 		for (int i = 0; i < a.length; i++) {
 			sg.add(a[i]);
 		}
-		
+
 		sg.printBSTPTree();
 	}
 

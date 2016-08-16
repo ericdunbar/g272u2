@@ -222,8 +222,8 @@ public class Q4HashDemo<T> extends LinearHashTable<T> implements USet<T> {
 		details = new String[] {
 				"Add a series to the hash table, starting at 88 and increasing by 13^3.",
 				"All elements in the series have 10 as the modulo (~remainder) which is why",
-				"the elements have all been added to the table starting at index 180 and",
-				"wrapping around to 0." };
+				"the elements have all been added to the table starting at index 180 (169, 11)",
+				"and wrapping around to 0 (0,0)." };
 		CommonSuite.printDescription(title, details);
 
 		System.out.println();
