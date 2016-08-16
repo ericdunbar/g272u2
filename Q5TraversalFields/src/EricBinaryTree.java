@@ -11,7 +11,7 @@ import java.util.Queue;
  * @date 11/8/16
  * @course COMP272
  *
- * @param <Node>
+ * @param <TheNode>
  */
 public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 
@@ -74,7 +74,7 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	 * 
 	 * @author Eric Dunbar
 	 */
-	public static class Node extends EricBinaryTree.BTENode<Node> {
+	public static class TheNode extends EricBinaryTree.BTENode<TheNode> {
 		final int warning = -99;
 		/**
 		 * Track the order number of the node if visited by a pre-order routine.
@@ -106,11 +106,11 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	 * @param u node to be added
 	 * @return a pointer to the added node
 	 */
-	public Node addLowest(Node u) {
+	public TheNode addLowest(TheNode u) {
 		if (r == nil) {
 			r = u;
 		} else {
-			Node w = r;
+			TheNode w = r;
 			while (w.left != nil) {
 				w = w.left;
 			}
@@ -129,7 +129,7 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	 * @param child the Node that is to be added
 	 * @return the newly added node
 	 */
-	public Node addLeft(Node parent, Node child) {
+	public TheNode addLeft(TheNode parent, TheNode child) {
 		if (parent == nil) {
 			throw new NullPointerException();
 		}
@@ -147,7 +147,7 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	 * @param child the Node that is to be added
 	 * @return the newly added node
 	 */
-	public Node addRight(Node parent, Node child) {
+	public TheNode addRight(TheNode parent, TheNode child) {
 		if (parent == nil) {
 			throw new NullPointerException();
 		}
@@ -165,7 +165,7 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	 * @param rank what is the starting rank of the root node (0 for root)
 	 * @return
 	 */
-	public String printTree(Node u, int rank) {
+	public String printTree(TheNode u, int rank) {
 		if (u == nil)
 			return "END";
 		else {
@@ -186,7 +186,7 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	 * @param rank current pre-order rank, should be 0 if starting with the root
 	 *            node
 	 */
-	public int preOrderNumberRecursive(Node u, int rank) {
+	public int preOrderNumberRecursive(TheNode u, int rank) {
 		if (u == nil)
 			return rank;
 		u.preOrder = rank++;
@@ -210,9 +210,9 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	 * @author Eric Dunbar
 	 * @param the current node in the traversal order
 	 */
-	public Node preorderNext(Node u) {
-		Node prev = nil;
-		Node next;
+	public TheNode preorderNext(TheNode u) {
+		TheNode prev = nil;
+		TheNode next;
 
 		if (u.left != nil)
 			return u.left; // RETURN left child
@@ -249,7 +249,7 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	 * @author Eric Dunbar
 	 * @param the current node in the traversal order
 	 */
-	public Node inorderNext(Node u) {
+	public TheNode inorderNext(TheNode u) {
 		/*
 		 * First: test to see if it has a right-child, if so, go down one and
 		 * find the "first" (lowest) node
@@ -260,7 +260,7 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 		 * Third: if it was the right node, keep repeating 2nd and third until
 		 * you hit nil
 		 */
-		Node prev;
+		TheNode prev;
 
 		if (u.right != nil) {
 			u = u.right;
@@ -293,7 +293,7 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	 * @author Eric Dunbar
 	 * @param u current Node in the traversal order
 	 */
-	public Node postorderNext(Node u) {
+	public TheNode postorderNext(TheNode u) {
 		/*
 		 * 1. Go up. a. If you were the right-child return your parent b. If you
 		 * were the left-child... return the firstNode, starting at the parent
@@ -303,7 +303,7 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 		if (u == nil) {
 			return nil;
 		}
-		Node prev = u;
+		TheNode prev = u;
 		u = u.parent;
 
 		// GO UP. If u was right-child, return the parent
@@ -347,9 +347,9 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	 * @param the type of traversal ordering requested, can be Order.PREORDER,
 	 *            Order.INORDER, and Order.POSTORDER
 	 */
-	public void orderNumberIterative(Node u, Order o) {
-		Node prev = nil;
-		Node next;
+	public void orderNumberIterative(TheNode u, Order o) {
+		TheNode prev = nil;
+		TheNode next;
 		int preOrderRank = 0;
 		int inOrderRank = 0;
 		int postOrderRank = 0;
@@ -468,7 +468,7 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	 * @param rank current post-order rank, should be 0 if starting with the
 	 *            root node
 	 */
-	private int postOrderNumberRecursive(Node u, int rank) {
+	private int postOrderNumberRecursive(TheNode u, int rank) {
 		if (u == nil)
 			return rank;
 		rank = postOrderNumberRecursive(u.left, rank);
@@ -486,7 +486,7 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	 * @param rank current in-order rank, should be 0 if starting with the root
 	 *            node
 	 */
-	private int inOrderNumberRecursive(Node u, int rank) {
+	private int inOrderNumberRecursive(TheNode u, int rank) {
 		if (u == nil)
 			return rank;
 		rank = inOrderNumberRecursive(u.left, rank);
@@ -518,17 +518,17 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	/**
 	 * Used to make a mini-factory
 	 */
-	protected Node sampleNode;
+	protected TheNode sampleNode;
 
 	/**
 	 * The root of this tree
 	 */
-	protected Node r;
+	protected TheNode r;
 
 	/**
 	 * This tree's "null" node
 	 */
-	protected Node nil;
+	protected TheNode nil;
 
 	/**
 	 * Create a new instance of this class. Original.
@@ -537,7 +537,7 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	 *            node in newNode()
 	 * @param nil - a node that will be used in place of null
 	 */
-	public EricBinaryTree(Node sampleNode, Node nil) {
+	public EricBinaryTree(TheNode sampleNode, TheNode nil) {
 		this.sampleNode = sampleNode;
 		this.nil = nil;
 		r = nil;
@@ -550,7 +550,7 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	 * @param sampleNode - a sample of a node that can be used to create a new
 	 *            node in newNode()
 	 */
-	public EricBinaryTree(Node sampleNode) {
+	public EricBinaryTree(TheNode sampleNode) {
 		this.sampleNode = sampleNode;
 	}
 
@@ -559,9 +559,9 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	 * 
 	 * @return
 	 */
-	protected Node newNode() {
+	protected TheNode newNode() {
 		try {
-			Node u = (Node) sampleNode.getClass().newInstance();
+			TheNode u = (TheNode) sampleNode.getClass().newInstance();
 			u.parent = u.left = u.right = nil;
 			return u;
 		} catch (Exception e) {
@@ -575,7 +575,7 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	 * @param u
 	 * @return the distanct between u and the root, r
 	 */
-	public int depth(Node u) {
+	public int depth(TheNode u) {
 		int d = 0;
 		while (u != r) {
 			u = u.parent;
@@ -591,7 +591,7 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	 * @param u root Node for the sub-tree
 	 * @return the size of the subtree rooted at u
 	 */
-	protected int size(Node u) {
+	protected int size(TheNode u) {
 		if (u == nil)
 			return 0;
 		return 1 + size(u.left) + size(u.right);
@@ -603,7 +603,7 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	 * @return
 	 */
 	public int size2() {
-		Node u = r, prev = nil, next;
+		TheNode u = r, prev = nil, next;
 		int n = 0;
 		while (u != nil) {
 			if (prev == u.parent) {
@@ -642,7 +642,7 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	 * 
 	 * @return the size of the subtree rooted at u
 	 */
-	protected int height(Node u) {
+	protected int height(TheNode u) {
 		if (u == nil)
 			return -1;
 		return 1 + Math.max(height(u.left), height(u.right));
@@ -669,7 +669,7 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	 * 
 	 * @param u
 	 */
-	public void traverse(Node u) {
+	public void traverse(TheNode u) {
 		if (u == nil)
 			return;
 		traverse(u.left);
@@ -680,7 +680,7 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	 * Demonstration of a non-recursive traversal. Original.
 	 */
 	public void traverse2() {
-		Node u = r, prev = nil, next;
+		TheNode u = r, prev = nil, next;
 		while (u != nil) {
 			if (prev == u.parent) {
 				if (u.left != nil)
@@ -706,11 +706,11 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	 * Demonstration of a breadth-first traversal. Original.
 	 */
 	public void bfTraverse() {
-		Queue<Node> q = new LinkedList<Node>();
+		Queue<TheNode> q = new LinkedList<TheNode>();
 		if (r != nil)
 			q.add(r);
 		while (!q.isEmpty()) {
-			Node u = q.remove();
+			TheNode u = q.remove();
 			if (u.left != nil)
 				q.add(u.left);
 			if (u.right != nil)
@@ -723,8 +723,8 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	 * 
 	 * @return the first node reported in an in-order traversal
 	 */
-	public Node firstNode() {
-		Node w = r;
+	public TheNode firstNode() {
+		TheNode w = r;
 		if (w == nil)
 			return nil;
 		while (w.left != nil)
@@ -739,7 +739,7 @@ public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 	 * @param w
 	 * @return the node that follows w in an in-order traversal
 	 */
-	public Node nextNode(Node w) {
+	public TheNode nextNode(TheNode w) {
 		if (w.right != nil) {
 			w = w.right;
 			while (w.left != nil)

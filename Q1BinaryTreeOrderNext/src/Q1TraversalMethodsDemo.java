@@ -35,7 +35,7 @@ public class Q1TraversalMethodsDemo {
 	 * @param pg148 array of type Node
 	 * @param numNodes how many Nodes in the array
 	 */
-	private static void printNumbers(EricBinaryTree.Node[] pg148, int numNodes) {
+	private static void printNumbers(EricBinaryTree.TheNode[] pg148, int numNodes) {
 		int lineWrap = 15;
 		int lineEndIdx = Math.min(lineWrap, numNodes);
 		int lineStartIdx = 0;
@@ -65,7 +65,7 @@ public class Q1TraversalMethodsDemo {
 		}
 	}
 
-	public static EricBinaryTree.Node[] buildBTPg148(EricBinaryTree<EricBinaryTree.Node> b,
+	public static EricBinaryTree.TheNode[] buildBTPg148(EricBinaryTree<EricBinaryTree.TheNode> b,
 			int copies) {
 		return buildBTPg148Proper(b, copies + 1);
 	}
@@ -78,14 +78,14 @@ public class Q1TraversalMethodsDemo {
 	 * @param copies number of copies of the sub-tree to be used
 	 * @return array of Nodes in pre-order traversal order
 	 */
-	public static EricBinaryTree.Node[] buildBTPg148Proper(EricBinaryTree<EricBinaryTree.Node> b,
+	public static EricBinaryTree.TheNode[] buildBTPg148Proper(EricBinaryTree<EricBinaryTree.TheNode> b,
 			int copies) {
 		// track nodes as they're added, pg. 148
-		EricBinaryTree.Node[] pg148 = new EricBinaryTree.Node[1 + 11 * (copies)];
+		EricBinaryTree.TheNode[] pg148 = new EricBinaryTree.TheNode[1 + 11 * (copies)];
 
 		int nodeIdx = 0;
 		pg148[nodeIdx++] = b.addLowest(b.newNode()); // create root
-		EricBinaryTree.Node second, tert;
+		EricBinaryTree.TheNode second, tert;
 
 		// make multiple copies of the original binary tree
 		for (int j = 0; j < copies; j++) {
@@ -110,7 +110,7 @@ public class Q1TraversalMethodsDemo {
 		return pg148;
 	}
 
-	private static EricBinaryTree<EricBinaryTree.Node> question1NextOrderSimulation() {
+	private static EricBinaryTree<EricBinaryTree.TheNode> question1NextOrderSimulation() {
 		String[] details = {
 				"Design an algorithm for the following operations for a binary tree BT,",
 				"and show the worst-case running times for each implementation:", "",
@@ -126,9 +126,9 @@ public class Q1TraversalMethodsDemo {
 				details);
 		System.out.println();
 
-		EricBinaryTree<EricBinaryTree.Node> b = new EricBinaryTree<>(new EricBinaryTree.Node(),
-				new EricBinaryTree.Node());
-		EricBinaryTree.Node[] pg148 = buildBTPg148Proper(b, 1);
+		EricBinaryTree<EricBinaryTree.TheNode> b = new EricBinaryTree<>(new EricBinaryTree.TheNode(),
+				new EricBinaryTree.TheNode());
+		EricBinaryTree.TheNode[] pg148 = buildBTPg148Proper(b, 1);
 		String[] method = { "preorderNext()", "inorderNext()", "postorderNext()" };
 		String[] traversal = { "PRE", "IN", "POST" };
 		int methodIdx = 0;
@@ -150,8 +150,8 @@ public class Q1TraversalMethodsDemo {
 		printOrderHeader(traversal, method, methodIdx++);
 
 		int i = 0;
-		EricBinaryTree.Node[] preOrderNextNums = new EricBinaryTree.Node[pg148.length];
-		EricBinaryTree.Node orderNumberCall = b.r;
+		EricBinaryTree.TheNode[] preOrderNextNums = new EricBinaryTree.TheNode[pg148.length];
+		EricBinaryTree.TheNode orderNumberCall = b.r;
 
 		while (orderNumberCall != b.nil) {
 			preOrderNextNums[i++] = orderNumberCall;
@@ -167,7 +167,7 @@ public class Q1TraversalMethodsDemo {
 		printOrderHeader(traversal, method, methodIdx++);
 
 		i = 0;
-		EricBinaryTree.Node[] inOrderNextNums = new EricBinaryTree.Node[pg148.length];
+		EricBinaryTree.TheNode[] inOrderNextNums = new EricBinaryTree.TheNode[pg148.length];
 		orderNumberCall = preOrderNextNums[2]; // should be firstNode pg148
 
 		while (orderNumberCall != b.nil) {
@@ -184,7 +184,7 @@ public class Q1TraversalMethodsDemo {
 		printOrderHeader(traversal, method, methodIdx++);
 
 		i = 0;
-		EricBinaryTree.Node[] postOrderNextNums = new EricBinaryTree.Node[pg148.length];
+		EricBinaryTree.TheNode[] postOrderNextNums = new EricBinaryTree.TheNode[pg148.length];
 		orderNumberCall = preOrderNextNums[2]; // should be firstNode pg148
 
 		while (orderNumberCall != b.nil) {

@@ -30,7 +30,7 @@ public class Q5TraversalFieldsDemo {
 	 * @param pg148 array of type Node
 	 * @param numNodes how many Nodes in the array
 	 */
-	private static void printNumbers(EricBinaryTree.Node[] pg148, int numNodes) {
+	private static void printNumbers(EricBinaryTree.TheNode[] pg148, int numNodes) {
 		int lineWrap = 15;
 		int lineEndIdx = Math.min(lineWrap, numNodes);
 		int lineStartIdx = 0;
@@ -60,7 +60,7 @@ public class Q5TraversalFieldsDemo {
 		}
 	}
 
-	public static EricBinaryTree.Node[] buildBTPg148(EricBinaryTree<EricBinaryTree.Node> b,
+	public static EricBinaryTree.TheNode[] buildBTPg148(EricBinaryTree<EricBinaryTree.TheNode> b,
 			int copies) {
 		return buildBTPg148Proper(b, copies + 1);
 	}
@@ -73,14 +73,14 @@ public class Q5TraversalFieldsDemo {
 	 * @param copies number of copies of the sub-tree to be used
 	 * @return array of Nodes in pre-order traversal order
 	 */
-	public static EricBinaryTree.Node[] buildBTPg148Proper(EricBinaryTree<EricBinaryTree.Node> b,
+	public static EricBinaryTree.TheNode[] buildBTPg148Proper(EricBinaryTree<EricBinaryTree.TheNode> b,
 			int copies) {
 		// track nodes as they're added, pg. 148
-		EricBinaryTree.Node[] pg148 = new EricBinaryTree.Node[1 + 11 * (copies)];
+		EricBinaryTree.TheNode[] pg148 = new EricBinaryTree.TheNode[1 + 11 * (copies)];
 
 		int nodeIdx = 0;
 		pg148[nodeIdx++] = b.addLowest(b.newNode()); // create root
-		EricBinaryTree.Node second, tert;
+		EricBinaryTree.TheNode second, tert;
 
 		// make multiple copies of the original binary tree
 		for (int j = 0; j < copies; j++) {
@@ -105,7 +105,7 @@ public class Q5TraversalFieldsDemo {
 		return pg148;
 	}
 
-	private static EricBinaryTree<EricBinaryTree.Node> question5CreateOrderNumbersSimulations(
+	private static EricBinaryTree<EricBinaryTree.TheNode> question5CreateOrderNumbersSimulations(
 			int repeats, int factor) {
 		String[] details = {
 				"5. (20 marks) Exercise 6.7. Create a subclass of BinaryTree whose nodes",
@@ -123,8 +123,8 @@ public class Q5TraversalFieldsDemo {
 		// eliminate null pointer exceptions & ensure arrays align
 		repeats = repeats / factor * factor;
 
-		EricBinaryTree<EricBinaryTree.Node> b = null; // the binary tree
-		EricBinaryTree.Node[] pg148 = null; // the nodes added to the binary
+		EricBinaryTree<EricBinaryTree.TheNode> b = null; // the binary tree
+		EricBinaryTree.TheNode[] pg148 = null; // the nodes added to the binary
 											// tree, in order
 
 		// regression analysis variables
@@ -139,8 +139,8 @@ public class Q5TraversalFieldsDemo {
 
 		// build a BinaryTree with increasing numbers of nodes using pg. 148
 		for (int idx = 0; idx < repeats; idx += repeats / factor) {
-			b = new EricBinaryTree<EricBinaryTree.Node>(new EricBinaryTree.Node(),
-					new EricBinaryTree.Node());
+			b = new EricBinaryTree<EricBinaryTree.TheNode>(new EricBinaryTree.TheNode(),
+					new EricBinaryTree.TheNode());
 
 			pg148 = buildBTPg148(b, idx);
 
