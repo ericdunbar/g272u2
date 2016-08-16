@@ -13,7 +13,7 @@ import java.util.Queue;
  *
  * @param <Node>
  */
-public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
+public class EricBinaryTree<Node extends EricBinaryTree.BTENode<Node>> {
 
 	public static class BTENode<Node extends BTENode<Node>> {
 		public Node left;
@@ -74,7 +74,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	 * 
 	 * @author Eric Dunbar
 	 */
-	public static class Node extends BinaryTreeEric.BTENode<Node> {
+	public static class Node extends EricBinaryTree.BTENode<Node> {
 		final int warning = -99;
 		/**
 		 * Track the order number of the node if visited by a pre-order routine.
@@ -537,7 +537,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	 *            node in newNode()
 	 * @param nil - a node that will be used in place of null
 	 */
-	public BinaryTreeEric(Node sampleNode, Node nil) {
+	public EricBinaryTree(Node sampleNode, Node nil) {
 		this.sampleNode = sampleNode;
 		this.nil = nil;
 		r = nil;
@@ -550,7 +550,7 @@ public class BinaryTreeEric<Node extends BinaryTreeEric.BTENode<Node>> {
 	 * @param sampleNode - a sample of a node that can be used to create a new
 	 *            node in newNode()
 	 */
-	public BinaryTreeEric(Node sampleNode) {
+	public EricBinaryTree(Node sampleNode) {
 		this.sampleNode = sampleNode;
 	}
 

@@ -10,7 +10,7 @@ import java.util.Arrays;
  * @assignment 2
  *
  */
-public class BinaryTreeEricDemo {
+public class EricBinaryTreeDemo {
 
 	/**
 	 * Trivial, private method used to format and print numbers for
@@ -37,7 +37,7 @@ public class BinaryTreeEricDemo {
 	 * @param pg148 array of type Node
 	 * @param numNodes how many Nodes in the array
 	 */
-	private static void printNumbers(BinaryTreeEric.Node[] pg148, int numNodes) {
+	private static void printNumbers(EricBinaryTree.Node[] pg148, int numNodes) {
 		int lineWrap = 15;
 		int lineEndIdx = Math.min(lineWrap, numNodes);
 		int lineStartIdx = 0;
@@ -67,7 +67,7 @@ public class BinaryTreeEricDemo {
 		}
 	}
 
-	public static BinaryTreeEric.Node[] buildBTPg148(BinaryTreeEric<BinaryTreeEric.Node> b,
+	public static EricBinaryTree.Node[] buildBTPg148(EricBinaryTree<EricBinaryTree.Node> b,
 			int copies) {
 		return buildBTPg148Proper(b, copies + 1);
 	}
@@ -80,14 +80,14 @@ public class BinaryTreeEricDemo {
 	 * @param copies number of copies of the sub-tree to be used
 	 * @return array of Nodes in pre-order traversal order
 	 */
-	public static BinaryTreeEric.Node[] buildBTPg148Proper(BinaryTreeEric<BinaryTreeEric.Node> b,
+	public static EricBinaryTree.Node[] buildBTPg148Proper(EricBinaryTree<EricBinaryTree.Node> b,
 			int copies) {
 		// track nodes as they're added, pg. 148
-		BinaryTreeEric.Node[] pg148 = new BinaryTreeEric.Node[1 + 11 * (copies)];
+		EricBinaryTree.Node[] pg148 = new EricBinaryTree.Node[1 + 11 * (copies)];
 
 		int nodeIdx = 0;
 		pg148[nodeIdx++] = b.addLowest(b.newNode()); // create root
-		BinaryTreeEric.Node second, tert;
+		EricBinaryTree.Node second, tert;
 
 		// make multiple copies of the original binary tree
 		for (int j = 0; j < copies; j++) {
@@ -112,7 +112,7 @@ public class BinaryTreeEricDemo {
 		return pg148;
 	}
 
-	private static BinaryTreeEric<BinaryTreeEric.Node> question1NextOrderSimulation() {
+	private static EricBinaryTree<EricBinaryTree.Node> question1NextOrderSimulation() {
 		String[] details = {
 				"Design an algorithm for the following operations for a binary tree BT,",
 				"and show the worst-case running times for each implementation:", "",
@@ -128,9 +128,9 @@ public class BinaryTreeEricDemo {
 				details);
 		System.out.println();
 
-		BinaryTreeEric<BinaryTreeEric.Node> b = new BinaryTreeEric<>(new BinaryTreeEric.Node(),
-				new BinaryTreeEric.Node());
-		BinaryTreeEric.Node[] pg148 = buildBTPg148Proper(b, 1);
+		EricBinaryTree<EricBinaryTree.Node> b = new EricBinaryTree<>(new EricBinaryTree.Node(),
+				new EricBinaryTree.Node());
+		EricBinaryTree.Node[] pg148 = buildBTPg148Proper(b, 1);
 		String[] method = { "preorderNext()", "inorderNext()", "postorderNext()" };
 		String[] traversal = { "PRE", "IN", "POST" };
 		int methodIdx = 0;
@@ -152,8 +152,8 @@ public class BinaryTreeEricDemo {
 		printOrderHeader(traversal, method, methodIdx++);
 
 		int i = 0;
-		BinaryTreeEric.Node[] preOrderNextNums = new BinaryTreeEric.Node[pg148.length];
-		BinaryTreeEric.Node orderNumberCall = b.r;
+		EricBinaryTree.Node[] preOrderNextNums = new EricBinaryTree.Node[pg148.length];
+		EricBinaryTree.Node orderNumberCall = b.r;
 
 		while (orderNumberCall != b.nil) {
 			preOrderNextNums[i++] = orderNumberCall;
@@ -169,7 +169,7 @@ public class BinaryTreeEricDemo {
 		printOrderHeader(traversal, method, methodIdx++);
 
 		i = 0;
-		BinaryTreeEric.Node[] inOrderNextNums = new BinaryTreeEric.Node[pg148.length];
+		EricBinaryTree.Node[] inOrderNextNums = new EricBinaryTree.Node[pg148.length];
 		orderNumberCall = preOrderNextNums[2]; // should be firstNode pg148
 
 		while (orderNumberCall != b.nil) {
@@ -186,7 +186,7 @@ public class BinaryTreeEricDemo {
 		printOrderHeader(traversal, method, methodIdx++);
 
 		i = 0;
-		BinaryTreeEric.Node[] postOrderNextNums = new BinaryTreeEric.Node[pg148.length];
+		EricBinaryTree.Node[] postOrderNextNums = new EricBinaryTree.Node[pg148.length];
 		orderNumberCall = preOrderNextNums[2]; // should be firstNode pg148
 
 		while (orderNumberCall != b.nil) {
@@ -198,7 +198,7 @@ public class BinaryTreeEricDemo {
 		return b;
 	}
 
-	private static BinaryTreeEric<BinaryTreeEric.Node> question5CreateOrderNumbersSimulations(
+	private static EricBinaryTree<EricBinaryTree.Node> question5CreateOrderNumbersSimulations(
 			int repeats, int factor) {
 		String[] details = {
 				"5. (20 marks) Exercise 6.7. Create a subclass of BinaryTree whose nodes",
@@ -216,8 +216,8 @@ public class BinaryTreeEricDemo {
 		// eliminate null pointer exceptions & ensure arrays align
 		repeats = repeats / factor * factor;
 
-		BinaryTreeEric<BinaryTreeEric.Node> b = null; // the binary tree
-		BinaryTreeEric.Node[] pg148 = null; // the nodes added to the binary
+		EricBinaryTree<EricBinaryTree.Node> b = null; // the binary tree
+		EricBinaryTree.Node[] pg148 = null; // the nodes added to the binary
 											// tree, in order
 
 		// regression analysis variables
@@ -232,8 +232,8 @@ public class BinaryTreeEricDemo {
 
 		// build a BinaryTree with increasing numbers of nodes using pg. 148
 		for (int idx = 0; idx < repeats; idx += repeats / factor) {
-			b = new BinaryTreeEric<BinaryTreeEric.Node>(new BinaryTreeEric.Node(),
-					new BinaryTreeEric.Node());
+			b = new EricBinaryTree<EricBinaryTree.Node>(new EricBinaryTree.Node(),
+					new EricBinaryTree.Node());
 
 			pg148 = buildBTPg148(b, idx);
 
@@ -308,7 +308,7 @@ public class BinaryTreeEricDemo {
 		CommonSuite.printDescription("BinaryTree Traversal", details);
 		System.out.println();
 
-		BinaryTreeEric.iterative = false;
+		EricBinaryTree.iterative = false;
 
 		// Display programmer info and create testing object
 		theTester = CommonSuite.commonProgramStart(2, 1,
