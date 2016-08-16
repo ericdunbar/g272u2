@@ -200,6 +200,9 @@ public class Q1TraversalMethodsDemo {
 	static TestSuite theTester;
 
 	public static void main(String[] args) {
+		// Display programmer info and create testing object
+		theTester = CommonSuite.commonProgramStart(2, 1,
+				"Determine next node in a BinaryTree traversal", testing);
 
 		String[] details = {
 				"A pre-order traversal of a binary tree is a traversal that visits each",
@@ -215,10 +218,6 @@ public class Q1TraversalMethodsDemo {
 		System.out.println();
 
 		EricBinaryTree.iterative = false;
-
-		// Display programmer info and create testing object
-		theTester = CommonSuite.commonProgramStart(2, 1,
-				"Determine next node in a BinaryTree traversal", testing);
 
 		question1NextOrderSimulation();
 
