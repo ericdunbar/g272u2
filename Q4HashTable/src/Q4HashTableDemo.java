@@ -8,7 +8,7 @@
  *
  * @param <T> data type
  */
-public class Q4HashDemo<T> extends LinearHashTable<T> implements USet<T> {
+public class Q4HashTableDemo<T> extends LinearHashTable<T> implements USet<T> {
 
 	private static boolean testing = false;
 	static TestSuite theTester;
@@ -90,7 +90,7 @@ public class Q4HashDemo<T> extends LinearHashTable<T> implements USet<T> {
 	 * @param nil an element that is used as the nil value. Programmer
 	 *            responsible for making sure it is not be used.
 	 */
-	public Q4HashDemo(T nil) {
+	public Q4HashTableDemo(T nil) {
 		super(nil);
 		factor = 1;
 		divisor = 13;
@@ -190,12 +190,12 @@ public class Q4HashDemo<T> extends LinearHashTable<T> implements USet<T> {
 		Integer q4[] = { 1, 5, 21, 26, 39, 14, 15, 16, 17, 18, 19, 20, 111, 145, 146 };
 
 		// why USet instead of HashDemo? Or LinearHashTable?
-		USet<Integer> h = new Q4HashDemo<Integer>(-99);
+		USet<Integer> h = new Q4HashTableDemo<Integer>(-99);
 
 		for (int i = 0; i < q4.length; i++) {
 			h.add(q4[i]);
 		}
-		printHashTable((Q4HashDemo<Integer>) h);
+		printHashTable((Q4HashTableDemo<Integer>) h);
 
 		int largeV = 234252;
 
@@ -214,7 +214,7 @@ public class Q4HashDemo<T> extends LinearHashTable<T> implements USet<T> {
 		for (int i = 88; i < 200_000; i += 2083) {
 			h.add(largeV);
 		}
-		printHashTable((Q4HashDemo<Integer>) h);
+		printHashTable((Q4HashTableDemo<Integer>) h);
 
 		System.out.println();
 
@@ -231,7 +231,7 @@ public class Q4HashDemo<T> extends LinearHashTable<T> implements USet<T> {
 		for (int i = 88; i < 200_000; i += Math.pow(13, 3)) {
 			h.add(i);
 		}
-		printHashTable((Q4HashDemo<Integer>) h);
+		printHashTable((Q4HashTableDemo<Integer>) h);
 	}
 
 	/**
@@ -243,7 +243,7 @@ public class Q4HashDemo<T> extends LinearHashTable<T> implements USet<T> {
 	 *
 	 * @param h hash table to display
 	 */
-	public static void printHashTable(Q4HashDemo<Integer> h) {
+	public static void printHashTable(Q4HashTableDemo<Integer> h) {
 		System.out.println();
 		System.out.println(CommonSuite.stringRepeat("_", 12) + "Thirteen position"
 				+ CommonSuite.stringRepeat("_", 97));

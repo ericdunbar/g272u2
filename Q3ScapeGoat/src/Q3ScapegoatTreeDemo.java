@@ -71,7 +71,7 @@ Rebuild sub-tree starting with u.x=5 as the root node of the sub-tree. 9 of the 
  * @assignment 2
  *
  */
-public class Q3ScapegoatTree {
+public class Q3ScapegoatTreeDemo {
 
 	public static void printQuestion() {
 		String title = "Scapegoat Tree (Q3)";

@@ -18,7 +18,7 @@ import java.util.Comparator;
  *
  * @param <T> The class type of BST
  */
-public class Q2BSTProperty<T> extends BinarySearchTree<Q2BSTProperty.Node<T>, T> {
+public class Q2BSTPropertyDemo<T> extends BinarySearchTree<Q2BSTPropertyDemo.Node<T>, T> {
 
 	/**
 	 * Creates instance of class given a sample node used to create new nodes, a
@@ -30,7 +30,7 @@ public class Q2BSTProperty<T> extends BinarySearchTree<Q2BSTProperty.Node<T>, T>
 	 * @param nil
 	 * @param c
 	 */
-	public Q2BSTProperty(Node<T> sampleNode, Node<T> nil, Comparator<T> c) {
+	public Q2BSTPropertyDemo(Node<T> sampleNode, Node<T> nil, Comparator<T> c) {
 		super(sampleNode, nil, c);
 	}
 
@@ -191,7 +191,7 @@ public class Q2BSTProperty<T> extends BinarySearchTree<Q2BSTProperty.Node<T>, T>
 	 * @param min lower limit data elements
 	 * @param max upper limit of data elements
 	 */
-	private static void buildBalanced(Q2BSTProperty<Integer> ib, int min, int max) {
+	private static void buildBalanced(Q2BSTPropertyDemo<Integer> ib, int min, int max) {
 		int mid = (min + max) / 2;
 		ib.add(mid);
 		if (min < max) {
@@ -209,7 +209,7 @@ public class Q2BSTProperty<T> extends BinarySearchTree<Q2BSTProperty.Node<T>, T>
 	 * @return whether the binary search tree conforms to the binary search tree
 	 *         property
 	 */
-	public static boolean printIsValidBST(Q2BSTProperty<Integer> ib) {
+	public static boolean printIsValidBST(Q2BSTPropertyDemo<Integer> ib) {
 		Node<Integer> my = ib.r;
 		boolean validBST = ib.isValidSearchTreeOrderProperty(ib.r);
 
@@ -221,7 +221,7 @@ public class Q2BSTProperty<T> extends BinarySearchTree<Q2BSTProperty.Node<T>, T>
 		return validBST;
 	}
 
-	public static void performThreeTests(Q2BSTProperty<Integer> ib, String[] text) {
+	public static void performThreeTests(Q2BSTPropertyDemo<Integer> ib, String[] text) {
 		CommonSuite.printSuperFancyHeader("NEW TEST: " + text[0]);
 		System.out.println();
 		CommonSuite.printFullDescription(text);
@@ -262,20 +262,20 @@ public class Q2BSTProperty<T> extends BinarySearchTree<Q2BSTProperty.Node<T>, T>
 	 * Demonstrate the binary search tree property test.
 	 */
 	private static void runBinarySearchTreePropertyTest() {
-		Q2BSTProperty<Integer> bt, ibt, mt, ut;
+		Q2BSTPropertyDemo<Integer> bt, ibt, mt, ut;
 
 		// CONSTRUCT THE BST
 
-		bt = new Q2BSTProperty<Integer>(new Node<Integer>(), new Node<Integer>(),
+		bt = new Q2BSTPropertyDemo<Integer>(new Node<Integer>(), new Node<Integer>(),
 				new DefaultComparator<Integer>());
 
-		ibt = new Q2BSTProperty<Integer>(new Node<Integer>(), new Node<Integer>(),
+		ibt = new Q2BSTPropertyDemo<Integer>(new Node<Integer>(), new Node<Integer>(),
 				new DefaultComparator<Integer>());
 
-		mt = new Q2BSTProperty<Integer>(new Node<Integer>(), new Node<Integer>(),
+		mt = new Q2BSTPropertyDemo<Integer>(new Node<Integer>(), new Node<Integer>(),
 				new DefaultComparator<Integer>());
 
-		ut = new Q2BSTProperty<Integer>(new Node<Integer>(), new Node<Integer>(),
+		ut = new Q2BSTPropertyDemo<Integer>(new Node<Integer>(), new Node<Integer>(),
 				new DefaultComparator<Integer>());
 
 		// A balanced tree
