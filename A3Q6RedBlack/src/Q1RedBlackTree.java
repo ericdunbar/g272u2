@@ -1,10 +1,12 @@
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-public class RedBlackTree<T> extends BinarySearchTree<RedBlackTree.Node<T>, T> implements SSet<T> {
+public class Q1RedBlackTree<T> extends BinarySearchTree<Q1RedBlackTree.Node<T>, T>
+		implements SSet<T> {
 
 	protected static class Node<T> extends BinarySearchTree.BSTNode<Node<T>, T> {
 		byte colour;
@@ -13,12 +15,12 @@ public class RedBlackTree<T> extends BinarySearchTree<RedBlackTree.Node<T>, T> i
 	static byte red = 0;
 	static byte black = 1;
 
-	public RedBlackTree(Comparator<T> c) {
+	public Q1RedBlackTree(Comparator<T> c) {
 		super(new Node<T>(), new Node<T>(), c);
 		nil.colour = black;
 	}
 
-	public RedBlackTree() {
+	public Q1RedBlackTree() {
 		this(new DefaultComparator<T>());
 	}
 
@@ -125,15 +127,15 @@ public class RedBlackTree<T> extends BinarySearchTree<RedBlackTree.Node<T>, T> i
 		splice(w);
 		u.colour += w.colour;
 		System.out.printf("Remove(%s): u.parent = w.parent;%n", x.toString());
-		System.out.printf("BEFORE:    u = %s,   u.parent = %s,        w = %s,  w.parent = %s%n", u, u.parent, w,
-				w.parent);
-		System.out.printf("BEFORE:  nil = %s, nil.parent = %s, nil.left = %s, nil.right = %s%n", nil,
-				nil.parent, nil.left, nil.right);
+		System.out.printf("BEFORE:    u = %s,   u.parent = %s,        w = %s,  w.parent = %s%n", u,
+				u.parent, w, w.parent);
+		System.out.printf("BEFORE:  nil = %s, nil.parent = %s, nil.left = %s, nil.right = %s%n",
+				nil, nil.parent, nil.left, nil.right);
 		u.parent = w.parent;
-		System.out.printf(" AFTER:    u = %s,   u.parent = %s,        w = %s,  w.parent = %s%n", u, u.parent, w,
-				w.parent);
-		System.out.printf(" AFTER:  nil = %s, nil.parent = %s, nil.left = %s, nil.right = %s%n", nil,
-				nil.parent, nil.left, nil.right);
+		System.out.printf(" AFTER:    u = %s,   u.parent = %s,        w = %s,  w.parent = %s%n", u,
+				u.parent, w, w.parent);
+		System.out.printf(" AFTER:  nil = %s, nil.parent = %s, nil.left = %s, nil.right = %s%n",
+				nil, nil.parent, nil.left, nil.right);
 		removeFixup(u);
 		return true;
 	}
@@ -261,8 +263,79 @@ public class RedBlackTree<T> extends BinarySearchTree<RedBlackTree.Node<T>, T> i
 		return dl + u.colour;
 	}
 
+	// PRINT THE TREE
+
+	/**
+	 * Tracks height and data for each node in the tree for printing purposes.
+	 */
+	private ArrayList<ArrayList<String>> pT;
+
+	/**
+	 * Add data to a data structure that tracks elements and ranks (height) of
+	 * the Nodes in the BinarySearchTree. This can be used to display the tree.
+	 * 
+	 * @param n height with 0 being root
+	 * @param x data element
+	 */
+	private void addToPT(int n, T x) {
+		while (pT.size() < n + 1)
+			pT.add(new ArrayList<String>());
+		pT.get(n).add(x.toString() + " (" + findNode(x).colour + ")");
+	}
+
+	public void printBSTree() {
+		printBSTree(r);
+	}
+
+	/**
+	 * Print the binary search sub-tree starting at the given Node.
+	 * 
+	 * @author Eric Dunbar
+	 * @param u the root Node for the sub-tree
+	 */
+	public void printBSTree(Node<T> u) {
+		pT = new ArrayList<ArrayList<String>>();
+
+		int n = 0;
+		constructBSTPTree(u, n);
+
+		System.out.println();
+		System.out.println("NOTE: positions are only correct for (a) depth or (b) horizontal position,");
+		System.out.println("      but not both at the same time.");
+		System.out.println();
+
+		for (int i = 1; i < pT.size(); i++) {
+			System.out.printf("d %3d: ", i-1);
+			int theSize = pT.get(i).size();
+			int baseWidth = 90;
+			String thePadding = CommonSuite.stringRepeat(" ",
+					(int) ((baseWidth - 3 * theSize) / (theSize + 1)));
+			for (int j = 0; j < theSize; j++)
+				System.out.printf("%s%3s", thePadding, pT.get(i).get(j));
+			System.out.println();
+		}
+	}
+
+	/**
+	 * Helper method to collect information to print the binary search tree.
+	 * 
+	 * @author Eric Dunbar
+	 * @param u the root Node for the sub-tree
+	 * @param n starting height (0 = root)
+	 */
+	private void constructBSTPTree(Node<T> u, int n) {
+		n++;
+		addToPT(n, u.x);
+		System.out.printf("%d: %s ", n, u.x);
+		if (u.left != nil)
+			constructBSTPTree(u.left, n);
+		if (u.right != nil)
+			constructBSTPTree(u.right, n);
+	}
+	// END PRINT
+
 	private static void runODSMain() {
-		RedBlackTree<Integer> s = new RedBlackTree<Integer>();
+		Q1RedBlackTree<Integer> s = new Q1RedBlackTree<Integer>();
 		// sorted sequence
 		for (int i = 0; i < 100; i++) {
 			s.add(i);
@@ -337,18 +410,22 @@ public class RedBlackTree<T> extends BinarySearchTree<RedBlackTree.Node<T>, T> i
 	}
 
 	private static void ericMain() {
-		RedBlackTree<Integer> s = new RedBlackTree<Integer>();
-		System.out.printf("nil = %s%n%n", s.nil);
+		Q1RedBlackTree<Integer> s = new Q1RedBlackTree<Integer>();
+
+		Integer n[] = {  50, 44, 62,32, 88, 48, 17, 78 };
 		// sorted sequence
-		for (int i = 0; i < 10; i++) {
-			s.add(i);
+		for (int i = 0; i < n.length; i++) {
+			s.add(n[i]);
+			s.printBSTree();
 		}
 
+		System.out.printf("root = %s; colour = %s%n", s.r.x.toString(), s.r.colour);
 		System.out.println();
-		s.remove(8);
-		System.out.println();
-		s.remove(7);
-		s.clear();
+
+		for (int i = 0; i < n.length; i++) {
+			Node<Integer> u = s.findNode(n[i]);
+			System.out.printf("x = %s; colour = %s%n", u.x.toString(), u.colour);
+		}
 	}
 
 	/**

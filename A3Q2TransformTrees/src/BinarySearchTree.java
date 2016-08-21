@@ -1,5 +1,3 @@
-
-
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -108,23 +106,6 @@ public class BinarySearchTree<Node extends BinarySearchTree.BSTNode<Node,T>, T> 
 		return z == nil ? null : z.x;
 	}
 
-	public Node findNode(T x) {
-		Node w = r, z = nil;
-		while (w != nil) {
-			int comp = c.compare(x, w.x);
-			if (comp < 0) {
-				z = w;
-				w = w.left;
-			} else if (comp > 0) {
-				w = w.right;
-			} else {
-				return w;
-			}
-		}
-		return z;
-	}
-
-	
 	public T findGE(T u) {
 		if (u == null) { // find the minimum value
 			Node w = r;
@@ -372,6 +353,4 @@ public class BinarySearchTree<Node extends BinarySearchTree.BSTNode<Node,T>, T> 
 	public Comparator<? super T> comparator() {
 		return c;
 	}
-	
-
 }
