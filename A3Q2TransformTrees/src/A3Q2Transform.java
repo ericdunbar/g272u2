@@ -77,32 +77,6 @@ public class A3Q2Transform<T> extends BinarySearchTree<A3Q2Transform.Node<T>, T>
 	protected static class Node<T> extends BinarySearchTree.BSTNode<Node<T>, T> {
 	}
 
-	/**
-	 * Tests whether a binary tree satisfies the "search tree order property"
-	 * (ODS by Pat Morin, binary search tree property, pg. 140) at every node.
-	 * For each node u, every data value stored in the subtree rooted at u.left
-	 * is less than u.x and every data value stored in the subtree rooted at
-	 * u.right is greater than u.x. ANSWER TO ASSIGNMENT 2, QUESTION 2.
-	 * 
-	 * @author Eric Dunbar
-	 * @param n root Node for sub-tree to be tested.
-	 * @return whether the binary search tree property is implemented properly
-	 */
-	public boolean isValidSearchTreeOrderProperty(Node<T> n) {
-		boolean testB = true; // a leaf complies with the property
-		if (n.left != nil) {
-			testB = testB && (c.compare(n.x, n.left.x) > 0);
-			testB = testB && isValidSearchTreeOrderProperty(n.left);
-		}
-		if (n.right != nil) {
-			testB = testB && (c.compare(n.x, n.right.x) < 0);
-			testB = testB && isValidSearchTreeOrderProperty(n.right);
-		}
-		return testB;
-	}
-
-	// DEMONSTRATION CODE STARTS
-	// DEMONSTRATION CODE STARTS
 	// DEMONSTRATION CODE STARTS
 	// DEMONSTRATION CODE STARTS
 	// DEMONSTRATION CODE STARTS
@@ -111,6 +85,7 @@ public class A3Q2Transform<T> extends BinarySearchTree<A3Q2Transform.Node<T>, T>
 	 * Tracks height and data for each node in the tree for printing purposes.
 	 */
 	private ArrayList<ArrayList<T>> pT;
+	private ArrayList<T> elements;
 
 	/**
 	 * Add data to a data structure that tracks elements and ranks (height) of
@@ -125,9 +100,11 @@ public class A3Q2Transform<T> extends BinarySearchTree<A3Q2Transform.Node<T>, T>
 		pT.get(n).add(x);
 	}
 
-	private void printBSTree() {
-		printBSTree(r);
+	private ArrayList<T> printBSTree() {
+		return printBSTree(r);
 	}
+
+	private String prefix;
 
 	/**
 	 * Print the binary search sub-tree starting at the given Node.
@@ -135,11 +112,15 @@ public class A3Q2Transform<T> extends BinarySearchTree<A3Q2Transform.Node<T>, T>
 	 * @author Eric Dunbar
 	 * @param u the root Node for the sub-tree
 	 */
-	private void printBSTree(Node<T> u) {
+	private ArrayList<T> printBSTree(Node<T> u) {
 		pT = new ArrayList<ArrayList<T>>();
+		elements = new ArrayList<T>();
 
 		int n = 0;
+		prefix = "";
+		System.out.print("{");
 		constructBSTree(u, n);
+		System.out.println("}");
 
 		System.out.println();
 		System.out.println("CAUTION: horizontal positions are correct only relative to each other");
@@ -154,6 +135,7 @@ public class A3Q2Transform<T> extends BinarySearchTree<A3Q2Transform.Node<T>, T>
 				System.out.printf("%s%3s", thePadding, pT.get(i).get(j));
 			System.out.println();
 		}
+		return elements;
 	}
 
 	/**
@@ -166,7 +148,9 @@ public class A3Q2Transform<T> extends BinarySearchTree<A3Q2Transform.Node<T>, T>
 	private void constructBSTree(Node<T> u, int n) {
 		n++;
 		addToPT(n, u.x);
-		System.out.printf("%d: %s ", n, u.x);
+		System.out.printf("%s%s", prefix, u.x);
+		elements.add(u.x);
+		prefix = ", ";
 		if (u.left != nil)
 			constructBSTree(u.left, n);
 		if (u.right != nil)
@@ -182,37 +166,20 @@ public class A3Q2Transform<T> extends BinarySearchTree<A3Q2Transform.Node<T>, T>
 	 * @param max upper limit of data elements
 	 */
 	private static void buildBalanced(A3Q2Transform<Integer> ib, int min, int max) {
+		if (min == max) {
+			ib.add(min);
+			return;
+		}
 		int mid = (min + max) / 2;
 		ib.add(mid);
-		if (min < max) {
+		if (min < mid)
 			buildBalanced(ib, min, mid - 1);
+		if (mid < max)
 			buildBalanced(ib, mid + 1, max);
-		}
 	}
 
 	/**
-	 * Test whether a binary search tree conforms to the 'binary search tree
-	 * property' as described in ODS by Pat Morin on page 140. The results of
-	 * the test are printed and a boolean is returned.
-	 * 
-	 * @param ib binary search tree
-	 * @return whether the binary search tree conforms to the binary search tree
-	 *         property
-	 */
-	public static boolean printIsValidBST(A3Q2Transform<Integer> ib) {
-		Node<Integer> my = ib.r;
-		boolean validBST = ib.isValidSearchTreeOrderProperty(ib.r);
-
-		System.out.printf("This tree %s obey the binary search tree property.%n",
-				validBST ? "does" : "does NOT");
-		System.out.println();
-		ib.printBSTree(my);
-		System.out.println();
-		return validBST;
-	}
-
-	/**
-	 * Demonstrate the binary search tree property test.
+	 * Demonstrate the binary search tree transformation.
 	 */
 	private static void runTransformDemo() {
 		A3Q2Transform<Integer> t1, t2, z1, z2;
@@ -233,19 +200,28 @@ public class A3Q2Transform<T> extends BinarySearchTree<A3Q2Transform.Node<T>, T>
 
 		// A balanced tree
 		int balMin = 1;
-		int balMax = 28;
+		int balMax = 31;
 		buildBalanced(t1, balMin, balMax);
-		t2.add(3);
-		t2.add(25);
-		t2.add(12);
-		for (int i = balMax; i >= balMin - 1; i--) {
+
+		t2.add((balMin + balMax) * 5 / 6);
+
+		for (int i = balMax; i >= balMin; i--) {
 			t2.add(i);
 		}
 
 		String[] description = { "A BALANCED TREE",
 				"The minimum element starts at " + balMin + " and maxes out at " + balMax + "." };
 
-		performTransform(t1, t2, description);
+		t2.clear();
+		
+		ArrayList<Integer> aL = t1.printBSTree();
+
+		while (aL.size() != 0) {
+			t2.add(aL.get((int)(Math.random()*aL.size())));
+			
+		}
+		
+		performTransform(t2, t1, description);
 
 		// An inefficient balanced tree
 		int base = 2;
@@ -253,6 +229,9 @@ public class A3Q2Transform<T> extends BinarySearchTree<A3Q2Transform.Node<T>, T>
 		t2.add((int) (Math.pow(base, exp) / 2));
 		for (int j = 1; j < Math.pow(base, exp); j++)
 			t2.add(j);
+
+		if (true)
+			return;
 
 		description = new String[] { "AN INEFFICIENT BALANCED TREE",
 				"A balanced tree is subjected to the Binary Search Tree Property test. ", "",
@@ -283,10 +262,7 @@ public class A3Q2Transform<T> extends BinarySearchTree<A3Q2Transform.Node<T>, T>
 		description = new String[] { "AN UNBALANCED TREE",
 				"An unbalanced tree is subjected to the Binary Search Tree Property test. ", "",
 				"The minimum element starts at " + 1 + " and maxes out at "
-						+ (int) Math.pow(base, exp) + ".",
-				"", "Two data elements are swapped between nodes. This causes the BSTP test ",
-				"to fail since one or more of the following conditions is no longer valid: ",
-				"1. u.left.x < u.x,; or", "2. u.right.x > u.x.", "" };
+						+ (int) Math.pow(base, exp) + "." };
 		// performTransform(z2, description);
 
 		System.out.println();
@@ -300,7 +276,8 @@ public class A3Q2Transform<T> extends BinarySearchTree<A3Q2Transform.Node<T>, T>
 
 		CommonSuite.printFullDescription(text);
 
-		t1.transformTree(t2);
+		if (!t1.transformTree(t2))
+			System.out.println("FAILURE: TREES ARE NOT EQUAL");
 
 	}
 
@@ -352,7 +329,7 @@ public class A3Q2Transform<T> extends BinarySearchTree<A3Q2Transform.Node<T>, T>
 	 * 2016, from
 	 * http://stackoverflow.com/questions/14027726/is-it-always-possible-to-turn-one-bst-into-another-using-tree-rotations.
 	 * 
-	 * 
+	 * @warning the tree's structure may be changed even with a failure
 	 * @author Eric Dunbar
 	 * @date Aug 21, 2016
 	 * @title Transform trees
@@ -363,11 +340,15 @@ public class A3Q2Transform<T> extends BinarySearchTree<A3Q2Transform.Node<T>, T>
 	 */
 	public boolean transformTree(A3Q2Transform<T> t) {
 
-		CommonSuite.printSuperFancyHeader("Template Binary Tree");
+		CommonSuite.printSuperFancyHeader("Master binary search tree (template)");
 		t.printBSTree();
-		CommonSuite.printSuperFancyHeader("Tree to be transformed");
+		CommonSuite.printSuperFancyHeader("Binary search tree to be transformed");
 		printBSTree();
 		System.out.println();
+
+		if (t.size() != this.size()) {
+			return false;
+		}
 
 		externalNil = t.nil;
 		newRoot = findLast(t.r.x);
@@ -389,6 +370,9 @@ public class A3Q2Transform<T> extends BinarySearchTree<A3Q2Transform.Node<T>, T>
 						"makeRoot, round %2d: change root of sub-tree rooted at %s to %s.",
 						++makeRootCounter, root.x, u.x));
 
+				if (findLast(u.x).x != u.x) {
+					return false;
+				}
 				makeRoot(root, newRoot);
 				root = findLast(u.x); // keep the current node of the
 										// transformed tree synchronized with
