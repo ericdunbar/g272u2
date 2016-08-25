@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * Illustrate that via AVL single rotation, any binary search tree T1 can be
@@ -77,14 +79,16 @@ public class A3Q2Transform<T> extends BinarySearchTree<A3Q2Transform.Node<T>, T>
 	protected static class Node<T> extends BinarySearchTree.BSTNode<Node<T>, T> {
 	}
 
-	// DEMONSTRATION CODE STARTS
-	// DEMONSTRATION CODE STARTS
-	// DEMONSTRATION CODE STARTS
+	// DISPLAY BINARY TREE
 
 	/**
 	 * Tracks height and data for each node in the tree for printing purposes.
 	 */
 	private ArrayList<ArrayList<T>> pT;
+
+	/**
+	 * Tracks elements in the tree as a list.
+	 */
 	private ArrayList<T> elements;
 
 	/**
@@ -104,8 +108,6 @@ public class A3Q2Transform<T> extends BinarySearchTree<A3Q2Transform.Node<T>, T>
 		return printBSTree(r);
 	}
 
-	private String prefix;
-
 	/**
 	 * Print the binary search sub-tree starting at the given Node.
 	 * 
@@ -113,14 +115,10 @@ public class A3Q2Transform<T> extends BinarySearchTree<A3Q2Transform.Node<T>, T>
 	 * @param u the root Node for the sub-tree
 	 */
 	private ArrayList<T> printBSTree(Node<T> u) {
-		pT = new ArrayList<ArrayList<T>>();
-		elements = new ArrayList<T>();
 
-		int n = 0;
-		prefix = "";
-		System.out.print("{");
-		constructBSTree(u, n);
-		System.out.println("}");
+		ArrayList<T> breadth = constructTree(u); // very wasteful
+		constructBSTree(u); // very wasteful
+		System.out.println(breadth);
 
 		System.out.println();
 		System.out.println("CAUTION: horizontal positions are correct only relative to each other");
@@ -135,11 +133,74 @@ public class A3Q2Transform<T> extends BinarySearchTree<A3Q2Transform.Node<T>, T>
 				System.out.printf("%s%3s", thePadding, pT.get(i).get(j));
 			System.out.println();
 		}
+		return breadth;
+	}
+
+	public ArrayList<T> constructBSTree() {
+		return constructBSTree(r);
+	}
+
+	public ArrayList<T> constructBSTree(Node<T> u) {
+		pT = new ArrayList<ArrayList<T>>();
+		elements = new ArrayList<T>();
+
+		int n = 0;
+		constructBSTree(u, n);
 		return elements;
 	}
 
 	/**
-	 * Helper method to collect information to print the binary search tree.
+	 * Creates an ArrayList<T> containing the data elements, in a breadth-first
+	 * traversal order from a binary tree. Source code for bfTraversal from Pat
+	 * Morin's ODS. Use this code as the basis for a rewrite of
+	 * constructBSTree()
+	 * 
+	 * @author Eric Dunbar
+	 * @return
+	 * @date Aug 23, 2016
+	 * @title
+	 * @assignment 3
+	 *
+	 * @return
+	 */
+	private ArrayList<T> constructTree() {
+		return constructTree(r);
+	}
+
+	/**
+	 * Creates an ArrayList<T> containing the data elements, in a breadth-first
+	 * traversal order from a binary tree. Source code for bfTraversal from Pat
+	 * Morin's ODS. Use this code as the basis for a rewrite of
+	 * constructBSTree()
+	 * 
+	 * @author Eric Dunbar
+	 * @return
+	 * @date Aug 23, 2016
+	 * @title
+	 * @assignment 3
+	 *
+	 * @return
+	 */
+	private ArrayList<T> constructTree(Node<T> z) {
+		elements = new ArrayList<T>();
+		Queue<Node<T>> q = new LinkedList<Node<T>>();
+
+		if (z != nil)
+			q.add(z);
+		while (!q.isEmpty()) {
+			Node<T> u = q.remove();
+			elements.add(u.x);
+			if (u.left != nil)
+				q.add(u.left);
+			if (u.right != nil)
+				q.add(u.right);
+		}
+		return elements;
+	}
+
+	/**
+	 * Recursive helper method to collect information to print the binary search
+	 * tree. Does a pre-order traversal.
 	 * 
 	 * @author Eric Dunbar
 	 * @param u the root Node for the sub-tree
@@ -148,14 +209,16 @@ public class A3Q2Transform<T> extends BinarySearchTree<A3Q2Transform.Node<T>, T>
 	private void constructBSTree(Node<T> u, int n) {
 		n++;
 		addToPT(n, u.x);
-		System.out.printf("%s%s", prefix, u.x);
 		elements.add(u.x);
-		prefix = ", ";
 		if (u.left != nil)
 			constructBSTree(u.left, n);
 		if (u.right != nil)
 			constructBSTree(u.right, n);
 	}
+
+	// DISPLAY BINARY TREE
+	// DISPLAY BINARY TREE
+	// DISPLAY BINARY TREE
 
 	/**
 	 * Builds a balanced BinarySearchTree<Integer> given the minimum and maximum
@@ -178,108 +241,7 @@ public class A3Q2Transform<T> extends BinarySearchTree<A3Q2Transform.Node<T>, T>
 			buildBalanced(ib, mid + 1, max);
 	}
 
-	/**
-	 * Demonstrate the binary search tree transformation.
-	 */
-	private static void runTransformDemo() {
-		A3Q2Transform<Integer> t1, t2, z1, z2;
-
-		// CONSTRUCT THE BST
-
-		t1 = new A3Q2Transform<Integer>(new Node<Integer>(), new Node<Integer>(),
-				new DefaultComparator<Integer>());
-
-		t2 = new A3Q2Transform<Integer>(new Node<Integer>(), new Node<Integer>(),
-				new DefaultComparator<Integer>());
-
-		z1 = new A3Q2Transform<Integer>(new Node<Integer>(), new Node<Integer>(),
-				new DefaultComparator<Integer>());
-
-		z2 = new A3Q2Transform<Integer>(new Node<Integer>(), new Node<Integer>(),
-				new DefaultComparator<Integer>());
-
-		// A balanced tree
-		int balMin = 1;
-		int balMax = 31;
-		buildBalanced(t1, balMin, balMax);
-
-		t2.add((balMin + balMax) * 5 / 6);
-
-		for (int i = balMax; i >= balMin; i--) {
-			t2.add(i);
-		}
-
-		String[] description = { "A BALANCED TREE",
-				"The minimum element starts at " + balMin + " and maxes out at " + balMax + "." };
-
-		t2.clear();
-		
-		ArrayList<Integer> aL = t1.printBSTree();
-
-		while (aL.size() != 0) {
-			t2.add(aL.get((int)(Math.random()*aL.size())));
-			
-		}
-		
-		performTransform(t2, t1, description);
-
-		// An inefficient balanced tree
-		int base = 2;
-		int exp = 4;
-		t2.add((int) (Math.pow(base, exp) / 2));
-		for (int j = 1; j < Math.pow(base, exp); j++)
-			t2.add(j);
-
-		if (true)
-			return;
-
-		description = new String[] { "AN INEFFICIENT BALANCED TREE",
-				"A balanced tree is subjected to the Binary Search Tree Property test. ", "",
-				"The minimum element starts at " + 1 + " and maxes out at "
-						+ (int) Math.pow(base, exp) + ".",
-				"", "Two data elements are swapped between nodes. This causes the BSTP test ",
-				"to fail since one or more of the following conditions is no longer valid: ",
-				"1. u.left.x < u.x,; or", "2. u.right.x > u.x.", "" };
-		// performTransform(t2, description);
-
-		// A manually built tree
-		for (Integer integer : new Integer[] { 4, 2, 3, 1, 6, 5, 7 })
-			z1.add(integer);
-
-		description = new String[] { "A MANUALLY BUILT TREE",
-				"A binary search tree is subjected to the Binary Search Tree Property test. ", "",
-				"Two data elements are swapped between nodes. This causes the BSTP test ",
-				"to fail since one or more of the following conditions is no longer valid: ",
-				"1. u.left.x < u.x,; or", "2. u.right.x > u.x.", "" };
-		// performTransform(z1, description);
-
-		// An unbalanced tree
-		base = 2;
-		exp = 3;
-		for (int j = 1; j < Math.pow(base, exp); j++)
-			z2.add(j);
-
-		description = new String[] { "AN UNBALANCED TREE",
-				"An unbalanced tree is subjected to the Binary Search Tree Property test. ", "",
-				"The minimum element starts at " + 1 + " and maxes out at "
-						+ (int) Math.pow(base, exp) + "." };
-		// performTransform(z2, description);
-
-		System.out.println();
-		System.out.println("DONE");
-	}
-
 	// TRANSFORM
-
-	public static void performTransform(A3Q2Transform<Integer> t1, A3Q2Transform<Integer> t2,
-			String[] text) {
-
-		CommonSuite.printFullDescription(text);
-
-		if (!t1.transformTree(t2))
-			System.out.println("FAILURE: TREES ARE NOT EQUAL");
-
-	}
 
 	/**
 	 * Is the current root of the sub-tree that is to have its root changed.
@@ -342,13 +304,12 @@ public class A3Q2Transform<T> extends BinarySearchTree<A3Q2Transform.Node<T>, T>
 
 		CommonSuite.printSuperFancyHeader("Master binary search tree (template)");
 		t.printBSTree();
-		CommonSuite.printSuperFancyHeader("Binary search tree to be transformed");
+		CommonSuite.printSuperFancyHeader("Binary search tree to be modified (transformed)");
 		printBSTree();
 		System.out.println();
 
-		if (t.size() != this.size()) {
-			return false;
-		}
+		if (t.size() != this.size())
+			return false; // oops. Trees are not the same size!
 
 		externalNil = t.nil;
 		newRoot = findLast(t.r.x);
@@ -369,16 +330,18 @@ public class A3Q2Transform<T> extends BinarySearchTree<A3Q2Transform.Node<T>, T>
 				CommonSuite.printFancyHeader(String.format(
 						"makeRoot, round %2d: change root of sub-tree rooted at %s to %s.",
 						++makeRootCounter, root.x, u.x));
+				boolean printTree = !(root.x == u.x);
 
-				if (findLast(u.x).x != u.x) {
+				if (findLast(u.x).x != u.x)
 					return false;
-				}
+
 				makeRoot(root, newRoot);
 				root = findLast(u.x); // keep the current node of the
 										// transformed tree synchronized with
 										// the current node of the template tree
 
-				printBSTree();
+				if (printTree)
+					printBSTree();
 				System.out.println();
 			}
 			if (prev == u.parent) {
@@ -480,6 +443,79 @@ public class A3Q2Transform<T> extends BinarySearchTree<A3Q2Transform.Node<T>, T>
 				rotateLeft(target.parent);
 			}
 		}
+	}
+
+	// TRANSFORM
+
+	/**
+	 * Transforms a given tree into the template tree and displays the given information.
+	 * 
+	 * @author Eric Dunbar
+	 * @date Aug 25, 2016
+	 * @title
+	 * @assignment 3
+	 *
+	 * @param transformed
+	 * @param template
+	 * @param text
+	 */
+	public static void performTransform(A3Q2Transform<Integer> transformed, A3Q2Transform<Integer> template,
+			String[] text) {
+
+		CommonSuite.printFullDescription(text);
+
+		if (!transformed.transformTree(template))
+			System.out.println("FAILURE: TREES ARE NOT EQUAL");
+
+	}
+
+	/**
+	 * Demonstrate the binary search tree transformation.
+	 */
+	private static void runTransformDemo() {
+		A3Q2Transform<Integer> t1, t2, t3, t4;
+
+		// CONSTRUCT THE BST
+
+		t1 = new A3Q2Transform<Integer>(new Node<Integer>(), new Node<Integer>(),
+				new DefaultComparator<Integer>());
+
+		t2 = new A3Q2Transform<Integer>(new Node<Integer>(), new Node<Integer>(),
+				new DefaultComparator<Integer>());
+
+		t3 = new A3Q2Transform<Integer>(new Node<Integer>(), new Node<Integer>(),
+				new DefaultComparator<Integer>());
+
+		t4 = new A3Q2Transform<Integer>(new Node<Integer>(), new Node<Integer>(),
+				new DefaultComparator<Integer>());
+
+		// A balanced tree
+		int balMin = 1;
+		int balMax = 31;
+		String[] description = { "BALANCED TREE vs. NEARLY BALANCED TREE",
+				"The minimum element starts at " + balMin + " and maxes out at " + balMax + "." };
+
+		buildBalanced(t1, balMin, balMax);
+
+		t2.add(14);
+		buildBalanced(t2, balMin, balMax);
+
+		performTransform(t1, t2, description);
+
+		// An extremely unbalanced tree
+		description = new String[]{ "UNBALANCED TREE vs. RANDOMIZED TREE",
+				"The minimum element starts at " + balMin + " and maxes out at " + balMax + "." };
+		for (int i = balMax; i >= balMin; i--)
+			t4.add(i);
+
+		// A randomized tree
+		ArrayList<Integer> aL = t4.constructTree();
+
+		while (!aL.isEmpty()) {
+			t3.add(aL.remove((int) (Math.random() * aL.size())));
+		}
+
+		performTransform(t4, t3, description);
 	}
 
 	public static void main(String[] args) {
