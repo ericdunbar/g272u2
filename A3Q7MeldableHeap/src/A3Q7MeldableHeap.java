@@ -247,16 +247,16 @@ public class A3Q7MeldableHeap<T> extends BinaryTree<A3Q7MeldableHeap.Node<T>> im
 		h.merge(h.r, j.r);
 		CommonSuite.printFancyHeader("MERGE of MeldableHeap h and j: h.merge(h.r, j.r)");
 		h.printBSTree();
-		CommonSuite.printFancyHeader("Pointer & element originally at j.r.right.right =");
+		CommonSuite.printFancyHeader("Pointer & element originally at j.r.right.right");
 		try {
 			System.out.printf("j.r.R.R %s = %s%n", j.r.right.right, j.r.right.right.x);
 		} catch (Exception e) {
-			System.out.println("Oops. Minor problem. Run simulation again. No nodes removed.");
+			System.out.println("Node empty. Run simulation again. No nodes removed.");
 			System.out.println(e.toString());
 		}
 
 		// demonstrate the remove(u) method
-		CommonSuite.printFancyHeader("REMOVE j.r.right.right: h.remove(j.right)");
+		CommonSuite.printFancyHeader("REMOVE j.r.right.right: h.remove(j.right.right)");
 		h.remove(j.r.right.right);
 		h.printBSTree();
 	}
