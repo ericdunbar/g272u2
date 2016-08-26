@@ -409,7 +409,7 @@ public class Q1RedBlackTree<T> extends BinarySearchTree<Q1RedBlackTree.Node<T>, 
 		System.out.println("done");
 	}
 
-	private static void ericMain() {
+	private static void demoRedblack() {
 		Q1RedBlackTree<Integer> s = new Q1RedBlackTree<Integer>();
 
 		Integer n[] = {  50, 44, 62,32, 88, 48, 17, 78 };
@@ -432,8 +432,9 @@ public class Q1RedBlackTree<T> extends BinarySearchTree<Q1RedBlackTree.Node<T>, 
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		CommonSuite.commonProgramStart(3, 6, "RedBlack Tree Demo", false);
 
-		ericMain();
+		demoRedblack();
 	}
 
 }
