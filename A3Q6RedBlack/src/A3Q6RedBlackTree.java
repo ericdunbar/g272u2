@@ -1,11 +1,7 @@
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Random;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
-public class Q1RedBlackTree<T> extends BinarySearchTree<Q1RedBlackTree.Node<T>, T>
+public class A3Q6RedBlackTree<T> extends BinarySearchTree<A3Q6RedBlackTree.Node<T>, T>
 		implements SSet<T> {
 
 	protected static class Node<T> extends BinarySearchTree.BSTNode<Node<T>, T> {
@@ -15,12 +11,12 @@ public class Q1RedBlackTree<T> extends BinarySearchTree<Q1RedBlackTree.Node<T>, 
 	static byte red = 0;
 	static byte black = 1;
 
-	public Q1RedBlackTree(Comparator<T> c) {
+	public A3Q6RedBlackTree(Comparator<T> c) {
 		super(new Node<T>(), new Node<T>(), c);
 		nil.colour = black;
 	}
 
-	public Q1RedBlackTree() {
+	public A3Q6RedBlackTree() {
 		this(new DefaultComparator<T>());
 	}
 
@@ -334,83 +330,8 @@ public class Q1RedBlackTree<T> extends BinarySearchTree<Q1RedBlackTree.Node<T>, 
 	}
 	// END PRINT
 
-	private static void runODSMain() {
-		Q1RedBlackTree<Integer> s = new Q1RedBlackTree<Integer>();
-		// sorted sequence
-		for (int i = 0; i < 100; i++) {
-			s.add(i);
-		}
-		for (Integer x : s) {
-			System.out.print(x + " ");
-		}
-		System.out.println();
-		s.clear();
-
-		// reverse sorted sequence
-		for (int i = 99; i >= 0; i--) {
-			s.add(i);
-		}
-		for (Integer x : s) {
-			System.out.print(x + " ");
-		}
-		System.out.println();
-		s.clear();
-
-		// pseudorandom sequence
-		for (int i = 1; i <= 101; i++) {
-			s.add((73 * i) % 101);
-		}
-		for (Integer x : s) {
-			System.out.print(x + " ");
-		}
-		System.out.println();
-		// pseudorandom sequence
-		for (int i = 1; i <= 50; i++) {
-			s.remove((i * 89) % 101);
-		}
-		for (Integer x : s) {
-			System.out.print(x + " ");
-		}
-		System.out.println();
-		System.out.print("Comparing to TreeSet...");
-		System.out.flush();
-		SortedSet<Integer> ts = new TreeSet<Integer>();
-		s.clear();
-		Random rand = new Random();
-		int n = 100000;
-		for (int i = 0; i < n; i++) {
-			Integer x = rand.nextInt();
-			ts.add(x);
-			s.add(x);
-		}
-		s.verify();
-		Utils.myassert(ts.size() == s.size());
-		Iterator<Integer> tsi = ts.iterator();
-		Iterator<Integer> si = s.iterator();
-		while (tsi.hasNext()) {
-			Utils.myassert(tsi.next().equals(si.next()));
-		}
-		Utils.myassert(s.size() == ts.size());
-		for (int i = 0; i < n / 2; i++) {
-			Integer x = rand.nextInt();
-			Integer y = s.findGE(x);
-			if (y != null) {
-				s.remove(y);
-				ts.remove(y);
-			}
-		}
-		s.verify();
-		Utils.myassert(ts.size() == s.size());
-		tsi = ts.iterator();
-		si = s.iterator();
-		while (tsi.hasNext()) {
-			Utils.myassert(tsi.next().equals(si.next()));
-		}
-		System.out.println("done");
-	}
-
 	private static void demoRedblack() {
-		Q1RedBlackTree<Integer> s = new Q1RedBlackTree<Integer>();
+		A3Q6RedBlackTree<Integer> s = new A3Q6RedBlackTree<Integer>();
 
 		Integer n[] = {  50, 44, 62,32, 88, 48, 17, 78 };
 		// sorted sequence
