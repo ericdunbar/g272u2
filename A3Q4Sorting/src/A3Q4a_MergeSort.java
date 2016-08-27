@@ -8,7 +8,7 @@ import java.util.Comparator;
  * @assignment 3
  *
  */
-public class A3Q4Sorts {
+public class A3Q4a_MergeSort {
 
 	/**
 	 * Sequence to be sorted for question 4 in assignment 3
@@ -101,7 +101,7 @@ public class A3Q4Sorts {
 	 *
 	 */
 	private static void runMergeSort() {
-		Integer sequence[] = A3Q4Sorts.sequence;
+		Integer sequence[] = A3Q4a_MergeSort.sequence;
 		System.out.println();
 		System.out.println("Unsorted sequence: " + Arrays.toString(sequence));
 		System.out.println();
