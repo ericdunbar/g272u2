@@ -1,5 +1,4 @@
 import java.util.Arrays;
-import java.util.Comparator;
 
 /**
  * @author Eric Dunbar
@@ -21,12 +20,7 @@ public class A3Q4a_MergeSort {
 				"4. (5 + 8 = 13 marks) Given sequence 3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5,",
 				"   sort the sequence using the following algorithms, and illustrate the",
 				"   details of the execution of the algorithms:", "",
-				"    a. (5 marks) merge-sort algorithm.", "",
-
-				"    b. (8 marks) quick-sort algorithm. Choose a partitioning strategy you",
-				"       like to pick a pivot element from the sequence. Analyze how different",
-				"       portioning strategies may impact on the performance of the sorting",
-				"       algorithm." };
+				"    a. (5 marks) merge-sort algorithm.", "" };
 		CommonSuite.printDescription(title, description);
 	}
 
@@ -54,8 +48,9 @@ public class A3Q4a_MergeSort {
 	 */
 	public static void mergeSort(Integer[] array, int depth) {
 		if (array.length <= 1) {
-			System.out.printf("        RETURN because array = %s has length = %d         (d = %d)%n", arrayToString(array),
-					array.length, depth);
+			System.out.printf(
+					"        RETURN because array = %s has length = %d         (d = %d)%n",
+					arrayToString(array), array.length, depth);
 			return;
 		}
 		depth++;
@@ -63,16 +58,18 @@ public class A3Q4a_MergeSort {
 		Integer[] a1 = Arrays.copyOfRange(array, array.length / 2, array.length);
 
 		System.out.printf("Subdivide lower: a0 = %-13s; a[0..%d]; a0.length = %s (d = %d)%n",
-				arrayToString(a0), array.length / 2 - 1, a0.length, depth); 
-		
+				arrayToString(a0), array.length / 2 - 1, a0.length, depth);
+
 		mergeSort(a0, depth);
 
 		System.out.printf("Subdivide UPPER: a1 = %-13s; a[%d..%d]; a1.length = %s (d = %d)%n",
-				arrayToString(a1), array.length / 2, array.length - 1, a1.length, depth); 
+				arrayToString(a1), array.length / 2, array.length - 1, a1.length, depth);
 
 		mergeSort(a1, depth);
 		merge(a0, a1, array, depth);
-		System.out.printf("        RETURN to less deep recursion of mergeSort because mergeSort is done (d = %d)%n", depth);
+		System.out.printf(
+				"        RETURN to less deep recursion of mergeSort because mergeSort is done (d = %d)%n",
+				depth);
 	}
 
 	protected static void merge(Integer[] a0, Integer[] a1, Integer[] a, int depth) {
@@ -87,8 +84,8 @@ public class A3Q4a_MergeSort {
 			else
 				a[i] = a1[i1++];
 		}
-		System.out.printf("    MERGE and sort a0 = %s and a1 = %s to a = %s  (d = %d)%n", arrayToString(a0),
-				arrayToString(a1), arrayToString(a), depth);
+		System.out.printf("    MERGE and sort a0 = %s and a1 = %s to a = %s  (d = %d)%n",
+				arrayToString(a0), arrayToString(a1), arrayToString(a), depth);
 	}
 
 	/**
