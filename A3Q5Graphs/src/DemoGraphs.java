@@ -1,5 +1,7 @@
 import java.util.Arrays;
 
+import sun.security.provider.certpath.AdjacencyList;
+
 /**
  * 
  */
@@ -37,17 +39,16 @@ public class DemoGraphs {
 	 * @author Eric Dunbar
 	 * @date Aug 29, 2016
 	 *
-	 * @param let lowercase letter
+	 * @param letter lowercase letter
 	 * @return number less the ASCII value of 'a'
 	 */
-	public static int apToNum(char let) {
+	public static int apToNum(char letter) {
 		int base = (int) 'a';
-		int num = (int) let - base;
-		System.out.println(num);
+		int num = (int) letter - base;
 		return num;
 	}
 
-	public static Integer[][] createAdjacencyMatrix() {
+	public static boolean[][] createAdjacencyMatrix() {
 		Integer[][] something = { { 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 				{ 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 				{ 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -56,7 +57,7 @@ public class DemoGraphs {
 				{ 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 },
 				{ 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0 },
 				{ 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0 },
-				{ 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0 },
+				{ 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0 },
 				{ 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0 },
 				{ 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0 },
 				{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
@@ -65,7 +66,9 @@ public class DemoGraphs {
 				{ 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1 },
 				{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 } };
 
-		return something;
+		boolean adjMatrix[][] = convertIntegerArrToBoolean(something);
+
+		return adjMatrix;
 	}
 
 	public static boolean[][] convertIntegerArrToBoolean(Integer[][] s) {
@@ -89,6 +92,7 @@ public class DemoGraphs {
 	 * @param b
 	 */
 	public static void printAlphaAdjacencyList(boolean[][] b) {
+		System.out.println("Alpha AdjacencyList");
 		for (int i = 0; i < b.length; i++) {
 			System.out.printf("%n%s: ", numToAP(i));
 			String prefix = "";
@@ -99,13 +103,57 @@ public class DemoGraphs {
 					prefix = ", ";
 				}
 			}
-
 		}
+		System.out.println();
 	}
 
-	
 	/**
-	 * Processes AdjacencyMatrix alphabetically.
+	 * Specify number of rows in Graph
+	 */
+	static int graphRows = 4;
+
+	/**
+	 * Specify number of columns in Graph
+	 */
+	static int graphCols = 4;
+
+	/**
+	 * Determines whether the given relative grid position CAN occur in the
+	 * Graph, assuming a 2D space.
+	 * 
+	 * @author Eric Dunbar
+	 * @date Aug 29, 2016
+	 * @title
+	 * @assignment 2
+	 *
+	 * @param i
+	 * @param rowOffset
+	 * @param colOffset
+	 * @return
+	 */
+	private static boolean validVertex(int i, int rowOffset, int colOffset) {
+		int iMod = i % graphCols;
+
+		if (iMod + colOffset < 0 || iMod + colOffset >= graphCols)
+			return false; // off left or right edge
+
+		if (i + rowOffset * graphCols < 0) {
+			return false; // off top
+		}
+
+		if (i + rowOffset * graphCols > graphRows * graphCols - 1) {
+			return false; // off bottom
+		}
+
+		if (rowOffset == 0 && colOffset == 0)
+			return false; // not me
+
+		return true;
+	}
+
+	/**
+	 * Prints AdjacencyMatrix to an AdjacencyList in CW processing order,
+	 * starting with the top-left adjacent vertex.
 	 * 
 	 * @author Eric Dunbar
 	 * @date Aug 29, 2016
@@ -114,41 +162,96 @@ public class DemoGraphs {
 	 *
 	 * @param b
 	 */
-	public static void printCWAdjacencyList(boolean[][] b) {
-
+	public static void printBADAdjacencyList(boolean[][] b) {
+		System.out.println("ClockWise AdjacencyList");
 		for (int i = 0; i < b.length; i++) {
 			System.out.printf("%n%s: ", numToAP(i));
 			String prefix = "";
 
-			if ((i % 4) == 0) {
-				
-			}
-			for (int j = 0; j < b[i].length; j++) {
-				if (b[i][j]) {
-					System.out.printf("%s%s", prefix, numToAP(j));
-					prefix = ", ";
+			for (int row = -graphRows + 1; row < graphRows; row++) {
+				for (int col = -graphCols + 1; col < graphCols; col++) {
+					if (validVertex(i, row, col)) {
+						if (b[i][i + row * graphCols + col]) {
+							System.out.printf("%s%s", prefix, numToAP(i + row * graphCols + col));
+							prefix = ", ";
+						}
+					}
 				}
 			}
-
 		}
+		System.out.println();
 	}
 
-	
-	
+	/**
+	 * Generates the clockwise adjacency list, starting at the lowest
+	 * alphabetical letter for any vertex and then progressing clockwise around
+	 * the outEdges.
+	 * 
+	 * @author Eric Dunbar
+	 * @date Aug 30, 2016
+	 * @title
+	 * @assignment 3
+	 *
+	 * @return
+	 */
+	public static AdjacencyLists buildAdjacencyListCW() {
+		// @formatter:off
+		char[][] cw = 
+			{ 	{ 'b', 'f', 'e' }, 
+				{ 'a', 'c' }, 
+				{ 'b', 'd', 'f' }, 
+				{ 'c', 'g' },
+				{ 'a', 'i' }, 
+				{ 'a', 'c', 'j' }, 
+				{ 'd', 'h', 'k', 'j' },
+				{ 'g', 'o' },
+				{ 'e', 'j', 'n', 'm' },
+				{ 'f', 'g', 'i' },
+				{ 'g', 'o' },
+				{ 'p' },
+				{ 'i' },
+				{ 'i', 'o' },
+				{ 'h', 'p', 'n', 'k' },
+				{ 'l', 'o' }
+				};
+		// @formatter:on
+
+		AdjacencyLists al = new AdjacencyLists(graphRows * graphCols);
+
+		for (int i = 0; i < cw.length; i++) {
+			for (int j = 0; j < cw[i].length; j++) {
+				al.addEdge(i, apToNum(cw[i][j]));
+			}
+		}
+		return al;
+	}
+
 	/**
 	 * @author Eric Dunbar
 	 * @date Aug 29, 2016
 	 * @title
-	 * @assignment 2
+	 * @assignment 3
 	 *
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		CommonSuite.commonProgramStart(3, 5, "Graphs", false);
 
-		Integer[][] s = createAdjacencyMatrix();
+		// boolean[][] adjMatrixI = createAdjacencyMatrix();
 
-		boolean b[][] = convertIntegerArrToBoolean(s);
+		AdjacencyLists al = buildAdjacencyListCW();
 
-		printAlphaAdjacencyList(b);
+		System.out.println("DFS");
+		Searches.dfsZ(al, apToNum('g'));
+
+		System.out.println();
+		System.out.println("BFS");
+		Searches.bfsZ(al, apToNum('b'));
+
+		char pathStart = 'l';
+		System.out.println();
+		System.out.println("Path goes through every edge in each direction (doublePath)");
+		System.out.printf("Path starts at vertex %s%n%n", pathStart);
+		Searches.doublePathZ(al, apToNum(pathStart));
 	}
 }
