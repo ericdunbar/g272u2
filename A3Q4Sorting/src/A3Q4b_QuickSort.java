@@ -3,6 +3,8 @@ import java.util.Comparator;
 import java.util.Random;
 
 /**
+ * Illustrates steps in a quickSort.
+ * 
  * @author Eric Dunbar
  * @date Aug 26, 2016
  * @title
@@ -14,12 +16,9 @@ public class A3Q4b_QuickSort {
 	protected static Random rand = new Random();
 
 	/**
-	 * 
 	 * @author Pat Morin (original)
-	 * @author Eric Dunbar (modified)
 	 * @param <T>
 	 * @date Aug 27, 2016
-	 * @title
 	 * @assignment 3
 	 *
 	 * @param a
@@ -75,8 +74,8 @@ public class A3Q4b_QuickSort {
 		Integer pivot = array[start + rand.nextInt(length)];
 		Integer belowPivotIdx = start - 1;
 
-		System.out.printf("%sRandomly choose %d as the pivot for indices [%s..%s] in %s.%n", sIndent,
-				pivot, start, start + length - 1,
+		System.out.printf("%sRandomly choose %d as the pivot for indices [%s..%s] in %s.%n",
+				sIndent, pivot, start, start + length - 1,
 				threeRangesArrayToString(array, start, start + length - 1));
 
 		Integer j = start;
@@ -106,19 +105,17 @@ public class A3Q4b_QuickSort {
 		}
 
 		System.out.println();
-		System.out.printf("%sNow indices [%d..%d] are sorted to %s%n", 
-				sIndent,
-				start,
-				start + length - 1,
-				threeRangesArrayToString(array, start, start + length - 1));
+		System.out.printf("%sNow indices [%d..%d] are sorted to %s%n", sIndent, start,
+				start + length - 1, threeRangesArrayToString(array, start, start + length - 1));
 
-		System.out.printf("%saround pivot %d: %s%n", sIndent,
-				pivot,
-				threeRangesArrayToString(array, belowPivotIdx+1, abovePivotIdx-1));
+		System.out.printf("%saround pivot %d: %s%n", sIndent, pivot,
+				threeRangesArrayToString(array, belowPivotIdx + 1, abovePivotIdx - 1));
 		System.out.println();
-		
-		System.out.printf("%sCall quickSort(array, start=%d, length=%d) and quickSort(array, start=%d, length=%d)%n",sIndent,
-				start, belowPivotIdx - start + 1, abovePivotIdx, length - (abovePivotIdx - start));
+
+		System.out.printf(
+				"%sCall quickSort(array, start=%d, length=%d) and quickSort(array, start=%d, length=%d)%n",
+				sIndent, start, belowPivotIdx - start + 1, abovePivotIdx,
+				length - (abovePivotIdx - start));
 		quickSort(array, start, belowPivotIdx - start + 1, depth);
 		quickSort(array, abovePivotIdx, length - (abovePivotIdx - start), depth);
 	}
@@ -163,7 +160,6 @@ public class A3Q4b_QuickSort {
 	 * 
 	 * @author Eric Dunbar
 	 * @date Aug 27, 2016
-	 * @title
 	 * @assignment 3
 	 *
 	 * @param a array to convert

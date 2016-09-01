@@ -76,12 +76,6 @@ public class AdjacencyLists implements Graph {
 	}
 	
 	public static void main(String[] args) {
-		Graph g = mesh(4);
-		Algorithms.bfsZ(g,0);
-		Algorithms.dfsZ(g,0);
-		Algorithms.dfs2Z(g,0);
-		
-		AdjacencyMatrix.main(args);
 	}
 
 }

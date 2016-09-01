@@ -12,8 +12,6 @@ import java.util.Random;
  * A program to demonstrate a remove(Node<T> u) method for MeldableHeap. The
  * remove(Node<T> u) method removes a given node from the MeldableHeap.
  * 
- * TODO: Should implement Queue interface
- * 
  * @author Eric Dunbar (remove(Node<T> u) method and a few others)
  * @author morin (most of the MeldableHeap)
  * @date Aug 26, 2016
@@ -303,7 +301,8 @@ public class A3Q7MeldableHeap<T> extends BinaryTree<A3Q7MeldableHeap.Node<T>> im
 	}
 
 	/**
-	 * Note by Eric Dunbar: method is included here for comparison.
+	 * Note by Eric Dunbar: method is included here for comparison. This is the
+	 * original remove(u) method by Morin.
 	 * 
 	 * @author Pat Morin
 	 * @date Unknown

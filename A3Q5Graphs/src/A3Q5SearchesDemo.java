@@ -1,22 +1,15 @@
-import java.util.Arrays;
-
-import sun.security.provider.certpath.AdjacencyList;
-
 /**
+ * Demonstration of Graph related search questions.
  * 
- */
-
-/**
  * @author Eric Dunbar
  * @date Aug 29, 2016
- * @title
  * @assignment 3
  *
  */
-public class DemoGraphs {
+public class A3Q5SearchesDemo {
 
 	/**
-	 * Converts a number from 1 to 26 to a corresponding lowercase letter from
+	 * Converts a number from 0 to 25 to a corresponding lowercase letter from
 	 * a-z. Does not throw an error if an integer is provided that can be
 	 * converted less (int)'a' to a valid character.
 	 * 
@@ -27,9 +20,9 @@ public class DemoGraphs {
 	 * @return lowercase letter with a = 0 .. z = 25
 	 */
 	public static char numToAP(int num) {
-		int base = (int) 'a';
-		char let = (char) (num + base);
-		return let;
+		char base = 'a';
+		char letter = (char) (num + base);
+		return letter;
 	}
 
 	/**
@@ -43,13 +36,22 @@ public class DemoGraphs {
 	 * @return number less the ASCII value of 'a'
 	 */
 	public static int apToNum(char letter) {
-		int base = (int) 'a';
-		int num = (int) letter - base;
+		int base = 'a';
+		int num = letter - base;
 		return num;
 	}
 
+	/**
+	 * Generates the adjacency matrix for question 5.
+	 * 
+	 * @author Eric Dunbar
+	 * @date Sep 1, 2016
+	 * @assignment 3
+	 *
+	 * @return adjacency matrix in boolean form
+	 */
 	public static boolean[][] createAdjacencyMatrix() {
-		Integer[][] something = { { 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+		Integer[][] adjMatrixI = { { 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 				{ 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 				{ 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 				{ 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -66,9 +68,9 @@ public class DemoGraphs {
 				{ 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1 },
 				{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 } };
 
-		boolean adjMatrix[][] = convertIntegerArrToBoolean(something);
+		boolean adjMatrixB[][] = convertIntegerArrToBoolean(adjMatrixI);
 
-		return adjMatrix;
+		return adjMatrixB;
 	}
 
 	public static boolean[][] convertIntegerArrToBoolean(Integer[][] s) {
@@ -82,12 +84,11 @@ public class DemoGraphs {
 	}
 
 	/**
-	 * Processes AdjacencyMatrix alphabetically.
+	 * Processes and prints AdjacencyMatrix alphabetically.
 	 * 
 	 * @author Eric Dunbar
 	 * @date Aug 29, 2016
-	 * @title
-	 * @assignment 2
+	 * @assignment 3
 	 *
 	 * @param b
 	 */
@@ -123,8 +124,6 @@ public class DemoGraphs {
 	 * 
 	 * @author Eric Dunbar
 	 * @date Aug 29, 2016
-	 * @title
-	 * @assignment 2
 	 *
 	 * @param i
 	 * @param rowOffset
@@ -152,17 +151,16 @@ public class DemoGraphs {
 	}
 
 	/**
-	 * Prints AdjacencyMatrix to an AdjacencyList in CW processing order,
-	 * starting with the top-left adjacent vertex.
+	 * NOT USED. Prints AdjacencyMatrix to an AdjacencyList in CW processing
+	 * order, starting with the top-left adjacent vertex.
 	 * 
 	 * @author Eric Dunbar
 	 * @date Aug 29, 2016
-	 * @title
-	 * @assignment 2
+	 * @assignment 3
 	 *
-	 * @param b
+	 * @param b adjacency matrix in boolean form
 	 */
-	public static void printBADAdjacencyList(boolean[][] b) {
+	public static void NOTUSEDprintAdjacencyList(boolean[][] b) {
 		System.out.println("ClockWise AdjacencyList");
 		for (int i = 0; i < b.length; i++) {
 			System.out.printf("%n%s: ", numToAP(i));
@@ -189,7 +187,6 @@ public class DemoGraphs {
 	 * 
 	 * @author Eric Dunbar
 	 * @date Aug 30, 2016
-	 * @title
 	 * @assignment 3
 	 *
 	 * @return
@@ -229,7 +226,6 @@ public class DemoGraphs {
 	/**
 	 * @author Eric Dunbar
 	 * @date Aug 29, 2016
-	 * @title
 	 * @assignment 3
 	 *
 	 * @param args
@@ -241,15 +237,16 @@ public class DemoGraphs {
 
 		AdjacencyLists al = buildAdjacencyListCW();
 
-		System.out.println("DFS");
+		CommonSuite.printFancyHeader("DEPTH FIRST SEARCH, VERTEX TRAVERSAL ORDER");
 		Searches.dfsZ(al, apToNum('g'));
 
 		System.out.println();
-		System.out.println("BFS");
+		CommonSuite.printFancyHeader("BREADTH FIRST SEARCH, VERTEX TRAVERSAL ORDER");
 		Searches.bfsZ(al, apToNum('b'));
 
 		char pathStart = 'l';
 		System.out.println();
+		CommonSuite.printFancyHeader("DOUBLEPATH");
 		System.out.println("Path goes through every edge in each direction (doublePath)");
 		System.out.printf("Path starts at vertex %s%n%n", pathStart);
 		Searches.doublePathZ(al, apToNum(pathStart));

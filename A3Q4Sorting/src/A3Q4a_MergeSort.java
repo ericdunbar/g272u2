@@ -3,7 +3,7 @@ import java.util.Arrays;
 /**
  * @author Eric Dunbar
  * @date Aug 26, 2016
- * @title
+ * @title Sorting sequence for mergeSort
  * @assignment 3
  *
  */
@@ -93,9 +93,7 @@ public class A3Q4a_MergeSort {
 	 * 
 	 * @author Eric Dunbar
 	 * @date Aug 26, 2016
-	 * @title
-	 * @assignment 2
-	 *
+	 * @assignment 3
 	 */
 	private static void runMergeSort() {
 		Integer sequence[] = A3Q4a_MergeSort.sequence;

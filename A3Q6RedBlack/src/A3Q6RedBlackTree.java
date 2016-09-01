@@ -106,6 +106,11 @@ public class A3Q6RedBlackTree<T> extends BinarySearchTree<A3Q6RedBlackTree.Node<
 		}
 	}
 
+	/**
+	 * Removes given element and displays removal information.
+	 * 
+	 * @author Eric Dunbar
+	 */
 	public boolean remove(T x) {
 		Node<T> u = findLast(x);
 		if (u == nil || c.compare(u.x, x) != 0)

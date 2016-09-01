@@ -2,8 +2,9 @@ import java.util.Queue;
 import java.util.Stack;
 
 /**
+ * Provides the Graph traversal code for assignment 3, question 5
  * @author Pat Morin (original)
- * @author Eric Dunbar (modified0
+ * @author Eric Dunbar (modified)
  * @date Aug 30, 2016
  * @title
  * @assignment 3
@@ -42,8 +43,8 @@ public class Searches {
 			int i = q.remove();
 			for (Integer j : g.outEdges(i)) {
 				if (!seen[j]) {
-					System.out.printf("%2d. %s => %s%n", ++edge, DemoGraphs.numToAP(i),
-							DemoGraphs.numToAP(j));
+					System.out.printf("%2d. %s => %s%n", ++edge, A3Q5SearchesDemo.numToAP(i),
+							A3Q5SearchesDemo.numToAP(j));
 					q.add(j);
 					seen[j] = true;
 				}
@@ -87,8 +88,8 @@ public class Searches {
 		c[i] = grey; // currently visiting i
 		for (Integer j : g.outEdges(i)) {
 			if (c[j] == white) {
-				System.out.printf("%2d. %s => %s%n", ++edge, DemoGraphs.numToAP(i),
-						DemoGraphs.numToAP(j));
+				System.out.printf("%2d. %s => %s%n", ++edge, A3Q5SearchesDemo.numToAP(i),
+						A3Q5SearchesDemo.numToAP(j));
 				c[j] = grey;
 				dfsZ(g, j, c);
 			}
@@ -132,13 +133,13 @@ public class Searches {
 		c[i] = grey; // currently visiting i
 		for (Integer j : g.outEdges(i)) {
 			if (c[j] == white) {
-				System.out.printf("%2d. %s => %s%n", ++edge, DemoGraphs.numToAP(i),
-						DemoGraphs.numToAP(j));
+				System.out.printf("%2d. %s => %s%n", ++edge, A3Q5SearchesDemo.numToAP(i),
+						A3Q5SearchesDemo.numToAP(j));
 				c[j] = grey;
 				doublePathZ(g, j, c);
 			} else {
-				System.out.printf("%2d. %s => %s (reverse edge)%n", ++edge, DemoGraphs.numToAP(i),
-						DemoGraphs.numToAP(j));
+				System.out.printf("%2d. %s => %s (reverse edge)%n", ++edge, A3Q5SearchesDemo.numToAP(i),
+						A3Q5SearchesDemo.numToAP(j));
 			}
 		}
 		c[i] = black; // done visiting i
