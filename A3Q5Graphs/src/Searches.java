@@ -3,6 +3,7 @@ import java.util.Stack;
 
 /**
  * Provides the Graph traversal code for assignment 3, question 5
+ * 
  * @author Pat Morin (original)
  * @author Eric Dunbar (modified)
  * @date Aug 30, 2016
@@ -109,16 +110,16 @@ public class Searches {
 	 * @param g graph to be traversed
 	 * @param r starting vertex
 	 */
-	public static void doublePathZ(Graph g, int r) {
+	public static void BADdoublePathZ(Graph g, int r) {
 		byte[] c = new byte[g.nVertices()];
 		edge = 0;
-		doublePathZ(g, r, c);
+		BADdoublePathZ(g, r, c);
 	}
 
 	/**
 	 * Generates a path using a depth-first traversal order that traverses every
-	 * undirected edge once in an undirected graph. Caution: the class variable edge
-	 * is not reset when this method is called.
+	 * undirected edge once in an undirected graph. Caution: the class variable
+	 * edge is not reset when this method is called.
 	 * 
 	 * @author Eric Dunbar
 	 * @date Aug 30, 2016
@@ -127,22 +128,91 @@ public class Searches {
 	 *
 	 * @param g graph to be traversed
 	 * @param r starting vertex
-	 * @param c array of bytes tracking colour for each vertex (use doublePathZ(g, r))
+	 * @param c array of bytes tracking colour for each vertex (use
+	 *            doublePathZ(g, r))
 	 */
-	public static void doublePathZ(Graph g, int i, byte[] c) {
+	public static void BADdoublePathZ(Graph g, int i, byte[] c) {
 		c[i] = grey; // currently visiting i
 		for (Integer j : g.outEdges(i)) {
 			if (c[j] == white) {
 				System.out.printf("%2d. %s => %s%n", ++edge, A3Q5SearchesDemo.numToAP(i),
 						A3Q5SearchesDemo.numToAP(j));
 				c[j] = grey;
-				doublePathZ(g, j, c);
+				BADdoublePathZ(g, j, c);
 			} else {
-				System.out.printf("%2d. %s => %s (reverse edge)%n", ++edge, A3Q5SearchesDemo.numToAP(i),
-						A3Q5SearchesDemo.numToAP(j));
+				System.out.printf("%2d. %s => %s (reverse edge)%n", ++edge,
+						A3Q5SearchesDemo.numToAP(i), A3Q5SearchesDemo.numToAP(j));
 			}
 		}
 		c[i] = black; // done visiting i
+	}
+
+	/**
+	 * Generates a path using a depth-first traversal order that traverses every
+	 * undirected edge once in an undirected graph.
+	 * 
+	 * @author Eric Dunbar
+	 * @date Aug 30, 2016
+	 * @title create path
+	 * @assignment 3
+	 *
+	 * @param g graph to be traversed
+	 * @param r starting vertex
+	 */
+	public static void doublePathZ(Graph g, int r) {
+		byte[] c = new byte[g.nVertices()];
+		Stack<Integer> path = new Stack<>();
+		doublePathZ(g, r, c, path);
+
+		for (int i = 0; i < path.size() - 1; i++)
+			System.out.printf("%2s. %s => %s%n", i, A3Q5SearchesDemo.numToAP(path.get(i)),
+					A3Q5SearchesDemo.numToAP(path.get(i + 1)));
+	}
+
+	/**
+	 * Generates a path using a depth-first traversal order that traverses every
+	 * undirected edge once in an undirected graph.
+	 * 
+	 * @author Eric Dunbar
+	 * @date Aug 30, 2016
+	 * @title create path
+	 * @assignment 3
+	 *
+	 * @param g graph to be traversed
+	 * @param current starting vertex
+	 * @param colours array of bytes tracking colour for each vertex (use
+	 *            doublePathZ(g, r))
+	 * @param path includes vertices on path from start to end
+	 */
+	public static void doublePathZ(Graph g, int current, byte[] colours, Stack<Integer> path) {
+		colours[current] = grey; // currently visiting i
+		path.add(current);
+		for (Integer next : g.outEdges(current)) {
+			if (colours[next] == white) {
+				doublePathZ(g, next, colours, path); // visit target
+				path.add(current); // back from target
+			} else {
+				// if the edge (next, current) doesn't exist add (current, next)
+				// and (next, current)
+				if (!containsEdge(path, next, current)) {
+					if (path.get(path.size() - 1) != current)
+						path.add(current); // came back from another target
+					path.add(next);
+					path.add(current);
+				}
+			}
+		}
+		colours[current] = black; // done visiting i
+	}
+
+	private static boolean containsEdge(Stack<Integer> path, int source, int target) {
+		int index = 0;
+		while (index < path.size() - 1) {
+			if (path.get(index) == source && path.get(index + 1) == target)
+				return true; // found the edge
+			index++;
+		}
+		return false;
 	}
 
 	/**

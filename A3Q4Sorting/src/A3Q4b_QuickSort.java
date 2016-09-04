@@ -121,6 +121,86 @@ public class A3Q4b_QuickSort {
 	}
 
 	/**
+	 * VERSION WRITTEN FOR EXAM ONLY. EXAM ALGORITHM DIFFERS FROM MORIN.Integer
+	 * version of quickSort. Simplifies code slightly and simplifies
+	 * illustration code for assignment.
+	 * 
+	 * @author Pat Morin (original)
+	 * @author Eric Dunbar (modified)
+	 * @date Aug 27, 2016
+	 * @title
+	 * @assignment 3
+	 *
+	 * @param array array to sort
+	 * @param start
+	 * @param length
+	 */
+	public static void quickSortExamMedian(Integer array[], int start, int length, int depth) {
+		depth++;
+		System.out.println();
+		System.out.printf("Quick sort, recursion %d%n", depth);
+		String sIndent = "    ";
+		String dIndent = sIndent + sIndent;
+		String triIndent = sIndent + sIndent + sIndent;
+
+		if (length <= 1) {
+			System.out.printf("%sstart = %2d, end = %2d%n", dIndent, start, start + length);
+			return;
+		}
+		Integer pivot = array[start + length / 2];
+		int t = array[start + length - 1];
+		array[start + length - 1] = pivot;
+		array[start + length / 2] = t;
+		Integer belowPivotIdx = start - 1;
+
+		System.out.printf("%sRandomly choose %d as the pivot for indices [%s..%s] in %s.%n",
+				sIndent, pivot, start, start + length - 1,
+				threeRangesArrayToString(array, start, start + length - 1));
+
+		Integer j = start;
+		Integer abovePivotIdx = start + length;
+
+		while (j < abovePivotIdx) {
+			int comp = Integer.compare(array[j], pivot);
+			if (comp < 0) { // move to beginning of array
+				{
+					swap(array, j++, ++belowPivotIdx);
+					System.out.printf(
+							"%sMove %d to belowPivotIndex from [%d] to [%2d] because %d < pivot, belowPivotIndex++ to %s   %s%n",
+							triIndent, array[belowPivotIdx], j - 1, belowPivotIdx,
+							array[belowPivotIdx], belowPivotIdx,
+							threeRangesArrayToString(array, start, start + length - 1));
+				}
+			} else if (comp > 0) {
+				swap(array, j, --abovePivotIdx); // move to end of array
+				System.out.printf(
+						"%sMove %d to abovePivotIndex from [%d] to [%2d] because %d > pivot, abovePivotIndex-- to %s   %s%n",
+						triIndent, array[abovePivotIdx], j, abovePivotIdx, array[abovePivotIdx],
+						abovePivotIdx, threeRangesArrayToString(array, start, start + length - 1));
+			} else {
+				j++; // keep in the middle
+				System.out.printf("%sKeep %d at current index [%d], j++%n", triIndent, array[j - 1],
+						j - 1);
+			}
+		}
+
+		System.out.println();
+		System.out.printf("%sNow indices [%d..%d] are sorted to %s%n", sIndent, start,
+				start + length - 1, threeRangesArrayToString(array, start, start + length - 1));
+
+		System.out.printf("%saround pivot %d: %s%n", sIndent, pivot,
+				threeRangesArrayToString(array, belowPivotIdx + 1, abovePivotIdx - 1));
+		System.out.println();
+
+		System.out.printf(
+				"%sCall quickSort(array, start=%d, length=%d) and quickSort(array, start=%d, length=%d)%n",
+				sIndent, start, belowPivotIdx - start + 1, abovePivotIdx,
+				length - (abovePivotIdx - start));
+		quickSortExamMedian(array, start, belowPivotIdx - start + 1, depth);
+		quickSortExamMedian(array, abovePivotIdx, length - (abovePivotIdx - start), depth);
+	}
+
+	/**
 	 * 
 	 * @author Pat Morin
 	 * @date n/a
@@ -140,6 +220,8 @@ public class A3Q4b_QuickSort {
 	 * Sequence to be sorted for question 4 in assignment 3
 	 */
 	public static final Integer sequence[] = { 3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5 };
+
+	public static final Integer sequence_sample_exam[] = { 6, 8, 4, 5, 3, 1, 7 };
 
 	private static void displayQuestion() {
 		String title = "Sorting";
@@ -242,8 +324,7 @@ public class A3Q4b_QuickSort {
 	 * @assignment 3
 	 *
 	 */
-	private static void runQuickSort() {
-		Integer sequence[] = A3Q4b_QuickSort.sequence;
+	private static void runQuickSort(Integer[] sequence) {
 		System.out.println();
 		System.out.println("Unsorted sequence: " + Arrays.toString(sequence));
 		System.out.println();
@@ -251,7 +332,7 @@ public class A3Q4b_QuickSort {
 		System.out.printf("%d) quickSort(array, 0, array.length) = (array, 0, %d)%n", 0,
 				sequence.length);
 
-		quickSort(sequence, 0, sequence.length, 0);
+		quickSortExamMedian(sequence, 0, sequence.length, 0);
 
 		System.out.println();
 		System.out.println("  Sorted sequence: " + Arrays.toString(sequence));
@@ -271,7 +352,8 @@ public class A3Q4b_QuickSort {
 
 		displayQuestion();
 
-		runQuickSort();
+		//runQuickSort(A3Q4b_QuickSort.sequence);
+		runQuickSort(A3Q4b_QuickSort.sequence_sample_exam);
 	}
 
 }
